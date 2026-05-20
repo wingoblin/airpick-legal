@@ -2547,7 +2547,7 @@
 
     <div class="confirm-modal-backdrop" id="book-modal" aria-hidden="true">
       <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="book-modal-text">
-        <p class="confirm-modal-text" id="book-modal-text">항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 15분마다 갱신됩니다.</p>
+        <p class="confirm-modal-text" id="book-modal-text">항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 30분마다 갱신됩니다.</p>
         <div class="confirm-modal-actions">
           <button type="button" class="cm-btn cm-cancel" id="book-cancel">취소</button>
           <button type="button" class="cm-btn cm-go" id="book-go">예매하기</button>
@@ -3949,8 +3949,8 @@
     bookUrl = url;
     const ko = lang === "ko";
     document.getElementById("book-modal-text").textContent = ko
-      ? "항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 15분마다 갱신됩니다."
-      : "Discounted seats sell out in real time on a first-come basis to users worldwide. If seats are booked between when AirPick collected the price and your actual booking, the displayed price may differ depending on remaining seats. Fares update every 15 minutes.";
+      ? "항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 30분마다 갱신됩니다."
+      : "Discounted seats sell out in real time on a first-come basis to users worldwide. If seats are booked between when AirPick collected the price and your actual booking, the displayed price may differ depending on remaining seats. Fares update every 30 minutes.";
     document.getElementById("book-cancel").textContent = ko ? "취소" : "Cancel";
     document.getElementById("book-go").textContent = ko ? "예매하기" : "Book";
     bookModal.classList.add("open");
