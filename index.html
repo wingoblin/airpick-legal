@@ -1712,6 +1712,8 @@
     color: var(--muted);
     margin-left: 2px;
   }
+  /* "약" 접두사: 가격보다 작게, 색은 동일(inherit) */
+  .approx{ font-size: .65em; color: inherit; }
   .price .lowest{
     font-size: 10px;
     color: var(--muted);
@@ -2662,7 +2664,7 @@
 
   // ---------- STATE ----------
   let filter = "round";  // 기본: 왕복 설정
-  let sortKey = "date-asc"; // price-asc | price-desc | date-asc | date-desc
+  let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
   let originList = ["ICN"];
   let alarmDestList = []; // empty = all destinations for alarm
   let airportSheetTarget = "origin"; // "origin" | "dest" — which list the sheet edits
@@ -3429,7 +3431,7 @@
             </div>
           </div>
           <div class="price">
-            <div class="amount">${lang==="ko"?"약 ":"approx. "}${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+            <div class="amount"><span class="approx">${lang==="ko"?"약":"approx."}</span> ${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
             <div class="lowest">${lowestText}</div>
           </div>
         </div>
@@ -3968,7 +3970,7 @@
     document.getElementById("dt-duration").textContent = lang === "ko" ? `${totalDays}일` : `${totalDays} day${totalDays>1?"s":""}`;
 
     // price
-    document.getElementById("dt-price").textContent = `${lang==="ko"?"약 ":"approx. "}₩${formatKRW(roundApprox(f.price))}`;
+    document.getElementById("dt-price").innerHTML = `<span class="approx">${lang==="ko"?"약":"approx."}</span> ₩${formatKRW(roundApprox(f.price))}`;
 
     // d-day section removed
 
@@ -4276,7 +4278,7 @@
               <div class="tags">${stopsHTML}</div>
             </div>
             <div class="price">
-              <div class="amount">${lang==="ko"?"약 ":"approx. "}${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+              <div class="amount"><span class="approx">${lang==="ko"?"약":"approx."}</span> ${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
               <div class="lowest">${lowestText}</div>
             </div>
           </div>
