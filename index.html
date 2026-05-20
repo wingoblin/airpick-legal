@@ -3039,6 +3039,10 @@
   function formatKRW(n){
     return n.toLocaleString("ko-KR");
   }
+  // 표시용 근사가: 천원 단위 반올림 (실제 결제가는 예약 페이지에서 확정)
+  function roundApprox(n){
+    return Math.round(n / 1000) * 1000;
+  }
   // Local custom logo overrides (icon-only)
   const CUSTOM_LOGOS = { TW: "assets/airlines/TW.png", LJ: "assets/airlines/LJ.png", BX: "assets/airlines/BX.png", KE: "assets/airlines/KE.png", BR: "assets/airlines/BR.png", "7C": "assets/airlines/7C.png" };
   function airlineLogoSrc(code){
@@ -3425,7 +3429,7 @@
             </div>
           </div>
           <div class="price">
-            <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span>~</div>
+            <div class="amount">${lang==="ko"?"약 ":"approx. "}${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
             <div class="lowest">${lowestText}</div>
           </div>
         </div>
@@ -3964,7 +3968,7 @@
     document.getElementById("dt-duration").textContent = lang === "ko" ? `${totalDays}일` : `${totalDays} day${totalDays>1?"s":""}`;
 
     // price
-    document.getElementById("dt-price").textContent = `₩${formatKRW(f.price)}~`;
+    document.getElementById("dt-price").textContent = `${lang==="ko"?"약 ":"approx. "}₩${formatKRW(roundApprox(f.price))}`;
 
     // d-day section removed
 
@@ -4272,7 +4276,7 @@
               <div class="tags">${stopsHTML}</div>
             </div>
             <div class="price">
-              <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span>~</div>
+              <div class="amount">${lang==="ko"?"약 ":"approx. "}${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
               <div class="lowest">${lowestText}</div>
             </div>
           </div>
