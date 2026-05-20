@@ -2446,7 +2446,7 @@
     <aside class="sheet" id="airport-sheet" role="dialog" aria-modal="true" aria-label="출발 공항">
       <div class="grabber"></div>
       <h3 id="ap-sheet-title">어디서 출발하세요?</h3>
-      <div class="ap-tabs">
+      <div class="ap-tabs" id="ap-tabs">
         <button type="button" class="ap-tab on" data-region="domestic" data-i18n="ap-tab-dom">국내</button>
         <button type="button" class="ap-tab" data-region="intl" data-i18n="ap-tab-intl">해외</button>
       </div>
@@ -2701,6 +2701,8 @@
   // ---------- STATE ----------
   let filter = "round";  // 기본: 왕복 설정
   let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
+  // 출발지 선택 옵션 (백엔드 ORIGINS와 일치)
+  const ORIGIN_AIRPORTS = ["ICN", "GMP", "PUS", "TAE", "CJU"];
   let originList = ["ICN"];
   let alarmDestList = []; // empty = all destinations for alarm
   let airportSheetTarget = "origin"; // "origin" | "dest" — which list the sheet edits
@@ -2797,9 +2799,6 @@
     { iata:"PUS", region:"domestic", ko:"김해국제공항",   city_ko:"부산",    en:"Gimhae Intl",      city_en:"Busan",      country_ko:"대한민국", country_en:"South Korea" },
     { iata:"CJU", region:"domestic", ko:"제주국제공항", city_ko:"제주",    en:"Jeju Intl",        city_en:"Jeju",       country_ko:"대한민국", country_en:"South Korea" },
     { iata:"TAE", region:"domestic", ko:"대구국제공항",   city_ko:"대구",    en:"Daegu Intl",       city_en:"Daegu",      country_ko:"대한민국", country_en:"South Korea" },
-    { iata:"CJJ", region:"domestic", ko:"청주국제공항", city_ko:"청주",    en:"Cheongju Intl",    city_en:"Cheongju",   country_ko:"대한민국", country_en:"South Korea" },
-    { iata:"MWX", region:"domestic", ko:"무안국제공항",   city_ko:"무안",    en:"Muan Intl",        city_en:"Muan",       country_ko:"대한민국", country_en:"South Korea" },
-    { iata:"YNY", region:"domestic", ko:"양양국제공항", city_ko:"양양",    en:"Yangyang Intl",    city_en:"Yangyang",   country_ko:"대한민국", country_en:"South Korea" },
     // 해외
     { iata:"NRT", region:"intl",     ko:"나리타국제공항",     city_ko:"도쿄",     en:"Narita Intl",      city_en:"Tokyo",      country_ko:"일본",     country_en:"Japan" },
     { iata:"HND", region:"intl",     ko:"하네다공항",         city_ko:"도쿄",     en:"Haneda",           city_en:"Tokyo",      country_ko:"일본",     country_en:"Japan" },
@@ -3184,12 +3183,10 @@
   // ---------- RENDER ----------
   function getOrigin(){ return AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0]; }
   function getOriginLabel(){
-    const t = I18N[lang];
     if (originList.length === 0) return lang === "ko" ? "출발지 선택" : "Pick origin";
     const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
-    const name = lang === "ko" ? first.ko : first.en;
-    if (originList.length === 1) return name;
-    return `${name} ${t["ap-othern"](originList.length - 1)}`;
+    if (originList.length === 1) return lang === "ko" ? first.ko : first.en;
+    return lang === "ko" ? `${originList.length}개 공항 선택` : `${originList.length} airports`;
   }
   function getOriginSubLabel(){
     const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
@@ -3246,20 +3243,32 @@
 
   function renderAirportSheet(){
     const t = I18N[lang];
+    const isOrigin = airportSheetTarget !== "dest";
     // sheet title varies with target
     const titleEl = document.getElementById("ap-sheet-title");
     if (titleEl) titleEl.textContent = airportSheetTarget === "dest" ? t["ap-title-dest"] : t["ap-title"];
+    // origin can only be one of the airports we actually collect from, so the
+    // domestic/intl tabs are hidden and the list is fixed to ORIGIN_AIRPORTS.
+    const tabs = document.getElementById("ap-tabs");
+    if (tabs) tabs.style.display = isOrigin ? "none" : "";
     const ul = document.getElementById("airport-list");
     ul.innerHTML = "";
-    document.querySelectorAll(".ap-tab").forEach(b => b.classList.toggle("on", b.dataset.region === apTab));
-    const filtered = AIRPORTS.filter(a => a.region === apTab);
+    let filtered, intlView;
+    if (isOrigin) {
+      filtered = ORIGIN_AIRPORTS.map(code => AIRPORTS.find(a => a.iata === code)).filter(Boolean);
+      intlView = false;
+    } else {
+      document.querySelectorAll(".ap-tab").forEach(b => b.classList.toggle("on", b.dataset.region === apTab));
+      filtered = AIRPORTS.filter(a => a.region === apTab);
+      intlView = apTab === "intl";
+    }
     const activeList = airportSheetTarget === "dest" ? alarmDestList : originList;
     filtered.forEach(a => {
       const li = document.createElement("li");
       const isOn = activeList.includes(a.iata);
       const cityLabel = lang === "ko"
-        ? (apTab === "intl" ? `${a.country_ko} · ${a.city_ko}` : a.city_ko)
-        : (apTab === "intl" ? `${a.country_en} · ${a.city_en}` : a.city_en);
+        ? (intlView ? `${a.country_ko} · ${a.city_ko}` : a.city_ko)
+        : (intlView ? `${a.country_en} · ${a.city_en}` : a.city_en);
       li.innerHTML = `
         <button class="${isOn ? "on" : ""}" data-iata="${a.iata}">
           <span class="ap-row">
