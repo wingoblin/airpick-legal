@@ -3425,7 +3425,7 @@
             </div>
           </div>
           <div class="price">
-            <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+            <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span>~</div>
             <div class="lowest">${lowestText}</div>
           </div>
         </div>
@@ -3964,7 +3964,7 @@
     document.getElementById("dt-duration").textContent = lang === "ko" ? `${totalDays}일` : `${totalDays} day${totalDays>1?"s":""}`;
 
     // price
-    document.getElementById("dt-price").textContent = `₩${formatKRW(f.price)}`;
+    document.getElementById("dt-price").textContent = `₩${formatKRW(f.price)}~`;
 
     // d-day section removed
 
@@ -4272,7 +4272,7 @@
               <div class="tags">${stopsHTML}</div>
             </div>
             <div class="price">
-              <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+              <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span>~</div>
               <div class="lowest">${lowestText}</div>
             </div>
           </div>
