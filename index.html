@@ -2130,6 +2130,8 @@
 
     <p class="foot">
       <span data-i18n="foot2">실제 결제 금액은 항공사 페이지에서 확인하세요.</span>
+      <br>
+      <span id="fare-note">유류할증료·세금 포함. 좌석 선택료·수하물 등 부가 비용은 예약 페이지에서 확인</span>
     </p>
 
     <!-- =============== RECENT SCREEN =============== -->
@@ -2515,40 +2517,96 @@
 
 <script>
   // ---------- DATA ----------
-  // historicalLow = 역대 최저가 (회색 작게). 데이터가 없는 항목이므로 합리적 추정치.
-  // trip = 'oneway' | 'round'
-  const FLIGHTS = [
-    // ————— 특가 (deal) —————
-    // 임박한 특가 (7일 이내 — 빨간 스트라이프)
-    { iata:"OSA", ko:"오사카",   en:"Osaka",     flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:69900,  date:"2026-05-23", returnDate:"2026-05-26", stops:0, trip:"round", historicalLow: 65000,  fareType:"deal",    provider:"INTERPARK" },
-    { iata:"FUK", ko:"후쿠오카", en:"Fukuoka",   flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:79500,  date:"2026-05-25", returnDate:"2026-05-28", stops:0, trip:"round", historicalLow: 72000,  fareType:"deal",    provider:"HANATOUR" },
-    { iata:"NGO", ko:"나고야",   en:"Nagoya",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:84800,  date:"2026-05-26", returnDate:"2026-05-29", stops:0, trip:"round", historicalLow: 78000,  fareType:"deal",    provider:"MODETOUR" },
-    // 임박한 특가 (15일 이내 — 주황 스트라이프)
-    { iata:"KIX", ko:"오사카",   en:"Osaka",     flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:92300,  date:"2026-05-30", returnDate:"2026-06-02", stops:0, trip:"round", historicalLow: 87000,  fareType:"deal",    provider:"HANATOUR" },
-    { iata:"TPE", ko:"타이베이", en:"Taipei",    flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에바항공",     airline_en:"EVA Air",       airline_code:"BR", from:"ICN", price:118400, date:"2026-06-02", returnDate:"2026-06-06", stops:0, trip:"round", historicalLow: 109000, fareType:"deal",    provider:"INTERPARK" },
-    { iata:"HKG", ko:"홍콩",     en:"Hong Kong", flag:"🇭🇰", country_ko:"홍콩",     country_en:"Hong Kong",   region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"캐세이퍼시픽", airline_en:"Cathay Pacific",airline_code:"CX", from:"ICN", price:165700, date:"2026-06-04", returnDate:"2026-06-09", stops:1, via:"TPE", via_ko:"타이베이", via_en:"Taipei", trip:"round", historicalLow: 155000, fareType:"deal",    provider:"MODETOUR" },
-    // 일반 시점 특가 (30일+ — 파란/녹색)
-    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:87003,  date:"2026-09-15", returnDate:"2026-09-18", stops:0, trip:"round", historicalLow: 79900,  fareType:"deal",    provider:"INTERPARK" },
-    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:108339, date:"2026-06-26", returnDate:"2026-06-29", stops:0, trip:"round", historicalLow: 99000,  fareType:"deal",    provider:"HANATOUR" },
-    { iata:"TYO", ko:"도쿄",     en:"Tokyo",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:125543, date:"2026-09-08", returnDate:"2026-09-12", stops:0, trip:"round", historicalLow: 119800, fareType:"deal",    provider:"MODETOUR" },
-    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:158919, date:"2026-06-23", returnDate:"2026-06-27", stops:0, trip:"round", historicalLow: 142000, fareType:"deal",    provider:"HANATOUR" },
-    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:176426, date:"2026-08-28", returnDate:"2026-09-02", stops:0, trip:"round", historicalLow: 169000, fareType:"deal",    provider:"INTERPARK" },
-    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:205887, date:"2026-10-05", returnDate:"2026-10-10", stops:1, via:"MNL", via_ko:"마닐라", via_en:"Manila", trip:"round", historicalLow: 198000, fareType:"deal",    provider:"MODETOUR" },
-    // ————— 일반 (regular) —————
-    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:132400, date:"2026-07-12", returnDate:"2026-07-16", stops:0, trip:"round", historicalLow: 119000, fareType:"regular", provider:"INTERPARK" },
-    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:148700, date:"2026-07-20", returnDate:"2026-07-24", stops:0, trip:"round", historicalLow: 138000, fareType:"regular", provider:"HANATOUR" },
-    { iata:"TYO", ko:"도쿄",     en:"Tokyo",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:165800, date:"2026-10-12", returnDate:"2026-10-16", stops:0, trip:"round", historicalLow: 159000, fareType:"regular", provider:"MODETOUR" },
-    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:198400, date:"2026-08-08", returnDate:"2026-08-13", stops:0, trip:"round", historicalLow: 188000, fareType:"regular", provider:"HANATOUR" },
-    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:245900, date:"2026-09-21", returnDate:"2026-09-27", stops:0, trip:"round", historicalLow: 229000, fareType:"regular", provider:"INTERPARK" },
-    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:287100, date:"2026-11-02", returnDate:"2026-11-08", stops:0, trip:"round", historicalLow: 269000, fareType:"regular", provider:"MODETOUR" },
-    // ————— 편도 특가 (oneway) —————
-    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:39900,  date:"2026-05-24", returnDate:"2026-05-24", stops:0, trip:"oneway", historicalLow: 35000,  fareType:"deal",    provider:"INTERPARK" },
-    { iata:"FUK", ko:"후쿠오카", en:"Fukuoka",  flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:44500,  date:"2026-05-27", returnDate:"2026-05-27", stops:0, trip:"oneway", historicalLow: 39000,  fareType:"deal",    provider:"HANATOUR" },
-    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에바항공",     airline_en:"EVA Air",       airline_code:"BR", from:"ICN", price:62800,  date:"2026-06-03", returnDate:"2026-06-03", stops:0, trip:"oneway", historicalLow: 55000,  fareType:"deal",    provider:"MODETOUR" },
-    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:79900,  date:"2026-06-15", returnDate:"2026-06-15", stops:0, trip:"oneway", historicalLow: 72000,  fareType:"deal",    provider:"INTERPARK" },
-    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:97500,  date:"2026-07-08", returnDate:"2026-07-08", stops:0, trip:"oneway", historicalLow: 89000,  fareType:"deal",    provider:"HANATOUR" },
-    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:115200, date:"2026-08-20", returnDate:"2026-08-20", stops:0, trip:"oneway", historicalLow: 105000, fareType:"deal",    provider:"MODETOUR" },
-  ];
+  // ---------- DATA (실데이터: deals.json) ----------
+  // 카드 데이터는 flight-deal-app 레포의 deals.json에서 fetch하여 채운다.
+  const DEALS_URL = "https://raw.githubusercontent.com/wingoblin/flight-deal-app/main/deals.json";
+
+  let FLIGHTS = [];
+  let dataState = "loading"; // "loading" | "ok" | "error"
+
+  // 목적지 IATA(도시코드) -> 표시용 메타데이터
+  const DEST_META = {
+    // 동북아시아
+    TYO: { ko:"도쿄",   en:"Tokyo",      flag:"🇯🇵", country_ko:"일본",   country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia" },
+    OSA: { ko:"오사카", en:"Osaka",      flag:"🇯🇵", country_ko:"일본",   country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia" },
+    FUK: { ko:"후쿠오카", en:"Fukuoka",  flag:"🇯🇵", country_ko:"일본",   country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia" },
+    NGO: { ko:"나고야", en:"Nagoya",     flag:"🇯🇵", country_ko:"일본",   country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia" },
+    OKA: { ko:"오키나와", en:"Okinawa",  flag:"🇯🇵", country_ko:"일본",   country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia" },
+    TPE: { ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",   country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia" },
+    HKG: { ko:"홍콩",   en:"Hong Kong",  flag:"🇭🇰", country_ko:"홍콩",   country_en:"Hong Kong",   region_ko:"동북아시아", region_en:"Northeast Asia" },
+    // 동남아시아
+    BKK: { ko:"방콕",   en:"Bangkok",    flag:"🇹🇭", country_ko:"태국",   country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    DAD: { ko:"다낭",   en:"Da Nang",    flag:"🇻🇳", country_ko:"베트남", country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia" },
+    HAN: { ko:"하노이", en:"Hanoi",      flag:"🇻🇳", country_ko:"베트남", country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia" },
+    SGN: { ko:"호치민", en:"Ho Chi Minh", flag:"🇻🇳", country_ko:"베트남", country_en:"Vietnam",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    CEB: { ko:"세부",   en:"Cebu",       flag:"🇵🇭", country_ko:"필리핀", country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    MNL: { ko:"마닐라", en:"Manila",     flag:"🇵🇭", country_ko:"필리핀", country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    SIN: { ko:"싱가포르", en:"Singapore", flag:"🇸🇬", country_ko:"싱가포르", country_en:"Singapore", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    KUL: { ko:"쿠알라룸푸르", en:"Kuala Lumpur", flag:"🇲🇾", country_ko:"말레이시아", country_en:"Malaysia", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    CGK: { ko:"자카르타", en:"Jakarta",  flag:"🇮🇩", country_ko:"인도네시아", country_en:"Indonesia", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    DPS: { ko:"발리",   en:"Bali",       flag:"🇮🇩", country_ko:"인도네시아", country_en:"Indonesia", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    // 유럽
+    CDG: { ko:"파리",   en:"Paris",      flag:"🇫🇷", country_ko:"프랑스", country_en:"France",      region_ko:"유럽", region_en:"Europe" },
+    LHR: { ko:"런던",   en:"London",     flag:"🇬🇧", country_ko:"영국",   country_en:"UK",          region_ko:"유럽", region_en:"Europe" },
+    FCO: { ko:"로마",   en:"Rome",       flag:"🇮🇹", country_ko:"이탈리아", country_en:"Italy",      region_ko:"유럽", region_en:"Europe" },
+    BCN: { ko:"바르셀로나", en:"Barcelona", flag:"🇪🇸", country_ko:"스페인", country_en:"Spain",      region_ko:"유럽", region_en:"Europe" },
+    FRA: { ko:"프랑크푸르트", en:"Frankfurt", flag:"🇩🇪", country_ko:"독일", country_en:"Germany",    region_ko:"유럽", region_en:"Europe" },
+    AMS: { ko:"암스테르담", en:"Amsterdam", flag:"🇳🇱", country_ko:"네덜란드", country_en:"Netherlands", region_ko:"유럽", region_en:"Europe" },
+    IST: { ko:"이스탄불", en:"Istanbul", flag:"🇹🇷", country_ko:"튀르키예", country_en:"Türkiye",    region_ko:"유럽", region_en:"Europe" },
+    // 미주
+    JFK: { ko:"뉴욕",   en:"New York",   flag:"🇺🇸", country_ko:"미국",   country_en:"USA",         region_ko:"미주", region_en:"Americas" },
+    LAX: { ko:"로스앤젤레스", en:"Los Angeles", flag:"🇺🇸", country_ko:"미국", country_en:"USA",     region_ko:"미주", region_en:"Americas" },
+    HNL: { ko:"호놀룰루", en:"Honolulu", flag:"🇺🇸", country_ko:"미국",   country_en:"USA",         region_ko:"미주", region_en:"Americas" },
+    YVR: { ko:"밴쿠버", en:"Vancouver",  flag:"🇨🇦", country_ko:"캐나다", country_en:"Canada",      region_ko:"미주", region_en:"Americas" },
+    // 오세아니아
+    SYD: { ko:"시드니", en:"Sydney",     flag:"🇦🇺", country_ko:"호주",   country_en:"Australia",   region_ko:"오세아니아", region_en:"Oceania" },
+  };
+
+  // deals.json 한 건 -> 카드 렌더가 쓰는 FLIGHT 객체로 변환
+  function dealToFlight(deal){
+    const m = DEST_META[deal.destination] || {};
+    const al = ALL_AIRLINES.find(a => a.code === deal.airline) || {};
+    const date = (deal.departure_at || "").slice(0, 10);
+    const returnDate = deal.return_at ? deal.return_at.slice(0, 10) : date;
+    return {
+      iata: deal.destination,
+      ko: m.ko || deal.destination,
+      en: m.en || deal.destination,
+      flag: m.flag || "",
+      country_ko: m.country_ko || "",
+      country_en: m.country_en || "",
+      region_ko: m.region_ko || "",
+      region_en: m.region_en || "",
+      airline_ko: al.ko || deal.airline,
+      airline_en: al.en || deal.airline,
+      airline_code: deal.airline,
+      from: deal.from || "ICN",
+      price: deal.price,
+      avgPrice: deal.baseline,
+      date,
+      returnDate,
+      stops: 0,
+      trip: deal.trip === "roundtrip" ? "round" : "oneway",
+      fareType: "deal",
+      provider: deal.gate || "",
+    };
+  }
+
+  async function loadDeals(){
+    dataState = "loading";
+    render();
+    try {
+      const res = await fetch(DEALS_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      FLIGHTS = (data.deals || []).map(dealToFlight);
+      dataState = "ok";
+    } catch (e) {
+      FLIGHTS = [];
+      dataState = "error";
+    }
+    render();
+  }
 
   // ---------- STATE ----------
   let filter = "round";  // 기본: 왕복 설정
@@ -3141,6 +3199,12 @@
       if (t[k] !== undefined) el.textContent = t[k];
     });
 
+    // 푸터 안내 문구 (회색, 다국어)
+    const fareNote = document.getElementById("fare-note");
+    if (fareNote) fareNote.textContent = lang === "ko"
+      ? "유류할증료·세금 포함. 좌석 선택료·수하물 등 부가 비용은 예약 페이지에서 확인"
+      : "Includes fuel surcharge & taxes. Seat, baggage and other fees are shown at booking.";
+
     // origin label
     const origin = getOrigin();
     document.getElementById("from-name").textContent = getOriginLabel();
@@ -3198,7 +3262,10 @@
     list.innerHTML = "";
 
     if (items.length === 0){
-      list.innerHTML = `<div class="empty"><img class="empty-icon" src="assets/empty-plane.png" alt=""/><div class="msg">${t.empty}</div></div>`;
+      let emptyMsg = t.empty;
+      if (dataState === "loading") emptyMsg = lang === "ko" ? "불러오는 중…" : "Loading…";
+      else if (dataState === "error") emptyMsg = lang === "ko" ? "일시적으로 데이터를 불러올 수 없습니다" : "Couldn't load data right now. Please try again later.";
+      list.innerHTML = `<div class="empty"><img class="empty-icon" src="assets/empty-plane.png" alt=""/><div class="msg">${emptyMsg}</div></div>`;
       return;
     }
 
@@ -3209,10 +3276,8 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}</span>`
         : `<span class="tag">${t.via(f.stops)}</span>`;
-      const isNewLow = f.price <= f.historicalLow;
-      const lowestText = isNewLow
-        ? `<span class="spark">🔥</span>${t.newLow}`
-        : `${t.lowestLabel} · ₩${formatKRW(f.historicalLow)}`;
+      const avgLabel = lang === "ko" ? "평균가" : "Avg";
+      const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const card = document.createElement("article");
       card.className = "card " + tier;
       card.innerHTML = `
@@ -3255,7 +3320,7 @@
           </div>
           <div class="price">
             <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
-            <div class="lowest ${isNewLow?"is-new":""}">${lowestText}</div>
+            <div class="lowest">${lowestText}</div>
           </div>
         </div>
       `;
@@ -4054,10 +4119,8 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}</span>`
         : `<span class="tag">${t.via(f.stops)}</span>`;
-      const isNewLow = f.price <= f.historicalLow;
-      const lowestText = isNewLow
-        ? `<span class="spark">🔥</span>${t.newLow}`
-        : `${t.lowestLabel} · ₩${formatKRW(f.historicalLow)}`;
+      const avgLabel = lang === "ko" ? "평균가" : "Avg";
+      const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       return `
         <article class="card ${tier}" data-idx="${i}">
           <div class="row-top">
@@ -4097,7 +4160,7 @@
             </div>
             <div class="price">
               <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
-              <div class="lowest ${isNewLow?"is-new":""}">${lowestText}</div>
+              <div class="lowest">${lowestText}</div>
             </div>
           </div>
         </article>`;
@@ -4345,6 +4408,9 @@
       window.scrollTo(0, 0);
     });
   }
+
+  // ---------- 실데이터 로드 (deals.json) ----------
+  loadDeals();
 </script>
 </body>
 </html>
