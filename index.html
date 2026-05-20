@@ -1666,18 +1666,6 @@
     font-weight: 400;
     letter-spacing: 0;
   }
-  .trip .when .wd-line .wd-sun,
-  .trip .when .wd-line .wd-sat,
-  .trip .when .wd-line .wd-wk{ color: var(--muted); }
-  .trip .when .nights{
-    color: var(--ink-2);
-    margin-left: 6px;
-    font-weight: 500;
-    font-size: 10.5px;
-    background: #f3f5f8;
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
   .trip .tags{
     display:flex; gap: 6px; flex-wrap: wrap;
     color: var(--muted);
@@ -2125,7 +2113,7 @@
       </nav>
       <button class="sort-btn" id="sort-btn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M11 18h2"/></svg>
-        <span id="sort-label" data-sort-label>출발일 빠른 순</span>
+        <span id="sort-label" data-sort-label>가격 낮은 순</span>
         <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
     </div>
@@ -2437,9 +2425,9 @@
       <div class="grabber"></div>
       <h3 data-i18n="sort-title">정렬 기준</h3>
       <ul id="sort-list">
-        <li><button data-sort="price-asc"><span data-i18n="sort-price-asc">가격 낮은 순</span><span class="check">✓</span></button></li>
+        <li><button data-sort="price-asc" class="on"><span data-i18n="sort-price-asc">가격 낮은 순</span><span class="check">✓</span></button></li>
         <li><button data-sort="price-desc"><span data-i18n="sort-price-desc">가격 높은 순</span><span class="check">✓</span></button></li>
-        <li><button data-sort="date-asc" class="on"><span data-i18n="sort-date-asc">출발일 빠른 순</span><span class="check">✓</span></button></li>
+        <li><button data-sort="date-asc"><span data-i18n="sort-date-asc">출발일 빠른 순</span><span class="check">✓</span></button></li>
         <li><button data-sort="date-desc"><span data-i18n="sort-date-desc">출발일 느린 순</span><span class="check">✓</span></button></li>
       </ul>
     </aside>
@@ -3108,16 +3096,14 @@
     const a = new Date(isoStart + "T00:00:00");
     const b = new Date(isoEnd + "T00:00:00");
     const nights = Math.round((b - a) / 86400000);
-    const wdKo = ["일","월","화","수","목","금","토"];
-    const wdEn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     // oneway flights (single date)
     if (isoStart === isoEnd){
       if (lang === "ko") {
         return `<span class="date-line">${a.getFullYear()}년 ${pad2(a.getMonth()+1)}.${pad2(a.getDate())}</span>`
-             + `<span class="wd-line"><span class="wd-${a.getDay()===0?'sun':a.getDay()===6?'sat':'wk'}">${wdKo[a.getDay()]}</span><span class="nights">편도</span></span>`;
+             + `<span class="wd-line">편도</span>`;
       } else {
         return `<span class="date-line">${a.toLocaleDateString("en-US", { month:"short", day:"numeric" })}, ${a.getFullYear()}</span>`
-             + `<span class="wd-line">${wdEn[a.getDay()]}<span class="nights">One-way</span></span>`;
+             + `<span class="wd-line">One-way</span>`;
       }
     }
     if (lang === "ko") {
@@ -3126,25 +3112,14 @@
       const end   = a.getFullYear() === b.getFullYear()
         ? `${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`
         : `${b.getFullYear()}.${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`;
-      // 주중 / 주말 표시를 위해 투립데이 시리즈 제공
-      const wdSeq = [];
-      for (let d = new Date(a); d <= b; d.setDate(d.getDate()+1)){
-        const dn = d.getDay();
-        wdSeq.push(`<span class="wd-${dn===0?'sun':dn===6?'sat':'wk'}">${wdKo[dn]}</span>`);
-      }
       return `<span class="date-line">${y}년 ${start} ~ ${end}</span>`
-           + `<span class="wd-line">${wdSeq.join("")}<span class="nights">${nights+1}일</span></span>`;
+           + `<span class="wd-line">${nights}박${nights+1}일</span>`;
     } else {
       const opts = { month:"short", day:"numeric" };
       const start = a.toLocaleDateString("en-US", opts);
       const end   = b.toLocaleDateString("en-US", opts);
-      const wdSeq = [];
-      for (let d = new Date(a); d <= b; d.setDate(d.getDate()+1)){
-        const dn = d.getDay();
-        wdSeq.push(`<span class="wd-${dn===0?'sun':dn===6?'sat':'wk'}">${wdEn[dn]}</span>`);
-      }
       return `<span class="date-line">${start} ~ ${end}, ${a.getFullYear()}</span>`
-           + `<span class="wd-line">${wdSeq.join(" ")}<span class="nights">${nights+1} day${nights>0?"s":""}</span></span>`;
+           + `<span class="wd-line">${nights}N${nights+1}D</span>`;
     }
   }
   function ddayTier(d){
