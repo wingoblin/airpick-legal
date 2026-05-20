@@ -1,21 +1,4350 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>에어픽 법적 문서</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>인천 출발 최저가 항공권</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-h1 { color: #333; }
-h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-a { color: #0066cc; }
+  :root{
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --ink: #0c1116;
+    --ink-2: #3a4350;
+    --muted: #8b95a3;
+    --line: #ebeef2;
+    --accent: #0b5cff;
+    --accent-soft: #eaf1ff;
+    --hot: #ff3b30;
+    --hot-soft: #ffecea;
+    --warn: #ff8a00;
+    --good: #15a673;
+    --good-soft: #e6f7ef;
+    --shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px rgba(15, 23, 42, .06);
+    --radius: 18px;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background: #eef0f5;
+    background-image:
+      radial-gradient(1200px 600px at 20% -10%, rgba(11,92,255,.06), transparent 60%),
+      radial-gradient(1000px 600px at 110% 110%, rgba(255,138,0,.05), transparent 55%),
+      linear-gradient(180deg, #f3f5f9 0%, #e9ecf2 100%);
+    color: var(--ink);
+    font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
+    font-feature-settings: "tnum" 1, "ss01" 1;
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+  .app{
+    width: 100%;
+    max-width: 430px;
+    background: var(--bg);
+    min-height: 100svh;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    position: relative;
+  }
+
+  /* ---------- DESKTOP FRAME (≥ 520px) ---------- */
+  @media (min-width: 520px){
+    body{
+      align-items: center;
+      padding: 24px 16px;
+    }
+    .app{
+      min-height: 0;
+      height: min(900px, calc(100svh - 48px));
+      max-height: 900px;
+      border-radius: 28px;
+      box-shadow:
+        0 1px 2px rgba(15,23,42,.05),
+        0 20px 60px rgba(15,23,42,.12),
+        0 40px 120px rgba(15,23,42,.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 0;
+    }
+    .scroll-area{
+      flex: 1 1 auto;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    .tabbar{
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+      transform: none !important;
+      max-width: 100% !important;
+      flex: 0 0 auto;
+    }
+    .sheet-backdrop{ position: absolute !important; }
+    .sheet{
+      position: absolute !important;
+      left: 0 !important;
+      right: 0 !important;
+      max-width: 100% !important;
+      transform: translateY(100%) !important;
+    }
+    .sheet.open{ transform: translateY(0) !important; }
+    .detail-view{
+      position: absolute !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      max-width: 100% !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- TAB SWITCHING ---------- */
+  /* home tab: show home, hide others */
+  .app[data-tab="home"] .alarm-screen,
+  .app[data-tab="home"] .notice-screen,
+  .app[data-tab="home"] .faq-screen{ display: none; }
+  /* alarm tab: show alarm, hide others */
+  .app[data-tab="alarm"] .topbar,
+  .app[data-tab="alarm"] .hero,
+  .app[data-tab="alarm"] .filterbar,
+  .app[data-tab="alarm"] .list,
+  .app[data-tab="alarm"] .foot,
+  .app[data-tab="alarm"] .notice-screen,
+  .app[data-tab="alarm"] .faq-screen{ display: none; }
+  /* notice tab */
+  .app[data-tab="notice"] .topbar,
+  .app[data-tab="notice"] .hero,
+  .app[data-tab="notice"] .filterbar,
+  .app[data-tab="notice"] .list,
+  .app[data-tab="notice"] .foot,
+  .app[data-tab="notice"] .alarm-screen,
+  .app[data-tab="notice"] .faq-screen{ display: none; }
+  /* faq tab */
+  .app[data-tab="faq"] .topbar,
+  .app[data-tab="faq"] .hero,
+  .app[data-tab="faq"] .filterbar,
+  .app[data-tab="faq"] .list,
+  .app[data-tab="faq"] .foot,
+  .app[data-tab="faq"] .alarm-screen,
+  .app[data-tab="faq"] .notice-screen,
+  .app[data-tab="faq"] .terms-screen,
+  .app[data-tab="faq"] .contact-screen{ display: none; }
+  /* terms tab */
+  .app[data-tab="terms"] .topbar,
+  .app[data-tab="terms"] .hero,
+  .app[data-tab="terms"] .filterbar,
+  .app[data-tab="terms"] .list,
+  .app[data-tab="terms"] .foot,
+  .app[data-tab="terms"] .alarm-screen,
+  .app[data-tab="terms"] .notice-screen,
+  .app[data-tab="terms"] .faq-screen,
+  .app[data-tab="terms"] .contact-screen{ display: none; }
+  /* contact tab */
+  .app[data-tab="contact"] .topbar,
+  .app[data-tab="contact"] .hero,
+  .app[data-tab="contact"] .filterbar,
+  .app[data-tab="contact"] .list,
+  .app[data-tab="contact"] .foot,
+  .app[data-tab="contact"] .alarm-screen,
+  .app[data-tab="contact"] .notice-screen,
+  .app[data-tab="contact"] .faq-screen,
+  .app[data-tab="contact"] .terms-screen{ display: none; }
+  /* home/alarm/notice hide chat screens */
+  .app[data-tab="home"] .terms-screen,
+  .app[data-tab="home"] .faq-screen,
+  .app[data-tab="home"] .contact-screen,
+  .app[data-tab="alarm"] .terms-screen,
+  .app[data-tab="alarm"] .contact-screen,
+  .app[data-tab="notice"] .terms-screen,
+  .app[data-tab="notice"] .contact-screen{ display: none; }
+
+  /* ---------- CHAT (FAQ) ---------- */
+  .chat-thread{
+    padding: 6px 14px 24px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .chat-msg{
+    max-width: 78%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    font-weight: 500;
+  }
+  .chat-msg.q{
+    align-self: flex-end;
+    background: var(--accent);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+  .chat-msg.a{
+    align-self: flex-start;
+    background: #f3f5f8;
+    color: var(--ink);
+    border-bottom-left-radius: 5px;
+  }
+  .chat-icon{
+    display: inline-block;
+    width: 28px; height: 18px;
+    object-fit: contain;
+    vertical-align: -3px;
+    margin-left: 4px;
+  }
+  .chat-section{
+    align-self: center;
+    font-size: 10.5px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: .04em;
+    margin: 10px 0 2px;
+    text-transform: uppercase;
+    background: #fff;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  .chat-time{
+    font-size: 10px;
+    color: var(--muted);
+    align-self: center;
+    margin: 6px 0;
+    font-weight: 500;
+  }
+
+  /* ---------- NOTICE SCREEN ---------- */
+  .notice-header{
+    padding: 10px 18px 8px;
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    z-index: 10;
+  }
+  .notice-header h2{
+    margin: 0; font-size: 17px; font-weight: 800;
+    letter-spacing: -.025em; color: var(--ink);
+  }
+  .notice-list{ padding: 4px 14px 0; display: flex; flex-direction: column; gap: 6px; }
+  /* FAQ items (replaces notice items) */
+  .faq-item{
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .faq-item summary{
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 14px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -.015em;
+    line-height: 1.4;
+  }
+  .faq-item summary::-webkit-details-marker{ display: none; }
+  .faq-item .q-mark{
+    flex: 0 0 auto;
+    width: 20px; height: 20px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .faq-item .q-text{ flex: 1 1 auto; }
+  .faq-item .faq-chev{
+    flex: 0 0 auto;
+    width: 14px; height: 14px;
+    color: #c5cbd4;
+    transition: transform .22s ease;
+  }
+  .faq-item[open] .faq-chev{ transform: rotate(180deg); }
+  .faq-item .a-wrap{
+    display: flex; gap: 10px;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+  }
+  .faq-item .a-mark{
+    flex: 0 0 auto;
+    width: 20px; height: 20px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .faq-item .a-text{
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+  .notice-item{
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(15,23,42,.03);
+    box-shadow: var(--shadow);
+    padding: 11px 14px;
+    cursor: pointer;
+    transition: transform .12s ease;
+  }
+  .notice-item:active{ transform: scale(.99); }
+  .notice-item .top{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px; gap: 6px;
+  }
+  .notice-item .badge{
+    font-size: 10px; font-weight: 700;
+    color: var(--accent); background: var(--accent-soft);
+    padding: 2px 7px; border-radius: 999px; letter-spacing: -.01em;
+  }
+  .notice-item .badge.info{ color: var(--ink-2); background: #f3f5f8; }
+  .notice-item .badge.event{ color: #c46600; background: #fff2e0; }
+  .notice-item .badge.update{ color: var(--good); background: var(--good-soft); }
+  .notice-item .date{
+    font-size: 11px; color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  .notice-item .title{
+    font-size: 13px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em; line-height: 1.3;
+  }
+  .notice-item .desc{
+    font-size: 11px; color: var(--ink-2);
+    margin-top: 3px; line-height: 1.4; font-weight: 500;
+  }
+
+  /* ---------- BOTTOM TAB BAR ---------- */
+  .tabbar{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    display: flex;
+    z-index: 30;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tabbar button{
+    flex: 1 1 0;
+    border: 0;
+    background: transparent;
+    padding: 10px 0 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--muted);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: -.01em;
+    position: relative;
+  }
+  .tabbar button svg{ width: 22px; height: 22px; }
+  .tabbar button.on{ color: var(--ink); }
+  .tabbar button .dot{
+    position: absolute;
+    top: 8px; right: calc(50% - 18px);
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--hot);
+    display: none;
+  }
+  .tabbar button.has-dot .dot{ display: block; }
+
+  /* ---------- TOSS-STYLE SWITCH ---------- */
+  .tswitch{
+    width: 50px; height: 30px;
+    background: #d8dde4;
+    border-radius: 999px;
+    position: relative;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: background .18s ease;
+    flex: 0 0 auto;
+  }
+  .tswitch::after{
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 24px; height: 24px;
+    background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 2px 4px rgba(15,23,42,.18);
+    transition: transform .2s cubic-bezier(.3, 1.2, .4, 1);
+  }
+  .tswitch.on{ background: var(--accent); }
+  .tswitch.on::after{ transform: translateX(20px); }
+  .tswitch:disabled{ opacity: .45; cursor: not-allowed; }
+
+  /* ---------- ALARM SCREEN ---------- */
+  .alarm-header{
+    padding: 10px 18px 6px;
+  }
+  .alarm-header h2{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -.025em;
+    color: var(--ink);
+  }
+  .alarm-section{
+    padding: 4px 18px 10px;
+  }
+  .alarm-section + .alarm-section{
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+  .alarm-section .section-title{
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0 0 6px;
+    letter-spacing: -.005em;
+  }
+    margin-top: 4px;
+  }
+  .alarm-section .section-title{
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0 0 10px;
+    letter-spacing: -.005em;
+  }
+  .origin-card{
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 11px 16px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+  }
+  .origin-card:active{ background: #f8f9fb; }
+  /* grouped route card (origin + dest stacked) */
+  .route-card-grp{
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .route-card-grp .origin-card.grouped{
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    display: grid;
+    grid-template-columns: 44px 1fr 18px;
+    align-items: center;
+    column-gap: 12px;
+    padding: 11px 16px;
+    text-align: left;
+  }
+  .route-card-grp .origin-card.grouped + .origin-card.grouped{
+    border-top: 1px solid var(--line);
+  }
+  .route-card-grp .role{
+    width: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: -.01em;
+    text-align: left;
+  }
+  .route-card-grp .meta{
+    text-align: left;
+    align-items: flex-start !important;
+  }
+  .origin-card .ic{
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: #f3f5f8;
+    color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+  }
+  .origin-card .ic img{ width: 28px; height: 18px; object-fit: contain; }
+  .origin-card .meta{ flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+  .origin-card .meta .name{
+    display: block;
+    font-size: 15px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em;
+  }
+  .origin-card .meta .sub{
+    display: block;
+    font-size: 12px; color: var(--muted);
+    margin-top: 3px;
+    font-weight: 500;
+    word-break: break-word;
+  }
+  .origin-card .chev{
+    width: 18px; height: 18px;
+    color: #c5cbd4;
+    flex: 0 0 auto;
+  }
+
+  /* more-grid: 공지사항/최근본상품 2-col grid */
+  .more-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .more-tile{
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    padding: 9px 10px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    font: inherit;
+    text-align: left;
+  }
+  .more-tile:active{ background: #f8f9fb; }
+  .more-tile .ic{
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: #f3f5f8;
+    color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+  }
+  .more-tile .ic svg{ width: 16px; height: 16px; }
+  .more-tile .name{
+    font-size: 12.5px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em;
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .more-tile .chev{
+    width: 14px; height: 14px;
+    color: #c5cbd4;
+    flex: 0 0 auto;
+  }
+
+  /* recent screen */
+  .app[data-tab="recent"] .topbar,
+  .app[data-tab="recent"] .hero,
+  .app[data-tab="recent"] .filterbar,
+  .app[data-tab="recent"] .list,
+  .app[data-tab="recent"] .foot,
+  .app[data-tab="recent"] .alarm-screen,
+  .app[data-tab="recent"] .notice-screen,
+  .app[data-tab="recent"] .faq-screen,
+  .app[data-tab="recent"] .terms-screen,
+  .app[data-tab="recent"] .contact-screen{ display: none; }
+  .app[data-tab="home"] .recent-screen,
+  .app[data-tab="alarm"] .recent-screen,
+  .app[data-tab="notice"] .recent-screen,
+  .app[data-tab="faq"] .recent-screen,
+  .app[data-tab="terms"] .recent-screen,
+  .app[data-tab="contact"] .recent-screen{ display: none; }
+  .recent-empty{
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .recent-empty img{ width: 110px; height: auto; margin: 0 auto 12px; display: block; opacity: .85; }
+  .recent-empty .msg{ font-size: 13px; font-weight: 500; }
+
+  .toggle-row{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 4px;
+    gap: 12px;
+  }
+  .toggle-row + .toggle-row{ border-top: 1px solid var(--line); }
+  .toggle-row.master{
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+  }
+  .toggle-row.master + .toggle-row.master{ margin-top: 8px; }
+  .toggle-row .label-wrap{
+    flex: 1 1 auto; min-width: 0;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .toggle-row .label-wrap .t{
+    font-size: 15px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em;
+  }
+  .toggle-row .label-wrap .s{
+    font-size: 12px; color: var(--muted);
+    font-weight: 500;
+  }
+  .alarm-sub{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 4px 18px;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: opacity .18s ease;
+  }
+  .alarm-sub.is-off{
+    opacity: .4;
+    pointer-events: none;
+  }
+  .alarm-empty-note{
+    margin-top: 14px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(244,245,247,.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    padding: 14px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(15,23,42,.04);
+  }
+  .brand{
+    display:flex; align-items:center; gap:7px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: -.01em;
+    color: var(--muted);
+  }
+  .brand .brand-plane{
+    width: 40px;
+    height: 26px;
+    object-fit: contain;
+    flex: 0 0 auto;
+    animation: brand-takeoff 4s ease-in-out infinite;
+    transform-origin: 60% 70%;
+  }
+  @keyframes brand-takeoff{
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    35%  { transform: translate(2px, -3px) rotate(-2deg); }
+    70%  { transform: translate(-1px, 1px) rotate(1deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .brand .brand-plane{ animation: none; }
+  }
+  .brand .brand-stack{
+    display: inline-flex; flex-direction: column;
+    line-height: 1.05;
+  }
+  .brand .brand-name{
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: -.02em;
+  }
+  .brand .brand-tagline{
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 12.5px;
+    letter-spacing: -.01em;
+    margin-top: 2px;
+  }
+  .lang{
+    display:inline-flex;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    box-shadow: var(--shadow);
+  }
+  .lang button{
+    border: 0; background: transparent;
+    font: inherit; cursor: pointer;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    letter-spacing: .01em;
+  }
+  .lang button.on{
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* ---------- HERO (Toss-style minimal) ---------- */
+  .hero{
+    padding: 14px 22px 16px;
+  }
+  .hero-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .hero-plane{
+    width: 36px; height: 24px;
+    object-fit: contain;
+    flex: 0 0 auto;
+  }
+  .from-btn{
+    background: transparent; border: 0; padding: 0;
+    font: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -.025em;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: left;
+    min-width: 0;
+  }
+  .from-btn:active{ opacity: .6 }
+  .from-btn .chev{
+    width: 18px; height: 18px;
+    color: #c5cbd4;
+    flex: 0 0 auto;
+    transform: translateY(1px);
+  }
+  .from-hint{
+    color: var(--muted);
+    font-size: 12.5px;
+    margin: 6px 0 0;
+    letter-spacing: -.01em;
+    font-weight: 500;
+  }
+
+  .detail-btn{
+    flex: 0 0 auto;
+    display: inline-flex; align-items:center; gap:5px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -.01em;
+    box-shadow: var(--shadow);
+    position: relative;
+    line-height: 1;
+  }
+  .detail-btn svg{ width:14px; height:14px; color: var(--ink-2) }
+  .detail-btn .badge{
+    position:absolute;
+    top: -3px; right: -3px;
+    min-width: 16px; height: 16px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 0 2px #fff;
+  }
+  .detail-btn.has-changes .badge{ display: inline-flex; }
+
+  /* ---------- FILTER + SORT BAR ---------- */
+  .filterbar{
+    display:flex; align-items:center; gap:8px;
+    padding: 14px 20px 6px;
+  }
+  /* active filter banner */
+  .filter-banner{
+    display: flex; align-items: center; gap: 6px;
+    margin: 6px 16px 0;
+    padding: 8px 12px 8px 14px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+  .filter-banner[hidden]{ display: none !important; }
+  .filter-banner svg{ width: 14px; height: 14px; flex: 0 0 auto; }
+  .filter-banner .msg{ flex: 1 1 auto; }
+  .filter-banner button{
+    border: 0; background: transparent; padding: 4px 6px;
+    color: var(--accent); cursor: pointer;
+    font: inherit; font-size: 11px; font-weight: 700;
+    letter-spacing: -.01em;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .chips{
+    display:flex; gap:6px;
+    flex: 1 1 auto;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar{ display:none }
+  .chip{
+    flex: 0 0 auto;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink-2);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: -.01em;
+    font-family: inherit;
+  }
+  .chip.on{
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .sort-btn{
+    flex: 0 0 auto;
+    display: inline-flex; align-items:center; gap:5px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: 8px 12px 8px 11px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -.01em;
+    box-shadow: var(--shadow);
+  }
+  .sort-btn svg{ width:14px; height:14px; }
+  .sort-btn .caret{ width:10px; height:10px; opacity:.5 }
+  .sort-btn #sort-label{
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* bottom sheet */
+  .sheet-backdrop{
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,.35);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease;
+    z-index: 50;
+  }
+  .sheet-backdrop.open{ opacity:1; pointer-events:auto; }
+  .sheet{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 100%);
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    border-radius: 22px 22px 0 0;
+    padding: 10px 12px 28px;
+    z-index: 51;
+    transition: transform .28s cubic-bezier(.2,.7,.2,1);
+    box-shadow: 0 -10px 40px rgba(15,23,42,.18);
+    padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  }
+  .sheet.open{ transform: translate(-50%, 0); }
+  .sheet .grabber{
+    width: 40px; height: 4px; border-radius: 999px;
+    background: #d8dde4;
+    margin: 4px auto 10px;
+  }
+  .sheet h3{
+    margin: 4px 12px 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--muted);
+    letter-spacing: -.01em;
+  }
+  .sheet ul{ list-style:none; margin:0; padding:0; }
+  .sheet li button{
+    width: 100%;
+    display:flex; align-items:center; justify-content:space-between;
+    background: transparent; border: 0;
+    padding: 14px 12px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    border-radius: 12px;
+    letter-spacing: -.01em;
+  }
+  .sheet li button:active{ background: #f3f5f8; }
+  .sheet li button.on{ color: var(--accent); font-weight: 700; }
+  .sheet li button .check{ opacity: 0; color: var(--accent); }
+  .sheet li button.on .check{ opacity: 1; }
+  .sheet li + li{ border-top: 1px solid var(--line); }
+
+  /* airport picker rows */
+  .ap-tabs{
+    display: flex;
+    padding: 0 12px 8px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .ap-tab{
+    flex: 1 1 0;
+    background: transparent;
+    border: 0;
+    padding: 12px 0;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    position: relative;
+    letter-spacing: -.01em;
+  }
+  .ap-tab.on{
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .ap-tab.on::after{
+    content: "";
+    position: absolute;
+    left: 14%; right: 14%; bottom: -1px;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 2px;
+  }
+  .ap-list-wrap{
+    max-height: 50svh;
+    overflow-y: auto;
+    margin: 0 0 4px;
+  }
+  .sheet li .ap-row{
+    display:flex; align-items: center; justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+  }
+  .sheet li .ap-name{
+    display:flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  }
+  .sheet li .ap-name .city{
+    font-size: 12px; color: var(--muted);
+    font-weight: 500;
+  }
+  .sheet li .ap-iata{
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    background: #f3f5f8;
+    padding: 3px 7px;
+    border-radius: 6px;
+    letter-spacing: .04em;
+  }
+  .sheet li button.on .ap-iata{
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  /* airline sheet sub-English label */
+  #airline-list .al-sub{
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+  /* airline sheet: same style as airport sheet (accent on selected) */
+
+  /* detail options sheet */
+  .detail-sheet{ padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .detail-sheet > .grabber + h3 + *{ /* scroll if too tall */ }
+  .detail-sheet{ max-height: 85svh; display: flex; flex-direction: column; }
+  .detail-sheet > .sheet-foot{ flex: 0 0 auto; }
+  .detail-sheet .detail-scroll{
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  .detail-section{ padding: 8px 16px 16px; }
+  .detail-section + .detail-section{ border-top: 1px solid var(--line); padding-top: 16px; }
+  .detail-row{
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    background: #f3f5f8;
+    border-radius: 12px;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+  }
+  .detail-row:active{ background: #e9ecf1; }
+  .detail-row .dr-left{
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
+  .detail-row .dr-left .t{
+    font-size: 14px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em;
+  }
+  .detail-row .dr-left .s{
+    font-size: 11.5px; color: var(--muted); font-weight: 500;
+  }
+  .detail-row .chev{
+    width: 18px; height: 18px;
+    color: #c5cbd4;
+    flex: 0 0 auto;
+  }
+  .date-range{
+    display: flex; align-items: center; gap: 8px;
+  }
+  .date-range .date-field{
+    flex: 1 1 0;
+    display: flex; flex-direction: column; gap: 4px;
+    background: #f3f5f8;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .date-range .date-field .df-label{
+    font-size: 11px; color: var(--muted); font-weight: 500;
+  }
+  .date-range .date-field input[type="date"]{
+    border: 0; background: transparent;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.005em;
+    padding: 0;
+    width: 100%;
+    outline: none;
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    appearance: none;
+  }
+  .date-range .date-field input[type="date"]::-webkit-calendar-picker-indicator{
+    opacity: .35;
+    cursor: pointer;
+  }
+  .date-range .date-field.empty input[type="date"]{ color: var(--muted); font-weight: 500; }
+  .date-range .date-dash{ color: var(--muted); font-weight: 600; }
+  .detail-label{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .detail-label .hint{
+    color: var(--muted); font-weight: 500; font-size: 11.5px;
+  }
+  .stepper-row{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 0;
+  }
+  .stepper-row + .stepper-row{ border-top: 1px solid var(--line); }
+  .stepper-meta{ display:flex; flex-direction: column; gap: 2px; }
+  .stepper-meta .t{ font-size: 14px; font-weight: 600; color: var(--ink); }
+  .stepper-meta .s{ font-size: 11.5px; color: var(--muted); }
+  .stepper{
+    display: flex; align-items: center; gap: 10px;
+  }
+  .stepper button{
+    width: 30px; height: 30px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex; align-items:center; justify-content:center;
+    font-family: inherit;
+  }
+  .stepper button:disabled{ opacity: .35; cursor: not-allowed; }
+  .stepper .v{
+    min-width: 18px; text-align: center;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  .pill-row{
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .pill{
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink-2);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -.01em;
+  }
+  .pill.on{
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: transparent;
+  }
+  .time-range{
+    margin-top: 6px;
+  }
+  .time-display{
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px;
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 14px;
+  }
+  .time-display .val{
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.02em;
+    background: #f3f5f8;
+    padding: 8px 16px;
+    border-radius: 12px;
+    min-width: 92px;
+    text-align: center;
+  }
+  .time-display .dash{
+    font-size: 16px; color: var(--muted); font-weight: 600;
+  }
+  .dual-slider{
+    position: relative;
+    height: 36px;
+    margin: 0 14px;
+  }
+  .dual-slider .track{
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 4px;
+    margin-top: -2px;
+    background: #e5e8ec;
+    border-radius: 999px;
+  }
+  .dual-slider .range-fill{
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    margin-top: -2px;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+  .dual-slider input[type="range"]{
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    background: transparent;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+  }
+  .dual-slider input[type="range"]:focus{ outline: none; }
+  .dual-slider input[type="range"]::-webkit-slider-runnable-track{
+    background: transparent;
+    height: 36px;
+    border: 0;
+  }
+  .dual-slider input[type="range"]::-moz-range-track{
+    background: transparent;
+    height: 36px;
+    border: 0;
+  }
+  .dual-slider input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #fff;
+    border: 0;
+    box-shadow: 0 0 0 2px var(--accent), 0 2px 6px rgba(15,23,42,.18);
+    cursor: grab;
+    margin-top: 5px;
+  }
+  .dual-slider input[type="range"]::-moz-range-thumb{
+    pointer-events: auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #fff;
+    border: 0;
+    box-shadow: 0 0 0 2px var(--accent), 0 2px 6px rgba(15,23,42,.18);
+    cursor: grab;
+  }
+  .dual-slider input[type="range"]:active::-webkit-slider-thumb{ cursor: grabbing; }
+  .dual-slider .ticks{
+    display: flex; justify-content: space-between;
+    margin: 8px 4px 0;
+    font-size: 10.5px;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  .airline-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  /* ---------- WHEEL PICKER ---------- */
+  .wheel-card{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .wheel-row{
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+  }
+  .wheel-row:active{ background: #f8f9fb; }
+  .wheel-row + .wheel-row{ border-top: 1px solid var(--line); }
+  .wheel-panel + .wheel-row{ border-top: 1px solid var(--line); }
+  .wheel-row .wr-label{
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-2);
+    letter-spacing: -.01em;
+  }
+  .wheel-row .wr-side{ display: inline-flex; align-items: center; gap: 8px; }
+  .wheel-row .wr-val{
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.01em;
+  }
+  .wheel-row .wr-val.empty{ color: var(--muted); font-weight: 500; }
+  .wheel-row .wr-chev{
+    width: 16px; height: 16px;
+    color: #c5cbd4;
+    transition: transform .22s ease;
+  }
+  .wheel-row[aria-expanded="true"] .wr-chev{ transform: rotate(180deg); }
+  .wheel-panel{
+    padding: 6px 0 12px;
+    background: #fff;
+    border-top: 1px solid var(--line);
+  }
+  .wheel-panel[hidden]{ display: none !important; }
+  .wheel-confirm{
+    display: block;
+    margin: 12px 14px 4px;
+    width: calc(100% - 28px);
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    cursor: pointer;
+  }
+  .wheel-confirm:active{ opacity: .85; }
+  .wheel{
+    position: relative;
+    height: 168px;
+    display: flex;
+    overflow: hidden;
+  }
+  .wheel-indicator{
+    position: absolute;
+    left: 12px; right: 12px;
+    top: 50%; transform: translateY(-50%);
+    height: 38px;
+    background: #f3f5f8;
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .wheel::before, .wheel::after{
+    content: "";
+    position: absolute; left: 0; right: 0;
+    height: 56px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .wheel::before{ top: 0; background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0)); }
+  .wheel::after{ bottom: 0; background: linear-gradient(0deg, #fff 30%, rgba(255,255,255,0)); }
+  .wheel-col{
+    flex: 1 1 0;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    position: relative; z-index: 2;
+    text-align: center;
+  }
+  .wheel-col::-webkit-scrollbar{ display: none; }
+  .wheel-col .pad{ height: 65px; } /* (168 - 38) / 2 ≈ 65 */
+  .wheel-col .item{
+    height: 38px;
+    scroll-snap-align: center;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: -.01em;
+    cursor: pointer;
+    transition: color .18s ease, font-weight .18s ease;
+  }
+  .wheel-col .item.selected{
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .sheet-foot{
+    display: flex; gap: 10px; padding: 14px 16px 4px;
+    border-top: 1px solid var(--line);
+    background: #fff;
+  }
+  .sheet-foot .btn{
+    flex: 1 1 auto;
+    border: 0; border-radius: 12px;
+    font: inherit; cursor: pointer;
+    padding: 14px 18px;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .sheet-foot .btn.reset{
+    flex: 0 0 auto;
+    background: #f3f5f8;
+    color: var(--ink-2);
+  }
+  .sheet-foot .btn.apply{
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* empty state */
+  .list > .empty{
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .list > .empty .empty-icon{
+    width: 110px;
+    height: auto;
+    margin: 0 auto 12px;
+    display: block;
+    opacity: .85;
+  }
+  .list > .empty .msg{ font-size: 14px; font-weight: 500; }
+
+  /* ---------- LIST ---------- */
+  .list{
+    padding: 10px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card{
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(15,23,42,.03);
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:active{
+    transform: scale(.985);
+  }
+  .card.tier-2::before,
+  .card.tier-3::before,
+  .card.tier-4::before{
+    content: "";
+    position:absolute; left:0; top:0; bottom:0; width:3px;
+  }
+  .card.tier-2::before{ background: #10b981; } /* 15일 이내 — 에메랄드 */
+  .card.tier-3::before{ background: #ff8a00; } /* 30일 이내 — 주황 */
+  .card.tier-4::before{ background: #ff3b30; } /* 30일 이상 — 빨강 */
+  .row-top{
+    display:flex; align-items:flex-start; justify-content: space-between;
+    gap: 12px;
+  }
+  .dest{
+    display:flex; align-items:center; gap: 11px; min-width:0;
+  }
+  .flag{
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    background: #f3f5f8;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 22px;
+    flex: 0 0 auto;
+    line-height: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  /* airline-as-flag badge — 흰 배경 + 로고 이미지 */
+  .flag.al-badge{
+    background: #fff;
+    padding: 0;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .flag.al-badge img.al-logo-img{
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 0;
+    background: #fff;
+    z-index: 2;
+    transition: opacity .2s ease;
+    image-rendering: -webkit-optimize-contrast;
+    transform: scale(1.45);
+    transform-origin: center;
+  }
+  .flag.al-badge img.al-logo-img.hidden{ opacity: 0; }
+  /* fallback (colored IATA code) only shows when image failed */
+  .flag.al-badge .al-fallback{
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: #fff;
+    z-index: 0;
+    background: #f3f5f8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+  .flag.al-badge .al-fallback{
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: #fff;
+    z-index: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+  .flag.al-badge .al-fallback svg{ width: 78%; height: 78%; }
+  .flag.al-badge .mark-code{
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: -.02em;
+    color: #fff;
+    line-height: 1;
+  }
+  .flag.al-badge .mark-tw{
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -.05em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    color: #fff;
+  }
+  .flag.al-badge .mark-tw > span{
+    font-size: 13px;
+    color: #80c41c;
+    margin-left: -1px;
+  }
+  .flag.al-badge[data-code="7C"] .al-fallback{ background: #f06400; }
+  .flag.al-badge[data-code="BX"] .al-fallback{ background: #045fa3; }
+  .flag.al-badge[data-code="TW"] .al-fallback{ background: #c8102e; }
+  .flag.al-badge[data-code="LJ"] .al-fallback{ background: #00b452; }
+  .flag.al-badge[data-code="OZ"] .al-fallback{ background: #d70926; }
+  .flag.al-badge[data-code="KE"] .al-fallback{ background: #00b0e6; }
+  .flag.al-badge[data-code="BR"] .al-fallback{ background: #1b6738; }
+  .flag.al-badge[data-code="CX"] .al-fallback{ background: #006464; }
+  .dest-text{ min-width:0 }
+  .dest-name{
+    display:flex; align-items:center; gap:6px;
+    font-size: 16px; font-weight: 400;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .dest-name .loc-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .dest-name .city-ko{ font-weight: 700; }
+  .dest-name .country{
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: -.01em;
+  }
+  .dest-name .iata{
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    background: #f3f5f8;
+    padding: 2px 6px;
+    border-radius: 6px;
+    letter-spacing: .04em;
+  }
+  .airline-line{
+    display: inline-flex; align-items: center;
+    margin-top: 5px;
+    gap: 4px;
+  }
+  .airline-line .al-logo{
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    color: #fff;
+    background: var(--ink);
+  }
+  .airline-line .al-logo[data-code="7C"] { background: #f06400; }  /* 제주항공 */
+  .airline-line .al-logo[data-code="BX"] { background: #045fa3; }  /* 에어부산 */
+  .airline-line .al-logo[data-code="TW"] { background: #c8102e; }  /* 티웨이 */
+  .airline-line .al-logo[data-code="LJ"] { background: #00b452; }  /* 진에어 */
+  .airline-line .al-logo[data-code="OZ"] { background: #d70926; }  /* 아시아나 */
+  .airline-line .al-logo[data-code="KE"] { background: #00b0e6; }  /* 대한항공 */
+  .airline-line .al-logo[data-code="BR"] { background: #1b6738; }  /* 에바 */
+  .airline-line .al-logo[data-code="CX"] { background: #006464; }  /* 캐세이 */
+  .route .via{
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .route{
+    display:flex; align-items:center; gap:5px;
+    font-size: 11.5px;
+    color: var(--ink-2);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .route .arrow{
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .route .city{
+    color: var(--muted);
+    font-weight: 500;
+    margin-left: 3px;
+  }
+  .badges-right{
+    display:flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  }
+  .dday{
+    display: inline-flex; flex-direction: column; align-items: flex-end; gap: 5px;
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+  }
+  .dday .dday-lbl{
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .dday .dday-track{
+    position: relative;
+    width: 70px; height: 14px;
+  }
+  .dday .dday-track::before{
+    content: ""; position: absolute; top: 50%; left: 0; right: 0;
+    border-top: 1.5px dashed #c5cbd4;
+    height: 0;
+  }
+  /* destination dot at end of track */
+  .dday .dday-track::after{
+    content: ""; position: absolute;
+    right: 0px; top: 50%;
+    width: 4px; height: 4px;
+    border-radius: 999px;
+    background: var(--hot);
+    transform: translateY(-50%);
+  }
+  .dday .dday-track svg.plane{
+    position: absolute; top: -2px;
+    width: 16px; height: 16px;
+    color: currentColor;
+    transform: rotate(40deg);
+    transition: left .3s ease;
+  }
+  /* tier color override (all charcoal) */
+  .dday.t1, .dday.t2, .dday.t3, .dday.t4{
+    color: var(--ink-2);
+  }
+  .dday.t1.from-tier{ background: var(--hot-soft); color: #ff3b30; }
+  .dday.t2.from-tier{ background: #fff2e0; color: #c46600; }
+  .dday.t3.from-tier{ background: var(--accent-soft); color: var(--accent); }
+  .dday.t4.from-tier{ background: var(--good-soft); color: var(--good); }
+
+  .row-bottom{
+    display:flex; align-items:flex-end; justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    gap: 10px;
+  }
+  .trip{
+    display:flex; flex-direction: column; gap: 4px;
+    font-size: 12px;
+    color: var(--ink-2);
+    min-width: 0;
+  }
+  .trip .when{
+    color: var(--ink);
+    font-weight: 400;
+    font-size: 12.5px;
+    letter-spacing: -.01em;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .trip .when .date-line{
+    display: flex; align-items: center;
+  }
+  .trip .when .wd-line{
+    display: flex; gap: 0;
+    font-size: 10.5px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .trip .when .wd-line .wd-sun,
+  .trip .when .wd-line .wd-sat,
+  .trip .when .wd-line .wd-wk{ color: var(--muted); }
+  .trip .when .nights{
+    color: var(--ink-2);
+    margin-left: 6px;
+    font-weight: 500;
+    font-size: 10.5px;
+    background: #f3f5f8;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .trip .tags{
+    display:flex; gap: 6px; flex-wrap: wrap;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .trip .tags .tag{
+    background: #f3f5f8;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 10.5px;
+    color: var(--ink-2);
+  }
+  .trip .tags .tag.direct{
+    background: #f3f5f8;
+    color: var(--ink-2);
+  }
+  .price{
+    display:flex; flex-direction: column; align-items: flex-end;
+    flex: 0 0 auto;
+  }
+  .price .amount{
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .price .amount .krw{
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  .price .lowest{
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+    letter-spacing: -.005em;
+  }
+  .price .lowest.is-new{
+    color: var(--hot);
+    font-weight: 600;
+  }
+  .price .lowest .spark{
+    display: inline-block;
+    transform: translateY(-1px);
+    margin-right: 2px;
+  }
+
+  /* (removed: BEST ribbon) */
+
+  /* footer */
+  .foot{
+    text-align:center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 22px;
+    padding: 0 24px;
+    line-height: 1.6;
+  }
+
+  /* small screens */
+  @media (max-width: 360px){
+    h1.title{ font-size: 24px }
+    .flag{ width:40px; height:40px; font-size:22px }
+    .price .amount{ font-size: 20px }
+  }
+
+  /* ============================================================ */
+  /* ---------- FLIGHT DETAIL VIEW (상세 페이지) ---------- */
+  /* ============================================================ */
+  .detail-view{
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
+  }
+  .detail-view.open{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .detail-bar{
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 14px 16px 10px;
+    gap: 10px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  .detail-bar .icon-btn{
+    width: 36px; height: 36px;
+    border-radius: 999px;
+    border: 0; background: transparent;
+    display: inline-flex; align-items:center; justify-content:center;
+    cursor: pointer;
+    color: var(--ink);
+    flex: 0 0 auto;
+  }
+  .detail-bar .icon-btn:active{ background: #f3f5f8; }
+  .detail-bar .icon-btn svg{ width: 22px; height: 22px; }
+  .detail-bar .title-wrap{
+    flex: 1 1 auto;
+    padding-top: 7px;
+    min-width: 0;
+  }
+  .detail-bar .title-line{
+    display: flex; align-items: center; gap: 8px;
+    font-size: 15px; font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.01em;
+  }
+  .detail-bar .title-line .flag{
+    width: auto; height: auto; background: transparent;
+    font-size: 18px; border-radius: 0;
+  }
+  .detail-bar .region{
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+    letter-spacing: -.01em;
+  }
+
+  .detail-body{
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 16px 24px;
+    background: #fff;
+  }
+  .airline-strip{
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 4px 12px;
+  }
+  .airline-mark{
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .airline-mark .a-logo{
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: -.02em;
+    overflow: hidden;
+    position: relative;
+  }
+  .airline-mark .a-logo img.al-logo-img{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 0;
+    background: #fff;
+    z-index: 1;
+    image-rendering: -webkit-optimize-contrast;
+    transform: scale(1.45);
+    transform-origin: center;
+  }
+  .airline-mark .a-logo img.al-logo-img.hidden{ opacity: 0; }
+  .airline-mark .a-logo .al-fallback{
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .airline-mark .a-logo[data-code="7C"] .al-fallback{ background: #f06400; }
+  .airline-mark .a-logo[data-code="BX"] .al-fallback{ background: #045fa3; }
+  .airline-mark .a-logo[data-code="TW"] .al-fallback{ background: #c8102e; }
+  .airline-mark .a-logo[data-code="LJ"] .al-fallback{ background: #00b452; }
+  .airline-mark .a-logo[data-code="OZ"] .al-fallback{ background: #d70926; }
+  .airline-mark .a-logo[data-code="KE"] .al-fallback{ background: #00b0e6; }
+  .airline-mark .a-logo[data-code="BR"] .al-fallback{ background: #1b6738; }
+  .airline-mark .a-logo[data-code="CX"] .al-fallback{ background: #006464; }
+    background: var(--accent);
+    color: #fff;
+    display: inline-flex; align-items:center; justify-content:center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: .03em;
+  }
+  .airline-mark .a-name{
+    font-size: 13px; font-weight: 700;
+    color: var(--ink); letter-spacing: -.01em;
+  }
+
+  .route-card{
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+  .route-col{ min-width: 0; }
+  .route-col.right{ text-align: right; }
+  .route-col .ap{
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: -.01em;
+  }
+  .route-col .city-big{
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.025em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .route-col .iata-line{
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: .04em;
+  }
+  .route-col .date-line{
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-top: 18px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.005em;
+  }
+  .route-mid{
+    align-self: center;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--muted);
+    padding-top: 6px;
+  }
+  .route-mid .swap{
+    width: 20px; height: 20px;
+    color: #c5cbd4;
+  }
+  .route-mid .dur-label{
+    font-size: 10.5px; color: var(--muted); font-weight: 500;
+  }
+  .route-mid .dur-val{
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    margin-top: 22px;
+  }
+
+  .price-row{
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .price-row .left{
+    font-size: 13px; color: var(--ink-2); font-weight: 600;
+  }
+  .price-row .right{
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-size: 20px; font-weight: 800;
+    color: var(--ink); letter-spacing: -.02em;
+  }
+
+  .dday-section{
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-top: 22px;
+    padding: 0 4px;
+    gap: 12px;
+  }
+  .dday-section .big{
+    font-family: 'Inter', sans-serif;
+    font-size: 38px; font-weight: 900;
+    color: var(--muted);
+    letter-spacing: -.04em;
+    line-height: 1;
+    font-style: italic;
+  }
+  .dday-section .low{
+    font-size: 12px;
+    color: var(--ink-2);
+    letter-spacing: -.01em;
+  }
+  .dday-section .low b{
+    color: var(--ink); font-weight: 700;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .calendar{
+    margin-top: 26px;
+  }
+  .cal-header{
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.01em;
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cal-grid{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 14px;
+    text-align: center;
+  }
+  .cal-grid .wd{
+    font-size: 12px; font-weight: 600;
+    padding-bottom: 6px;
+  }
+  .cal-grid .wd.sun{ color: #ff3b30; }
+  .cal-grid .wd.sat{ color: var(--accent); }
+  .cal-grid .d{
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    padding: 8px 0;
+    position: relative;
+    font-variant-numeric: tabular-nums;
+  }
+  .cal-grid .d.sun{ color: #ff3b30; }
+  .cal-grid .d.sat{ color: var(--accent); }
+  .cal-grid .d.muted{ color: transparent; }
+  .cal-grid .d.today{
+    font-weight: 800;
+  }
+  .cal-grid .d.today::after{
+    content: "오늘";
+    position: absolute;
+    left: 50%; bottom: -10px;
+    transform: translateX(-50%);
+    font-size: 9px; color: var(--muted); font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+  }
+  html[lang="en"] .cal-grid .d.today::after{
+    content: "today";
+    font-family: 'Inter', sans-serif;
+  }
+  /* trip-range highlight band */
+  .cal-grid .d.in-range{
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cal-grid .d.in-range.range-start{ border-radius: 999px 0 0 999px; }
+  .cal-grid .d.in-range.range-end{ border-radius: 0 999px 999px 0; }
+  .cal-grid .d.in-range.range-start.range-end{ border-radius: 999px; }
+
+  .disclaimer{
+    margin-top: 30px;
+    padding: 20px 6px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.65;
+    letter-spacing: -.005em;
+    text-align: center;
+  }
+  .disclaimer .provider{
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .disclaimer .provider b{
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: .04em;
+  }
+
+  .detail-cta{
+    flex: 0 0 auto;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid var(--line);
+  }
+  .detail-cta button{
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 16px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    letter-spacing: -.01em;
+    transition: background .12s ease;
+  }
+  .detail-cta button:active{
+    background: var(--accent);
+    color: #fff;
+  }
 </style>
 </head>
 <body>
-<h1>에어픽 (AirPick)</h1>
-<ul>
-<li><a href="/terms.html">이용약관</a></li>
-<li><a href="/privacy.html">개인정보처리방침</a></li>
-</ul>
+  <main class="app" id="app" data-tab="home">
+    <div class="scroll-area">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-plane" src="assets/logo.png" alt="에어픽" />
+        <span class="brand-stack">
+          <span class="brand-name" data-i18n="brand">에어픽</span>
+          <span class="brand-tagline" data-i18n="brand-tagline">가장 저렴한 순간을 잡다</span>
+        </span>
+      </div>
+      <div class="lang" role="tablist" aria-label="Language">
+        <button id="btn-ko" class="on" type="button">한국어</button>
+        <button id="btn-en" type="button">English</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-row">
+        <button class="from-btn" id="from-btn" type="button">
+          <span id="from-name">인천국제공항</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <button class="detail-btn" id="detail-btn" type="button" aria-label="세부 옵션">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          <span data-i18n="detail">세부 옵션</span>
+          <span class="badge" id="detail-badge">0</span>
+        </button>
+      </div>
+      <p class="from-hint" data-i18n="from-hint">출발지를 변경하시겠습니까?</p>
+    </section>
+
+    <div class="filterbar">
+      <nav class="chips" aria-label="filters" id="chips">
+        <button class="chip" data-filter="all" data-i18n="chip-all">전체</button>
+        <button class="chip on" data-filter="round" data-i18n="chip-round">왕복</button>
+        <button class="chip" data-filter="oneway" data-i18n="chip-oneway">편도</button>
+        <button class="chip" data-filter="transit" data-i18n="chip-transit">경유</button>
+      </nav>
+      <button class="sort-btn" id="sort-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M11 18h2"/></svg>
+        <span id="sort-label" data-sort-label>출발일 빠른 순</span>
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+
+    <div class="filter-banner" id="filter-banner" hidden></div>
+    <section class="list" id="list"></section>
+
+    <p class="foot">
+      <span data-i18n="foot2">실제 결제 금액은 항공사 페이지에서 확인하세요.</span>
+    </p>
+
+    <!-- =============== RECENT SCREEN =============== -->
+    <section class="recent-screen">
+      <header class="notice-header" style="display:flex;align-items:center;gap:6px;">
+        <button id="recent-back" type="button" aria-label="뒤로" style="width:32px;height:32px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 data-i18n="recent-title">최근 본 상품</h2>
+      </header>
+      <section class="list" id="recent-list" style="display:flex;"></section>
+    </section>
+
+    <!-- =============== CONTACT CHAT SCREEN =============== -->
+    <section class="contact-screen">
+      <header class="notice-header" style="display:flex;align-items:center;gap:6px;">
+        <button id="contact-back" type="button" aria-label="뒤로" style="width:32px;height:32px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 data-i18n="contact-title">문의사항</h2>
+      </header>
+      <div class="chat-thread" id="contact-thread"></div>
+    </section>
+
+    <!-- =============== TERMS CHAT SCREEN =============== -->
+    <section class="terms-screen">
+      <header class="notice-header" style="display:flex;align-items:center;gap:6px;">
+        <button id="terms-back" type="button" aria-label="뒤로" style="width:32px;height:32px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 data-i18n="terms-title">이용약관</h2>
+      </header>
+      <div class="chat-thread" id="terms-thread"></div>
+    </section>
+
+    <!-- =============== FAQ CHAT SCREEN =============== -->
+    <section class="faq-screen">
+      <header class="notice-header" style="display:flex;align-items:center;gap:6px;">
+        <button id="faq-back" type="button" aria-label="뒤로" style="width:32px;height:32px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 data-i18n="faq-title">자주 묻는 질문</h2>
+      </header>
+      <div class="chat-thread" id="faq-thread"></div>
+    </section>
+
+    <!-- =============== NOTICE SCREEN =============== -->
+    <section class="notice-screen">
+      <header class="notice-header" style="display:flex;align-items:center;gap:6px;">
+        <button id="notice-back" type="button" aria-label="뒤로" style="width:32px;height:32px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 data-i18n="notice-title">공지사항</h2>
+      </header>
+      <div class="notice-list" id="notice-list"></div>
+    </section>
+
+    <!-- =============== ALARM SCREEN =============== -->
+    <section class="alarm-screen">
+      <header class="alarm-header">
+        <h2 data-i18n="alarm-title">알람</h2>
+      </header>
+
+      <section class="alarm-section">
+        <p class="section-title" data-i18n="alarm-more">더보기</p>
+        <div class="more-grid">
+          <button class="more-tile" id="open-notice-btn" type="button">
+            <span class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span>
+            <span class="name" data-i18n="tab-notice">공지사항</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+          <button class="more-tile" id="open-recent-btn" type="button">
+            <span class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            </span>
+            <span class="name" data-i18n="recent-title">최근 본 상품</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="alarm-section">
+        <p class="section-title" data-i18n="alarm-route">내 노선</p>
+        <div class="route-card-grp">
+          <button class="origin-card grouped" id="alarm-origin-btn" type="button">
+            <span class="role" data-i18n="alarm-from">출발</span>
+            <span class="meta">
+              <span class="name" id="alarm-origin-name">인천국제공항</span>
+              <span class="sub" id="alarm-origin-sub">ICN · 인천</span>
+            </span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+          <button class="origin-card grouped" id="alarm-dest-btn" type="button">
+            <span class="role" data-i18n="alarm-to">도착</span>
+            <span class="meta">
+              <span class="name" id="alarm-dest-name" data-i18n="alarm-dest-add">도착지를 골라주세요</span>
+              <span class="sub" id="alarm-dest-sub" data-i18n="alarm-dest-empty">도착지 선택안함 · 모든 노선</span>
+            </span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="alarm-section">
+        <p class="section-title" data-i18n="alarm-master-title">알람 설정</p>
+        <div class="toggle-row master">
+          <div class="label-wrap">
+            <span class="t" data-i18n="alarm-master">출발지 알람 받기</span>
+            <span class="s" data-i18n="alarm-master-sub">내 출발지에서 출발하는 저렴한 항공권 알림</span>
+          </div>
+          <button class="tswitch" id="alarm-master-switch" role="switch" aria-checked="false" aria-label="알람 받기"></button>
+        </div>
+
+        <div class="alarm-sub" id="alarm-sub-wrap">
+          <div class="toggle-row">
+            <div class="label-wrap">
+              <span class="t" data-i18n="alarm-7-t">7일 이내 출발</span>
+              <span class="s" data-i18n="alarm-7-s">임박한 일정이 있을 때 알려드려요</span>
+            </div>
+            <button class="tswitch" data-window="7" role="switch" aria-checked="false" aria-label="7일 이내 알람"></button>
+          </div>
+          <div class="toggle-row">
+            <div class="label-wrap">
+              <span class="t" data-i18n="alarm-30-t">30일 이내 출발</span>
+              <span class="s" data-i18n="alarm-30-s">한 달 안으로 출발하는 일정</span>
+            </div>
+            <button class="tswitch" data-window="30" role="switch" aria-checked="false" aria-label="30일 이내 알람"></button>
+          </div>
+        </div>
+
+        <p class="alarm-empty-note" id="alarm-empty-note" data-i18n="alarm-empty">알람을 켜면 조건을 설정할 수 있어요</p>
+      </section>
+    </div>
+
+    <div class="sheet-backdrop" id="sheet-backdrop"></div>
+    <aside class="sheet detail-sheet" id="detail-sheet" role="dialog" aria-modal="true" aria-label="세부 옵션">
+      <div class="grabber"></div>
+      <h3 data-i18n="detail-title">세부 옵션</h3>
+
+      <div class="detail-scroll">
+      <div class="detail-section">
+        <div class="detail-label"><span data-i18n="d-pax">인원</span></div>
+        <div id="pax-list"></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label"><span data-i18n="d-from">출발지</span></div>
+        <button type="button" class="detail-row" id="detail-from-row">
+          <span class="dr-left">
+            <span class="t" id="detail-from-name">인천국제공항</span>
+            <span class="s" id="detail-from-sub">ICN · 인천</span>
+          </span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">
+          <span data-i18n="d-date">출발 일자</span>
+          <span class="hint" data-i18n="d-date-hint">날짜 범위</span>
+        </div>
+        <div class="wheel-card">
+          <button type="button" class="wheel-row" data-wheel-target="date-from" aria-expanded="false">
+            <span class="wr-label" data-i18n="d-date-from">가는 날</span>
+            <span class="wr-side">
+              <span class="wr-val" id="wheel-date-from-val">—</span>
+              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="wheel-panel" id="wheel-panel-date-from" hidden>
+            <div class="wheel">
+              <div class="wheel-col" data-wheel="date-from-year"></div>
+              <div class="wheel-col" data-wheel="date-from-month"></div>
+              <div class="wheel-col" data-wheel="date-from-day"></div>
+              <div class="wheel-indicator"></div>
+            </div>
+          </div>
+          <button type="button" class="wheel-row" data-wheel-target="date-to" aria-expanded="false">
+            <span class="wr-label" data-i18n="d-date-to">오는 날</span>
+            <span class="wr-side">
+              <span class="wr-val" id="wheel-date-to-val">—</span>
+              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="wheel-panel" id="wheel-panel-date-to" hidden>
+            <div class="wheel">
+              <div class="wheel-col" data-wheel="date-to-year"></div>
+              <div class="wheel-col" data-wheel="date-to-month"></div>
+              <div class="wheel-col" data-wheel="date-to-day"></div>
+              <div class="wheel-indicator"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">
+          <span data-i18n="d-time">출발 시간대</span>
+          <span class="hint" data-i18n="d-time-hint">시간 범위</span>
+        </div>
+        <div class="wheel-card">
+          <button type="button" class="wheel-row" data-wheel-target="time-from" aria-expanded="false">
+            <span class="wr-label" data-i18n="d-time-from">이르게</span>
+            <span class="wr-side">
+              <span class="wr-val" id="wheel-time-from-val">00:00</span>
+              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="wheel-panel" id="wheel-panel-time-from" hidden>
+            <div class="wheel wheel-2col">
+              <div class="wheel-col" data-wheel="time-from-hour"></div>
+              <div class="wheel-col" data-wheel="time-from-min"></div>
+              <div class="wheel-indicator"></div>
+            </div>
+          </div>
+          <button type="button" class="wheel-row" data-wheel-target="time-to" aria-expanded="false">
+            <span class="wr-label" data-i18n="d-time-to">늦게</span>
+            <span class="wr-side">
+              <span class="wr-val" id="wheel-time-to-val">24:00</span>
+              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="wheel-panel" id="wheel-panel-time-to" hidden>
+            <div class="wheel wheel-2col">
+              <div class="wheel-col" data-wheel="time-to-hour"></div>
+              <div class="wheel-col" data-wheel="time-to-min"></div>
+              <div class="wheel-indicator"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label"><span data-i18n="d-airlines">항공사</span></div>
+        <button type="button" class="detail-row" id="detail-airline-row">
+          <span class="dr-left">
+            <span class="t" id="detail-airline-name">전체 항공사</span>
+            <span class="s" id="detail-airline-sub">원하는 항공사를 골라주세요</span>
+          </span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label"><span data-i18n="d-cabin">좌석 등급</span></div>
+        <div class="pill-row" id="cabin-pills"></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">
+          <span data-i18n="d-route">노선 유형</span>
+          <span class="hint" data-i18n="d-multi">중복 선택</span>
+        </div>
+        <div class="pill-row" id="stops-pills"></div>
+      </div>
+      </div><!-- detail-scroll -->
+
+      <div class="sheet-foot">
+        <button class="btn reset" id="detail-reset" data-i18n="d-reset">초기화</button>
+        <button class="btn apply" id="detail-apply" data-i18n="d-apply">적용하기</button>
+      </div>
+    </aside>
+
+    <aside class="sheet" id="airline-sheet" role="dialog" aria-modal="true" aria-label="항공사">
+      <div class="grabber"></div>
+      <h3 data-i18n="al-title">항공사를 골라주세요</h3>
+      <div class="ap-tabs">
+        <button type="button" class="ap-tab al-tab on" data-region="domestic" data-i18n="ap-tab-dom">국내</button>
+        <button type="button" class="ap-tab al-tab" data-region="intl" data-i18n="ap-tab-intl">해외</button>
+      </div>
+      <div class="ap-list-wrap">
+        <ul id="airline-list"></ul>
+      </div>
+      <div class="sheet-foot">
+        <button class="btn reset" id="airline-clear" data-i18n="ap-clear">초기화</button>
+        <button class="btn apply" id="airline-apply" data-i18n="ap-apply">적용하기</button>
+      </div>
+    </aside>
+
+    <aside class="sheet" id="airport-sheet" role="dialog" aria-modal="true" aria-label="출발 공항">
+      <div class="grabber"></div>
+      <h3 id="ap-sheet-title">어디서 출발하세요?</h3>
+      <div class="ap-tabs">
+        <button type="button" class="ap-tab on" data-region="domestic" data-i18n="ap-tab-dom">국내</button>
+        <button type="button" class="ap-tab" data-region="intl" data-i18n="ap-tab-intl">해외</button>
+      </div>
+      <div class="ap-list-wrap">
+        <ul id="airport-list"></ul>
+      </div>
+      <div class="sheet-foot">
+        <button class="btn reset" id="airport-clear" data-i18n="ap-clear">초기화</button>
+        <button class="btn apply" id="airport-apply" data-i18n="ap-apply">적용하기</button>
+      </div>
+    </aside>
+
+    <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="정렬">
+      <div class="grabber"></div>
+      <h3 data-i18n="sort-title">정렬 기준</h3>
+      <ul id="sort-list">
+        <li><button data-sort="price-asc"><span data-i18n="sort-price-asc">가격 낮은 순</span><span class="check">✓</span></button></li>
+        <li><button data-sort="price-desc"><span data-i18n="sort-price-desc">가격 높은 순</span><span class="check">✓</span></button></li>
+        <li><button data-sort="date-asc" class="on"><span data-i18n="sort-date-asc">출발일 빠른 순</span><span class="check">✓</span></button></li>
+        <li><button data-sort="date-desc"><span data-i18n="sort-date-desc">출발일 느린 순</span><span class="check">✓</span></button></li>
+      </ul>
+    </aside>
+
+    <!-- =============== BOTTOM TAB BAR =============== -->
+    <nav class="tabbar" id="tabbar" aria-label="탭">
+      <button data-tab="home" class="on" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        <span data-i18n="tab-home">홈</span>
+      </button>
+      <button data-tab="alarm" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        <span data-i18n="tab-alarm">설정</span>
+      </button>
+    </nav>
+
+    <!-- ============== FLIGHT DETAIL VIEW ============== -->
+    <div class="detail-view" id="detail-view" aria-hidden="true">
+    <header class="detail-bar">
+      <button class="icon-btn" id="detail-back" aria-label="뒤로">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="title-wrap">
+        <div class="title-line">
+          <span class="flag" id="dt-flag">🇯🇵</span>
+          <span id="dt-title">일본, 오사카 / 4일</span>
+        </div>
+        <div class="region" id="dt-region">동북아시아</div>
+      </div>
+      <button class="icon-btn" aria-label="공유">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 8 12 3 17 8"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+      </button>
+    </header>
+    <div class="detail-body">
+      <div class="airline-strip">
+        <div class="airline-mark">
+          <span class="a-logo" id="dt-airline-logo">7C</span>
+          <span class="a-name" id="dt-airline-name">제주항공</span>
+        </div>
+      </div>
+
+      <div class="route-card">
+        <div class="route-col left">
+          <div class="ap" id="dt-from-ap">인천국제공항</div>
+          <div class="city-big" id="dt-from-city">인천</div>
+          <div class="iata-line" id="dt-from-iata">ICN</div>
+          <div class="date-line" id="dt-from-date">2026-09-15</div>
+        </div>
+        <div class="route-mid">
+          <svg class="swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <div class="dur-label" data-i18n="dt-duration">여행기간</div>
+          <div class="dur-val" id="dt-duration">4일</div>
+        </div>
+        <div class="route-col right">
+          <div class="ap" id="dt-to-ap">오사카 국제공항</div>
+          <div class="city-big" id="dt-to-city">오사카</div>
+          <div class="iata-line" id="dt-to-iata">OSA</div>
+          <div class="date-line" id="dt-to-date">2026-09-18</div>
+        </div>
+      </div>
+
+      <div class="price-row">
+        <span class="left" id="dt-airline-name2">제주항공</span>
+        <span class="right" id="dt-price">₩87,003</span>
+      </div>
+
+      <div class="calendar" id="dt-calendar"></div>
+
+      <div class="disclaimer">
+        <div data-i18n="disc1">본 서비스는 단순한 항공권 정보 중개자이며 판매의 당사자가 아닙니다.</div>
+        <div data-i18n="disc2">본 서비스는 마켓플레이스 상품, 항공권정보 및 거래 등에 대하여 책임을 지지 않습니다.</div>
+        <div class="provider"><span data-i18n="disc-prov">항공권 프로바이더 식별코드</span> : <b id="dt-provider">INTERPARK</b></div>
+      </div>
+    </div>
+    <footer class="detail-cta">
+      <button type="button" id="dt-cta" data-i18n="dt-cta">예약 사이트로 이동</button>
+    </footer>
+  </div>
+  </main>
+
+<script>
+  // ---------- DATA ----------
+  // historicalLow = 역대 최저가 (회색 작게). 데이터가 없는 항목이므로 합리적 추정치.
+  // trip = 'oneway' | 'round'
+  const FLIGHTS = [
+    // ————— 특가 (deal) —————
+    // 임박한 특가 (7일 이내 — 빨간 스트라이프)
+    { iata:"OSA", ko:"오사카",   en:"Osaka",     flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:69900,  date:"2026-05-23", returnDate:"2026-05-26", stops:0, trip:"round", historicalLow: 65000,  fareType:"deal",    provider:"INTERPARK" },
+    { iata:"FUK", ko:"후쿠오카", en:"Fukuoka",   flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:79500,  date:"2026-05-25", returnDate:"2026-05-28", stops:0, trip:"round", historicalLow: 72000,  fareType:"deal",    provider:"HANATOUR" },
+    { iata:"NGO", ko:"나고야",   en:"Nagoya",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:84800,  date:"2026-05-26", returnDate:"2026-05-29", stops:0, trip:"round", historicalLow: 78000,  fareType:"deal",    provider:"MODETOUR" },
+    // 임박한 특가 (15일 이내 — 주황 스트라이프)
+    { iata:"KIX", ko:"오사카",   en:"Osaka",     flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:92300,  date:"2026-05-30", returnDate:"2026-06-02", stops:0, trip:"round", historicalLow: 87000,  fareType:"deal",    provider:"HANATOUR" },
+    { iata:"TPE", ko:"타이베이", en:"Taipei",    flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에바항공",     airline_en:"EVA Air",       airline_code:"BR", from:"ICN", price:118400, date:"2026-06-02", returnDate:"2026-06-06", stops:0, trip:"round", historicalLow: 109000, fareType:"deal",    provider:"INTERPARK" },
+    { iata:"HKG", ko:"홍콩",     en:"Hong Kong", flag:"🇭🇰", country_ko:"홍콩",     country_en:"Hong Kong",   region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"캐세이퍼시픽", airline_en:"Cathay Pacific",airline_code:"CX", from:"ICN", price:165700, date:"2026-06-04", returnDate:"2026-06-09", stops:1, via:"TPE", via_ko:"타이베이", via_en:"Taipei", trip:"round", historicalLow: 155000, fareType:"deal",    provider:"MODETOUR" },
+    // 일반 시점 특가 (30일+ — 파란/녹색)
+    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:87003,  date:"2026-09-15", returnDate:"2026-09-18", stops:0, trip:"round", historicalLow: 79900,  fareType:"deal",    provider:"INTERPARK" },
+    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:108339, date:"2026-06-26", returnDate:"2026-06-29", stops:0, trip:"round", historicalLow: 99000,  fareType:"deal",    provider:"HANATOUR" },
+    { iata:"TYO", ko:"도쿄",     en:"Tokyo",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:125543, date:"2026-09-08", returnDate:"2026-09-12", stops:0, trip:"round", historicalLow: 119800, fareType:"deal",    provider:"MODETOUR" },
+    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:158919, date:"2026-06-23", returnDate:"2026-06-27", stops:0, trip:"round", historicalLow: 142000, fareType:"deal",    provider:"HANATOUR" },
+    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:176426, date:"2026-08-28", returnDate:"2026-09-02", stops:0, trip:"round", historicalLow: 169000, fareType:"deal",    provider:"INTERPARK" },
+    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:205887, date:"2026-10-05", returnDate:"2026-10-10", stops:1, via:"MNL", via_ko:"마닐라", via_en:"Manila", trip:"round", historicalLow: 198000, fareType:"deal",    provider:"MODETOUR" },
+    // ————— 일반 (regular) —————
+    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:132400, date:"2026-07-12", returnDate:"2026-07-16", stops:0, trip:"round", historicalLow: 119000, fareType:"regular", provider:"INTERPARK" },
+    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:148700, date:"2026-07-20", returnDate:"2026-07-24", stops:0, trip:"round", historicalLow: 138000, fareType:"regular", provider:"HANATOUR" },
+    { iata:"TYO", ko:"도쿄",     en:"Tokyo",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:165800, date:"2026-10-12", returnDate:"2026-10-16", stops:0, trip:"round", historicalLow: 159000, fareType:"regular", provider:"MODETOUR" },
+    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:198400, date:"2026-08-08", returnDate:"2026-08-13", stops:0, trip:"round", historicalLow: 188000, fareType:"regular", provider:"HANATOUR" },
+    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:245900, date:"2026-09-21", returnDate:"2026-09-27", stops:0, trip:"round", historicalLow: 229000, fareType:"regular", provider:"INTERPARK" },
+    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"티웨이항공", airline_en:"T'way Air",     airline_code:"TW", from:"ICN", price:287100, date:"2026-11-02", returnDate:"2026-11-08", stops:0, trip:"round", historicalLow: 269000, fareType:"regular", provider:"MODETOUR" },
+    // ————— 편도 특가 (oneway) —————
+    { iata:"OSA", ko:"오사카",   en:"Osaka",    flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"제주항공",     airline_en:"Jeju Air",      airline_code:"7C", from:"ICN", price:39900,  date:"2026-05-24", returnDate:"2026-05-24", stops:0, trip:"oneway", historicalLow: 35000,  fareType:"deal",    provider:"INTERPARK" },
+    { iata:"FUK", ko:"후쿠오카", en:"Fukuoka",  flag:"🇯🇵", country_ko:"일본",     country_en:"Japan",       region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에어부산",     airline_en:"Air Busan",     airline_code:"BX", from:"ICN", price:44500,  date:"2026-05-27", returnDate:"2026-05-27", stops:0, trip:"oneway", historicalLow: 39000,  fareType:"deal",    provider:"HANATOUR" },
+    { iata:"TPE", ko:"타이베이", en:"Taipei",   flag:"🇹🇼", country_ko:"대만",     country_en:"Taiwan",      region_ko:"동북아시아", region_en:"Northeast Asia", airline_ko:"에바항공",     airline_en:"EVA Air",       airline_code:"BR", from:"ICN", price:62800,  date:"2026-06-03", returnDate:"2026-06-03", stops:0, trip:"oneway", historicalLow: 55000,  fareType:"deal",    provider:"MODETOUR" },
+    { iata:"DAD", ko:"다낭",     en:"Da Nang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"진에어",       airline_en:"Jin Air",       airline_code:"LJ", from:"ICN", price:79900,  date:"2026-06-15", returnDate:"2026-06-15", stops:0, trip:"oneway", historicalLow: 72000,  fareType:"deal",    provider:"INTERPARK" },
+    { iata:"BKK", ko:"방콕",     en:"Bangkok",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"아시아나항공", airline_en:"Asiana",        airline_code:"OZ", from:"ICN", price:97500,  date:"2026-07-08", returnDate:"2026-07-08", stops:0, trip:"oneway", historicalLow: 89000,  fareType:"deal",    provider:"HANATOUR" },
+    { iata:"CEB", ko:"세부",     en:"Cebu",     flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia", airline_ko:"대한항공",     airline_en:"Korean Air",    airline_code:"KE", from:"ICN", price:115200, date:"2026-08-20", returnDate:"2026-08-20", stops:0, trip:"oneway", historicalLow: 105000, fareType:"deal",    provider:"MODETOUR" },
+  ];
+
+  // ---------- STATE ----------
+  let filter = "round";  // 기본: 왕복 설정
+  let sortKey = "date-asc"; // price-asc | price-desc | date-asc | date-desc
+  let originList = ["ICN"];
+  let alarmDestList = []; // empty = all destinations for alarm
+  let airportSheetTarget = "origin"; // "origin" | "dest" — which list the sheet edits
+  let apTab = "domestic";
+  let alTab = "domestic"; // airline tab
+
+  // detail options
+  const DEFAULT_DETAILS = {
+    adults: 1,
+    children: 0,
+    infants: 0,
+    cabin: "economy",        // economy | business | first
+    timeFromMin: 0,
+    timeToMin:   1440,
+    dateFrom: "",
+    dateTo:   "",
+    airlines: [],            // populated after FLIGHTS is defined
+    stops: [],
+  };
+  // Master list of airlines (selectable regardless of current FLIGHTS data)
+  const ALL_AIRLINES = [
+    // 국내 (대형)
+    { code:"KE", ko:"대한항공",       en:"Korean Air",       country_ko:"한국", country_en:"South Korea" },
+    { code:"OZ", ko:"아시아나항공",   en:"Asiana Airlines",  country_ko:"한국", country_en:"South Korea" },
+    // 국내 LCC
+    { code:"7C", ko:"제주항공",       en:"Jeju Air",         country_ko:"한국", country_en:"South Korea" },
+    { code:"LJ", ko:"진에어",         en:"Jin Air",          country_ko:"한국", country_en:"South Korea" },
+    { code:"TW", ko:"티웨이항공",     en:"T'way Air",        country_ko:"한국", country_en:"South Korea" },
+    { code:"BX", ko:"에어부산",       en:"Air Busan",        country_ko:"한국", country_en:"South Korea" },
+    { code:"ZE", ko:"이스타항공",     en:"Eastar Jet",       country_ko:"한국", country_en:"South Korea" },
+    { code:"RS", ko:"에어서울",       en:"Air Seoul",        country_ko:"한국", country_en:"South Korea" },
+    { code:"4V", ko:"플라이강원",     en:"Fly Gangwon",      country_ko:"한국", country_en:"South Korea" },
+    { code:"4H", ko:"에어프레미아",   en:"Air Premia",       country_ko:"한국", country_en:"South Korea" },
+    // 일본
+    { code:"NH", ko:"전일본공수",     en:"ANA",              country_ko:"일본", country_en:"Japan" },
+    { code:"JL", ko:"일본항공",       en:"Japan Airlines",   country_ko:"일본", country_en:"Japan" },
+    { code:"MM", ko:"피치항공",       en:"Peach",            country_ko:"일본", country_en:"Japan" },
+    { code:"JJP",ko:"제트스타재팬",   en:"Jetstar Japan",    country_ko:"일본", country_en:"Japan" },
+    // 동북아
+    { code:"CI", ko:"중화항공",       en:"China Airlines",   country_ko:"대만", country_en:"Taiwan" },
+    { code:"BR", ko:"에바항공",       en:"EVA Air",          country_ko:"대만", country_en:"Taiwan" },
+    { code:"CX", ko:"캐세이퍼시픽",   en:"Cathay Pacific",   country_ko:"홍콩", country_en:"Hong Kong" },
+    { code:"HX", ko:"홍콩항공",       en:"Hong Kong Airlines",country_ko:"홍콩", country_en:"Hong Kong" },
+    { code:"CA", ko:"중국국제항공",   en:"Air China",        country_ko:"중국", country_en:"China" },
+    { code:"MU", ko:"중국동방항공",   en:"China Eastern",    country_ko:"중국", country_en:"China" },
+    { code:"CZ", ko:"중국남방항공",   en:"China Southern",   country_ko:"중국", country_en:"China" },
+    // 동남아
+    { code:"TG", ko:"타이항공",       en:"Thai Airways",     country_ko:"태국", country_en:"Thailand" },
+    { code:"SQ", ko:"싱가포르항공",   en:"Singapore Airlines",country_ko:"싱가포르", country_en:"Singapore" },
+    { code:"VN", ko:"베트남항공",     en:"Vietnam Airlines", country_ko:"베트남", country_en:"Vietnam" },
+    { code:"VJ", ko:"비엣젯항공",     en:"VietJet Air",      country_ko:"베트남", country_en:"Vietnam" },
+    { code:"PR", ko:"필리핀항공",     en:"Philippine Airlines",country_ko:"필리핀", country_en:"Philippines" },
+    { code:"5J", ko:"세부퍼시픽",     en:"Cebu Pacific",     country_ko:"필리핀", country_en:"Philippines" },
+    { code:"AK", ko:"에어아시아",     en:"AirAsia",          country_ko:"말레이시아", country_en:"Malaysia" },
+    { code:"MH", ko:"말레이시아항공", en:"Malaysia Airlines",country_ko:"말레이시아", country_en:"Malaysia" },
+    { code:"GA", ko:"가루다인도네시아",en:"Garuda Indonesia", country_ko:"인도네시아", country_en:"Indonesia" },
+    // 미주
+    { code:"DL", ko:"델타항공",       en:"Delta",            country_ko:"미국", country_en:"USA" },
+    { code:"UA", ko:"유나이티드항공", en:"United",           country_ko:"미국", country_en:"USA" },
+    { code:"AA", ko:"아메리칸항공",   en:"American Airlines",country_ko:"미국", country_en:"USA" },
+    { code:"HA", ko:"하와이안항공",   en:"Hawaiian Airlines",country_ko:"미국", country_en:"USA" },
+    { code:"AC", ko:"에어캐나다",     en:"Air Canada",       country_ko:"캐나다", country_en:"Canada" },
+    // 유럽
+    { code:"AF", ko:"에어프랑스",     en:"Air France",       country_ko:"프랑스", country_en:"France" },
+    { code:"LH", ko:"루프트한자",     en:"Lufthansa",        country_ko:"독일", country_en:"Germany" },
+    { code:"BA", ko:"브리티시항공",   en:"British Airways",  country_ko:"영국", country_en:"UK" },
+    { code:"KL", ko:"KLM",            en:"KLM",              country_ko:"네덜란드", country_en:"Netherlands" },
+    { code:"FI", ko:"아이슬란드항공", en:"Icelandair",       country_ko:"아이슬란드", country_en:"Iceland" },
+    { code:"TK", ko:"터키항공",       en:"Turkish Airlines", country_ko:"튀르키예", country_en:"Türkiye" },
+    // 중동
+    { code:"EK", ko:"에미레이트항공", en:"Emirates",         country_ko:"UAE", country_en:"UAE" },
+    { code:"EY", ko:"에티하드항공",   en:"Etihad Airways",   country_ko:"UAE", country_en:"UAE" },
+    { code:"QR", ko:"카타르항공",     en:"Qatar Airways",    country_ko:"카타르", country_en:"Qatar" },
+    // 오세아니아
+    { code:"QF", ko:"콴타스항공",     en:"Qantas",           country_ko:"호주", country_en:"Australia" },
+    { code:"NZ", ko:"뉴질랜드항공",   en:"Air New Zealand",  country_ko:"뉴질랜드", country_en:"New Zealand" },
+  ];
+
+  function uniqAirlinesFromFlights(){
+    return ALL_AIRLINES.map(a => ({ code: a.code, ko: a.ko, en: a.en, country_ko: a.country_ko, country_en: a.country_en }));
+  }
+
+  // 항공사 기본값: 빈 배열 = 전체 (조건 없음)
+  (function initAirlineDefaults(){
+    DEFAULT_DETAILS.airlines = [];
+  })();
+  let details = JSON.parse(JSON.stringify(DEFAULT_DETAILS));
+
+  // ---------- AIRPORTS (국내 + 주요 해외) ----------
+  const AIRPORTS = [
+    // 국내
+    { iata:"ICN", region:"domestic", ko:"인천국제공항", city_ko:"인천",    en:"Incheon Intl",     city_en:"Incheon",    country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"GMP", region:"domestic", ko:"김포국제공항",   city_ko:"서울",    en:"Gimpo Intl",       city_en:"Seoul",      country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"PUS", region:"domestic", ko:"김해국제공항",   city_ko:"부산",    en:"Gimhae Intl",      city_en:"Busan",      country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"CJU", region:"domestic", ko:"제주국제공항", city_ko:"제주",    en:"Jeju Intl",        city_en:"Jeju",       country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"TAE", region:"domestic", ko:"대구국제공항",   city_ko:"대구",    en:"Daegu Intl",       city_en:"Daegu",      country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"CJJ", region:"domestic", ko:"청주국제공항", city_ko:"청주",    en:"Cheongju Intl",    city_en:"Cheongju",   country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"MWX", region:"domestic", ko:"무안국제공항",   city_ko:"무안",    en:"Muan Intl",        city_en:"Muan",       country_ko:"대한민국", country_en:"South Korea" },
+    { iata:"YNY", region:"domestic", ko:"양양국제공항", city_ko:"양양",    en:"Yangyang Intl",    city_en:"Yangyang",   country_ko:"대한민국", country_en:"South Korea" },
+    // 해외
+    { iata:"NRT", region:"intl",     ko:"나리타국제공항",     city_ko:"도쿄",     en:"Narita Intl",      city_en:"Tokyo",      country_ko:"일본",     country_en:"Japan" },
+    { iata:"HND", region:"intl",     ko:"하네다공항",         city_ko:"도쿄",     en:"Haneda",           city_en:"Tokyo",      country_ko:"일본",     country_en:"Japan" },
+    { iata:"KIX", region:"intl",     ko:"간사이국제공항",     city_ko:"오사카",   en:"Kansai Intl",      city_en:"Osaka",      country_ko:"일본",     country_en:"Japan" },
+    { iata:"FUK", region:"intl",     ko:"후쿠오카공항",       city_ko:"후쿠오카",  en:"Fukuoka",          city_en:"Fukuoka",    country_ko:"일본",     country_en:"Japan" },
+    { iata:"OKA", region:"intl",     ko:"나하공항",           city_ko:"오키나와",  en:"Naha",             city_en:"Okinawa",    country_ko:"일본",     country_en:"Japan" },
+    { iata:"TPE", region:"intl",     ko:"타오위안국제공항", city_ko:"타이베이", en:"Taoyuan Intl",     city_en:"Taipei",     country_ko:"대만",     country_en:"Taiwan" },
+    { iata:"HKG", region:"intl",     ko:"홍콩국제공항",       city_ko:"홍콩",     en:"Hong Kong Intl",   city_en:"Hong Kong",  country_ko:"홍콩",     country_en:"Hong Kong" },
+    { iata:"PVG", region:"intl",     ko:"상하이푸동공항",     city_ko:"상하이",   en:"Pudong Intl",      city_en:"Shanghai",   country_ko:"중국",     country_en:"China" },
+    { iata:"PEK", region:"intl",     ko:"베이징수도공항",     city_ko:"베이징",   en:"Beijing Capital",  city_en:"Beijing",    country_ko:"중국",     country_en:"China" },
+    { iata:"BKK", region:"intl",     ko:"수감나쿼공항",       city_ko:"방콕",     en:"Suvarnabhumi",     city_en:"Bangkok",    country_ko:"태국",     country_en:"Thailand" },
+    { iata:"SIN", region:"intl",     ko:"시닝가포르 차이공항", city_ko:"싱가포르", en:"Changi",        city_en:"Singapore",  country_ko:"싱가포르", country_en:"Singapore" },
+    { iata:"DAD", region:"intl",     ko:"다낭국제공항",       city_ko:"다낭",     en:"Da Nang Intl",     city_en:"Da Nang",    country_ko:"베트남",   country_en:"Vietnam" },
+    { iata:"SGN", region:"intl",     ko:"녕공국제공항",       city_ko:"호치민",    en:"Tan Son Nhat",     city_en:"Ho Chi Minh", country_ko:"베트남", country_en:"Vietnam" },
+    { iata:"CEB", region:"intl",     ko:"맅탄국제공항",       city_ko:"세부",     en:"Mactan-Cebu Intl", city_en:"Cebu",       country_ko:"필리핀",   country_en:"Philippines" },
+    { iata:"MNL", region:"intl",     ko:"니노이아키노국제", city_ko:"마닐라",   en:"Ninoy Aquino Intl",city_en:"Manila",     country_ko:"필리핀",   country_en:"Philippines" },
+    { iata:"LAX", region:"intl",     ko:"로스앤젤레스국제", city_ko:"로스앤젤레스", en:"Los Angeles Intl", city_en:"Los Angeles", country_ko:"미국", country_en:"USA" },
+    { iata:"JFK", region:"intl",     ko:"존 펀 케네디",     city_ko:"뉴욕",     en:"John F. Kennedy",  city_en:"New York",   country_ko:"미국",     country_en:"USA" },
+    { iata:"LHR", region:"intl",     ko:"히드로공항",         city_ko:"런던",     en:"Heathrow",         city_en:"London",     country_ko:"영국",     country_en:"UK" },
+    { iata:"CDG", region:"intl",     ko:"샤를 드골공항",     city_ko:"파리",     en:"Charles de Gaulle",city_en:"Paris",      country_ko:"프랑스",   country_en:"France" },
+  ];
+
+  // ---------- I18N ----------
+  const I18N = {
+    ko: {
+      brand: "에어픽",
+      "brand-tagline": "가장 저렴한 순간을 잡다",
+      live: "실시간 최저가",
+      title: "인천 출발 최저가",
+      subtitle: "지금 가장 저렴한 편도 항공권 6선",
+      updated: "업데이트",
+      now: "방금 전",
+      source: "스카이스캐너 기준",
+      "chip-all": "전체",
+      "chip-round": "왕복",
+      "chip-oneway": "편도",
+      "chip-transit": "경유",
+      "sort-title": "정렬 기준",
+      "sort-price-asc": "가격 낮은 순",
+      "sort-price-desc": "가격 높은 순",
+      "sort-date-asc": "출발일 빠른 순",
+      "sort-date-desc": "출발일 느린 순",
+      empty: "조건에 맞는 항공권이 없어요",
+      "from-hint": "출발지를 변경하시겠습니까?",
+      "ap-title": "어디서 출발하세요?",
+      "ap-title-dest": "어디로 가세요?",
+      "ap-apply": "적용하기",
+      "ap-clear": "초기화",
+      "ap-tab-dom": "국내",
+      "ap-tab-intl": "해외",
+      "al-title": "항공사를 골라주세요",
+      "al-all": "전체 항공사",
+      "al-pick": "원하는 항공사를 골라주세요",
+      "ap-othern": (n) => `외 ${n}`,
+      detail: "세부 옵션",
+      "detail-title": "세부 옵션",
+      "d-from": "출발지",
+      "d-date": "출발 일자",
+      "d-date-hint": "날짜 범위",
+      "d-date-from": "가는 날",
+      "d-date-to": "오는 날",
+      "d-airlines": "항공사",
+      "d-pax": "인원",
+      "d-cabin": "좌석 등급",
+      "d-time": "출발 시간대",
+      "d-time-hint": "원하는 시간 범위",
+      "d-time-from": "출발",
+      "d-time-to": "도착",
+      "d-stops": "경유",
+      "d-multi": "중복 선택",
+      "d-reset": "초기화",
+      "d-apply": "적용하기",
+      pax: { adults: { t:"성인", s:"만 12세 이상" }, children: { t:"어린이", s:"만 2~11세" }, infants: { t:"유아", s:"만 2세 미만" } },
+      cabin: { economy:"이코노미", premium:"프리미엄", business:"비즈니스", first:"일등석" },
+      times: { dawn:"새벽 00~06", morning:"오전 06~12", afternoon:"오후 12~18", evening:"저녁 18~24" },
+      stops: { round:"왕복", oneway:"편도", direct:"직항", one:"경유 1회", "two-plus":"경유 2회 이상" },
+      "dt-duration": "여행기간",
+      "dt-lowest": "이 구간 역대 최저가",
+      "dt-cta": "예약 사이트로 이동",
+      disc1: "에어픽은 항공권 및 여행상품 정보를 제공하는 중개 플랫폼이며, 실제 항공권 판매 및 계약의 당사자가 아닙니다. 항공권 예약, 결제, 환불, 변경, 운항 및 기타 거래와 관련한 책임은 해당 항공사 또는 판매처에 있으며, 에어픽은 이에 대한 책임을 지지 않습니다.",
+      disc2: "",
+      "disc-prov": "항공권 프로바이더 식별코드",
+      apIntl: "국제공항",
+      days: (n) => `${n}일`,
+      "tab-home": "홈",
+      "tab-notice": "공지사항",
+      "tab-alarm": "설정",
+      "notice-title": "공지사항",
+      "notice-event": "이벤트",
+      "notice-update": "업데이트",
+      "notice-info": "안내",
+      "alarm-more": "더보기",
+      "notice-sub": "자주 묻는 질문 · 이용약관",
+      "terms-title": "이용약관",
+      "contact-title": "문의사항",
+      "terms-sub": "서비스 이용약관 보기",
+      "faq-title": "자주 묻는 질문",
+      "alarm-title": "설정",
+      "alarm-origin": "내 출발지",
+      "alarm-route": "내 노선",
+      "alarm-from": "출발",
+      "alarm-to": "도착",
+      "alarm-dest": "도착지 (선택사항)",
+      "alarm-dest-empty": "도착지 선택안함 · 모든 노선",
+      "alarm-dest-add": "모든 노선",
+      "alarm-master-title": "알람 설정",
+      "alarm-master": "출발지 알람 받기",
+      "alarm-master-sub": "내 출발지에서 출발하는 저렴한 항공권 알람(전체)",
+      "alarm-7-t": "7일 이내 출발",
+      "alarm-7-s": "임박한 일정이 있을 때 알려드려요",
+      "alarm-30-t": "30일 이내 출발",
+      "alarm-30-s": "한 달 안으로 출발하는 일정",
+      "alarm-60-t": "60일 이내 출발",
+      "alarm-60-s": "두 달 안으로 출발하는 일정",
+      "alarm-empty": "알람을 켜면 조건을 설정할 수 있어요",
+      foot1: "표시 가격은 세금·유류할증료 포함 1인 기준입니다.",
+      foot2: "실제 결제 금액은 항공사 페이지에서 확인하세요.",
+      oneway: "편도",
+      direct: "직항",
+      via: (n) => `경유 ${n}회`,
+      dday: (d) => d === 0 ? "D-DAY" : (d < 0 ? `D+${-d}` : `D-${d}`),
+      lowestLabel: "역대 최저가",
+      newLow: "역대 최저가 갱신",
+      alert: "예약 링크 연결 예정",
+      best: "BEST",
+    },
+    en: {
+      brand: "AirPick",
+      "brand-tagline": "Catch the cheapest moment",
+      live: "Live lowest fares",
+      title: "Cheapest from Incheon",
+      subtitle: "The 6 cheapest one-way tickets right now",
+      updated: "Updated",
+      now: "just now",
+      source: "via Skyscanner",
+      "chip-all": "All",
+      "chip-round": "Round-trip",
+      "chip-oneway": "One-way",
+      "chip-transit": "Transit",
+      "sort-title": "Sort by",
+      "sort-price-asc": "Lowest price",
+      "sort-price-desc": "Highest price",
+      "sort-date-asc": "Earliest departure",
+      "sort-date-desc": "Latest departure",
+      empty: "No flights match this filter",
+      "from-hint": "Change departure airport?",
+      "ap-title": "Where are you flying from?",
+      "ap-title-dest": "Where to?",
+      "ap-apply": "Apply",
+      "ap-clear": "Clear all",
+      "ap-tab-dom": "Domestic",
+      "ap-tab-intl": "International",
+      "al-title": "Pick airlines",
+      "al-all": "All airlines",
+      "al-pick": "Choose your preferred airlines",
+      "ap-othern": (n) => `+${n} more`,
+      detail: "Filters",
+      "detail-title": "More filters",
+      "d-from": "From airport",
+      "d-date": "Departure date",
+      "d-date-hint": "Date range",
+      "d-date-from": "Depart",
+      "d-date-to": "Return",
+      "d-airlines": "Airlines",
+      "d-pax": "Passengers",
+      "d-cabin": "Cabin class",
+      "d-time": "Departure time",
+      "d-time-hint": "Pick a time range",
+      "d-time-from": "From",
+      "d-time-to": "To",
+      "d-stops": "Stops",
+      "d-multi": "Multi-select",
+      "d-reset": "Reset",
+      "d-apply": "Apply",
+      pax: { adults: { t:"Adults", s:"Age 12+" }, children: { t:"Children", s:"Age 2–11" }, infants: { t:"Infants", s:"Under 2" } },
+      cabin: { economy:"Economy", premium:"Premium", business:"Business", first:"First" },
+      times: { dawn:"Dawn 00–06", morning:"Morning 06–12", afternoon:"Afternoon 12–18", evening:"Evening 18–24" },
+      stops: { round:"Round-trip", oneway:"One-way", direct:"Direct", one:"1 stop", "two-plus":"2+ stops" },
+      "dt-duration": "Trip length",
+      "dt-lowest": "All-time low on this route",
+      "dt-cta": "Go to booking site",
+      disc1: "AirPick is a mediation platform providing flight and travel-product information, and is not a party to the actual sale or contract of any flight ticket. Responsibility for ticket bookings, payments, refunds, changes, operation, and other transactions lies with the respective airline or seller; AirPick assumes no liability.",
+      disc2: "",
+      "disc-prov": "Flight provider code",
+      apIntl: "Intl Airport",
+      days: (n) => `${n} day${n>1?"s":""}`,
+      "tab-home": "Home",
+      "tab-notice": "Notices",
+      "tab-alarm": "Settings",
+      "notice-title": "Notices",
+      "notice-event": "EVENT",
+      "notice-update": "UPDATE",
+      "notice-info": "INFO",
+      "alarm-more": "More",
+      "notice-sub": "FAQ · Terms",
+      "terms-title": "Terms of Service",
+      "contact-title": "Contact",
+      "terms-sub": "View terms",
+      "faq-title": "FAQ",
+      "alarm-title": "Settings",
+      "alarm-origin": "Your departure",
+      "alarm-route": "My route",
+      "alarm-from": "From",
+      "alarm-to": "To",
+      "alarm-dest": "Destination (optional)",
+      "alarm-dest-empty": "Any destination · all routes",
+      "alarm-dest-add": "All routes",
+      "alarm-master-title": "Alert settings",
+      "alarm-master": "Get alerts for my origin",
+      "alarm-master-sub": "Cheap flight alerts from your home airports (all)",
+      "alarm-7-t": "Within 7 days",
+      "alarm-7-s": "Last-minute deals",
+      "alarm-30-t": "Within 30 days",
+      "alarm-30-s": "Trips in the next month",
+      "alarm-60-t": "Within 60 days",
+      "alarm-60-s": "Trips in the next two months",
+      "alarm-empty": "Turn on alerts to set conditions",
+      foot1: "Prices include taxes and fuel surcharge, per person.",
+      foot2: "Final price confirmed on the airline's page.",
+      oneway: "One-way",
+      direct: "Direct",
+      via: (n) => `${n} stop${n>1?"s":""}`,
+      dday: (d) => d === 0 ? "TODAY" : (d < 0 ? `+${-d}d` : `${d}d left`),
+      lowestLabel: "All-time low",
+      newLow: "New all-time low",
+      alert: "Booking link coming soon",
+      best: "BEST",
+    }
+  };
+
+  let lang = "ko";
+
+  // ---------- HELPERS ----------
+  const today = new Date(); today.setHours(0,0,0,0);
+  function daysUntil(iso){
+    const d = new Date(iso + "T00:00:00");
+    return Math.round((d - today) / 86400000);
+  }
+  function formatKRW(n){
+    return n.toLocaleString("ko-KR");
+  }
+  // Local custom logo overrides (icon-only)
+  const CUSTOM_LOGOS = { TW: "assets/airlines/TW.png", LJ: "assets/airlines/LJ.png", BX: "assets/airlines/BX.png", KE: "assets/airlines/KE.png", BR: "assets/airlines/BR.png", "7C": "assets/airlines/7C.png" };
+  function airlineLogoSrc(code){
+    return CUSTOM_LOGOS[code] || ("https://www.gstatic.com/flights/airline_logos/200px/" + code + ".png");
+  }
+
+  // Simple per-airline mark (abstract, generic shapes). Returns inline HTML.
+  function airlineMark(code){
+    switch (code){
+      case "LJ": // 추상 나비 실루엣
+        return `<svg viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12 12c-1.6-2.4-3.6-3.6-5.8-3.6-1.8 0-3.2 1.4-3.2 3.2 0 2.2 1.6 4 4.2 4.6 1.8.4 3.4 0 4.8-1.2zM12 12c1.6-2.4 3.6-3.6 5.8-3.6 1.8 0 3.2 1.4 3.2 3.2 0 2.2-1.6 4-4.2 4.6-1.8.4-3.4 0-4.8-1.2zM12 7c.7 0 1.2.6 1.2 1.2v8c0 .7-.5 1.2-1.2 1.2s-1.2-.5-1.2-1.2v-8c0-.6.5-1.2 1.2-1.2z"/></svg>`;
+      case "TW": // 소문자 t + 초록 따옴표
+        return `<span class="mark-tw">t<span>'</span></span>`;
+      case "7C":
+        return `<span class="mark-code">7C</span>`;
+      case "BX":
+        return `<span class="mark-code">BX</span>`;
+      case "OZ":
+        return `<span class="mark-code">OZ</span>`;
+      case "KE":
+        return `<span class="mark-code">KE</span>`;
+      case "BR":
+        return `<span class="mark-code">BR</span>`;
+      case "CX":
+        return `<span class="mark-code">CX</span>`;
+      default:
+        return `<span class="mark-code">${code}</span>`;
+    }
+  }
+  const PROVIDERS = {
+    INTERPARK: { ko:"인터파크", en:"Interpark" },
+    HANATOUR:  { ko:"하나투어", en:"Hanatour"  },
+    MODETOUR:  { ko:"모두투어", en:"Modetour"  },
+  };
+  function providerLabel(code, lang){
+    const p = PROVIDERS[code];
+    if (!p) return code;
+    return lang === "ko" ? p.ko : p.en;
+  }
+  function formatDate(iso, lang){
+    const d = new Date(iso + "T00:00:00");
+    if(lang === "ko"){
+      const w = ["일","월","화","수","목","금","토"][d.getDay()];
+      return `${d.getMonth()+1}월 ${d.getDate()}일 (${w})`;
+    } else {
+      return d.toLocaleDateString("en-US", { month:"short", day:"numeric", weekday:"short" });
+    }
+  }
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function formatDateRange(isoStart, isoEnd, lang){
+    const a = new Date(isoStart + "T00:00:00");
+    const b = new Date(isoEnd + "T00:00:00");
+    const nights = Math.round((b - a) / 86400000);
+    const wdKo = ["일","월","화","수","목","금","토"];
+    const wdEn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    // oneway flights (single date)
+    if (isoStart === isoEnd){
+      if (lang === "ko") {
+        return `<span class="date-line">${a.getFullYear()}년 ${pad2(a.getMonth()+1)}.${pad2(a.getDate())}<span class="nights">편도</span></span>`
+             + `<span class="wd-line"><span class="wd-${a.getDay()===0?'sun':a.getDay()===6?'sat':'wk'}">${wdKo[a.getDay()]}</span></span>`;
+      } else {
+        return `<span class="date-line">${a.toLocaleDateString("en-US", { month:"short", day:"numeric" })}, ${a.getFullYear()}<span class="nights">One-way</span></span>`
+             + `<span class="wd-line">${wdEn[a.getDay()]}</span>`;
+      }
+    }
+    if (lang === "ko") {
+      const y = a.getFullYear();
+      const start = `${pad2(a.getMonth()+1)}.${pad2(a.getDate())}`;
+      const end   = a.getFullYear() === b.getFullYear()
+        ? `${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`
+        : `${b.getFullYear()}.${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`;
+      // 주중 / 주말 표시를 위해 투립데이 시리즈 제공
+      const wdSeq = [];
+      for (let d = new Date(a); d <= b; d.setDate(d.getDate()+1)){
+        const dn = d.getDay();
+        wdSeq.push(`<span class="wd-${dn===0?'sun':dn===6?'sat':'wk'}">${wdKo[dn]}</span>`);
+      }
+      return `<span class="date-line">${y}년 ${start} ~ ${end}<span class="nights">${nights+1}일</span></span>`
+           + `<span class="wd-line">${wdSeq.join("")}</span>`;
+    } else {
+      const opts = { month:"short", day:"numeric" };
+      const start = a.toLocaleDateString("en-US", opts);
+      const end   = b.toLocaleDateString("en-US", opts);
+      const wdSeq = [];
+      for (let d = new Date(a); d <= b; d.setDate(d.getDate()+1)){
+        const dn = d.getDay();
+        wdSeq.push(`<span class="wd-${dn===0?'sun':dn===6?'sat':'wk'}">${wdEn[dn]}</span>`);
+      }
+      return `<span class="date-line">${start} ~ ${end}, ${a.getFullYear()}<span class="nights">${nights+1} day${nights>0?"s":""}</span></span>`
+           + `<span class="wd-line">${wdSeq.join(" ")}</span>`;
+    }
+  }
+  function ddayTier(d){
+    if (d <= 15) return "tier-2";
+    if (d <= 30) return "tier-3";
+    return "tier-4";
+  }
+  function ddayBadgeTier(d){
+    if (d <= 15) return "t2";
+    if (d <= 30) return "t3";
+    return "t4";
+  }
+
+  // ---------- RENDER ----------
+  function getOrigin(){ return AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0]; }
+  function getOriginLabel(){
+    const t = I18N[lang];
+    if (originList.length === 0) return lang === "ko" ? "출발지 선택" : "Pick origin";
+    const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
+    const name = lang === "ko" ? first.ko : first.en;
+    if (originList.length === 1) return name;
+    return `${name} ${t["ap-othern"](originList.length - 1)}`;
+  }
+  function getOriginSubLabel(){
+    const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
+    if (originList.length === 1) return `${first.iata} · ${lang === "ko" ? first.city_ko : first.city_en}`;
+    return summarizeIatas(originList);
+  }
+  function summarizeIatas(list){
+    if (list.length <= 4) return list.join(" · ");
+    const head = list.slice(0, 3).join(" · ");
+    const more = list.length - 3;
+    return lang === "ko" ? `${head} 외 ${more}` : `${head} +${more}`;
+  }
+
+
+  function renderAirlineSheet(){
+    const t = I18N[lang];
+    const ul = document.getElementById("airline-list");
+    if (!ul) return;
+    ul.innerHTML = "";
+    document.querySelectorAll(".al-tab").forEach(b => b.classList.toggle("on", b.dataset.region === alTab));
+    const list = uniqAirlinesFromFlights().filter(a => {
+      const isDomestic = a.country_ko === "한국";
+      return alTab === "domestic" ? isDomestic : !isDomestic;
+    });
+    list.forEach(a => {
+      const li = document.createElement("li");
+      const isOn = details.airlines.includes(a.code);
+      const countryLbl = lang === "ko" ? (a.country_ko || "") : (a.country_en || "");
+      const mainName = lang === "ko" ? a.ko : a.en;
+      // 해외 탭에서 한국어 모드일 때만 보조 영문명 표시
+      const subEn = (alTab === "intl" && lang === "ko" && a.en) ? `<span class="al-sub">${a.en}</span>` : "";
+      li.innerHTML = `
+        <button class="${isOn ? "on" : ""}" data-code="${a.code}">
+          <span class="ap-row">
+            <span class="ap-name">
+              <span class="al-main">${mainName}${subEn}</span>
+              <span class="city">${countryLbl}</span>
+            </span>
+            <span class="ap-iata">${a.code}</span>
+          </span>
+        </button>`;
+      ul.appendChild(li);
+    });
+    ul.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", () => {
+        const code = b.dataset.code;
+        const i = details.airlines.indexOf(code);
+        if (i >= 0) details.airlines.splice(i, 1);
+        else details.airlines.push(code);
+        renderAirlineSheet();
+      });
+    });
+  }
+
+  function renderAirportSheet(){
+    const t = I18N[lang];
+    // sheet title varies with target
+    const titleEl = document.getElementById("ap-sheet-title");
+    if (titleEl) titleEl.textContent = airportSheetTarget === "dest" ? t["ap-title-dest"] : t["ap-title"];
+    const ul = document.getElementById("airport-list");
+    ul.innerHTML = "";
+    document.querySelectorAll(".ap-tab").forEach(b => b.classList.toggle("on", b.dataset.region === apTab));
+    const filtered = AIRPORTS.filter(a => a.region === apTab);
+    const activeList = airportSheetTarget === "dest" ? alarmDestList : originList;
+    filtered.forEach(a => {
+      const li = document.createElement("li");
+      const isOn = activeList.includes(a.iata);
+      const cityLabel = lang === "ko"
+        ? (apTab === "intl" ? `${a.country_ko} · ${a.city_ko}` : a.city_ko)
+        : (apTab === "intl" ? `${a.country_en} · ${a.city_en}` : a.city_en);
+      li.innerHTML = `
+        <button class="${isOn ? "on" : ""}" data-iata="${a.iata}">
+          <span class="ap-row">
+            <span class="ap-name">
+              <span>${lang === "ko" ? a.ko : a.en}</span>
+              <span class="city">${cityLabel}</span>
+            </span>
+            <span class="ap-iata">${a.iata}</span>
+          </span>
+        </button>`;
+      ul.appendChild(li);
+    });
+    ul.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", () => {
+        const iata = b.dataset.iata;
+        const list = airportSheetTarget === "dest" ? alarmDestList : originList;
+        const i = list.indexOf(iata);
+        if (i >= 0) {
+          // origin requires at least 1; dest can be empty
+          if (airportSheetTarget === "dest" || list.length > 1) list.splice(i, 1);
+        } else {
+          list.push(iata);
+        }
+        renderAirportSheet();
+      });
+    });
+  }
+
+  function updateFilterBanner(){
+    const banner = document.getElementById("filter-banner");
+    if (!banner) return;
+    if (alarmDestList.length === 0){
+      banner.hidden = true;
+      banner.innerHTML = "";
+      return;
+    }
+    const t = I18N[lang];
+    const first = AIRPORTS.find(a => a.iata === alarmDestList[0]);
+    const firstName = first ? (lang === "ko" ? first.ko : first.en) : alarmDestList[0];
+    const label = alarmDestList.length === 1
+      ? firstName
+      : `${firstName} ${t["ap-othern"](alarmDestList.length - 1)}`;
+    const msg = lang === "ko" ? `${label} 도착편만 표시중이에요` : `Showing arrivals to ${label} only`;
+    const clear = lang === "ko" ? "전체 보기" : "Show all";
+    banner.hidden = false;
+    banner.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      <span class="msg">${msg}</span>
+      <button type="button" id="banner-clear">${clear}</button>
+    `;
+    document.getElementById("banner-clear").addEventListener("click", () => {
+      alarmDestList = [];
+      render();
+    });
+  }
+
+  function render(){
+    const t = I18N[lang];
+    document.documentElement.lang = lang === "ko" ? "ko" : "en";
+
+    // i18n static
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (t[k] !== undefined) el.textContent = t[k];
+    });
+
+    // origin label
+    const origin = getOrigin();
+    document.getElementById("from-name").textContent = getOriginLabel();
+
+    // airport sheet (현재 선택 반영)
+    renderAirportSheet();
+
+    // sort label in button
+    document.getElementById("sort-label").textContent = t["sort-" + sortKey];
+
+    // apply filter
+    // home은 항상 특가만 노출—그 안에서 카테고리 필터
+    let items = FLIGHTS.filter(f => f.fareType === "deal");
+    // active filter banner update
+    updateFilterBanner();
+    if (filter === "round")   items = items.filter(f => f.trip === "round" && f.stops === 0);
+    if (filter === "oneway")  items = items.filter(f => f.trip === "oneway" && f.stops === 0);
+    if (filter === "transit") items = items.filter(f => f.stops >= 1);
+
+    // apply detail filters
+    items = items.filter(f => {
+      // airlines
+      if (details.airlines && details.airlines.length > 0 && !details.airlines.includes(f.airline_code)) return false;
+      // origin (multi)
+      if (originList.length > 0 && !originList.includes(f.from)) return false;
+      // destination filter (set in Settings)
+      if (alarmDestList.length > 0 && !alarmDestList.includes(f.iata)) return false;
+      // trip type filter
+      const tripSel = details.stops.filter(k => k === "round" || k === "oneway");
+      if (tripSel.length > 0 && !tripSel.includes(f.trip)) return false;
+      // stops filter
+      const stopsSel = details.stops.filter(k => k === "direct" || k === "one" || k === "two-plus");
+      if (stopsSel.length > 0){
+        const ok = (stopsSel.includes("direct") && f.stops === 0) ||
+                   (stopsSel.includes("one") && f.stops === 1) ||
+                   (stopsSel.includes("two-plus") && f.stops >= 2);
+        if (!ok) return false;
+      }
+      // date range
+      if (details.dateFrom && f.date < details.dateFrom) return false;
+      if (details.dateTo   && f.date > details.dateTo)   return false;
+      return true;
+    });
+
+    // apply sort
+    items.sort((a, b) => {
+      if (sortKey === "price-asc") return a.price - b.price;
+      if (sortKey === "price-desc") return b.price - a.price;
+      if (sortKey === "date-asc") return a.date.localeCompare(b.date);
+      if (sortKey === "date-desc") return b.date.localeCompare(a.date);
+      return 0;
+    });
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if (items.length === 0){
+      list.innerHTML = `<div class="empty"><img class="empty-icon" src="assets/empty-plane.png" alt=""/><div class="msg">${t.empty}</div></div>`;
+      return;
+    }
+
+    items.forEach((f, i) => {
+      const d = daysUntil(f.date);
+      const tier = ddayTier(d);
+      const ddayCls = ddayBadgeTier(d);
+      const stopsHTML = f.stops === 0
+        ? `<span class="tag direct">${t.direct}</span>`
+        : `<span class="tag">${t.via(f.stops)}</span>`;
+      const isNewLow = f.price <= f.historicalLow;
+      const lowestText = isNewLow
+        ? `<span class="spark">🔥</span>${t.newLow}`
+        : `${t.lowestLabel} · ₩${formatKRW(f.historicalLow)}`;
+      const card = document.createElement("article");
+      card.className = "card " + tier;
+      card.innerHTML = `
+        <div class="row-top">
+          <div class="dest">
+              <div class="flag al-badge" data-code="${f.airline_code}">
+                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>
+              </div>
+            <div class="dest-text">
+              <div class="dest-name">
+                <span class="city-ko">${lang === "ko" ? f.ko : f.en}</span>
+                <span class="loc-pill">
+                  <span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span>
+                  <span class="iata">${f.iata}</span>
+                </span>
+              </div>
+              <div class="route">
+                <span>${lang === "ko" ? origin.city_ko : origin.city_en}</span>
+                <span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>
+                ${f.via ? `<span class="via">${lang === "ko" ? f.via_ko : f.via_en}</span><span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>` : ""}
+                <span>${lang === "ko" ? f.ko : f.en}</span>
+              </div>
+            </div>
+          </div>
+          <div class="badges-right">
+            <span class="dday ${ddayCls}">
+              <span class="dday-lbl">${t.dday(d)}</span>
+              <span class="dday-track">
+                <svg class="plane" viewBox="0 0 24 24" fill="currentColor" style="left:${Math.max(0, Math.min(80, (1 - Math.min(d, 60) / 60) * 80))}%"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              </span>
+            </span>
+          </div>
+        </div>
+        <div class="row-bottom">
+          <div class="trip">
+            <span class="when">${formatDateRange(f.date, f.returnDate, lang)}</span>
+            <div class="tags">
+              ${stopsHTML}
+            </div>
+          </div>
+          <div class="price">
+            <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+            <div class="lowest ${isNewLow?"is-new":""}">${lowestText}</div>
+          </div>
+        </div>
+      `;
+      card.addEventListener("click", () => {
+        openDetail(f);
+      });
+      list.appendChild(card);
+    });
+  }
+
+  // ---------- LANG TOGGLE ----------
+  const btnKo = document.getElementById("btn-ko");
+  const btnEn = document.getElementById("btn-en");
+  btnKo.addEventListener("click", () => { lang = "ko"; btnKo.classList.add("on"); btnEn.classList.remove("on"); render(); renderDetailSheet(); renderAirportSheet(); renderAirlineSheet(); renderNotices(); });
+  btnEn.addEventListener("click", () => { lang = "en"; btnEn.classList.add("on"); btnKo.classList.remove("on"); render(); renderDetailSheet(); renderAirportSheet(); renderAirlineSheet(); renderNotices(); });
+
+  // ---------- FILTER CHIPS ----------
+  document.querySelectorAll("#chips .chip").forEach(c => {
+    c.addEventListener("click", () => {
+      document.querySelectorAll("#chips .chip").forEach(x => x.classList.remove("on"));
+      c.classList.add("on");
+      filter = c.dataset.filter;
+      render();
+    });
+  });
+
+  // ---------- SHEET CLOSERS ----------
+  const sortSheet    = document.getElementById("sheet");
+  const airportSheet = document.getElementById("airport-sheet");
+  const airlineSheet = document.getElementById("airline-sheet");
+  const detailSheet  = document.getElementById("detail-sheet");
+  const backdrop = document.getElementById("sheet-backdrop");
+  function openSheet(el){
+    el.classList.add("open");
+    backdrop.classList.add("open");
+  }
+  function closeSheet(){
+    sortSheet.classList.remove("open");
+    airportSheet.classList.remove("open");
+    airlineSheet.classList.remove("open");
+    detailSheet.classList.remove("open");
+    backdrop.classList.remove("open");
+  }
+  document.getElementById("sort-btn").addEventListener("click", () => openSheet(sortSheet));
+  document.getElementById("from-btn").addEventListener("click", () => { airportSheetTarget = "origin"; renderAirportSheet(); openSheet(airportSheet); });
+  document.querySelectorAll(".ap-tab").forEach(b => {
+    b.addEventListener("click", () => {
+      apTab = b.dataset.region;
+      renderAirportSheet();
+    });
+  });
+  document.querySelectorAll(".al-tab").forEach(b => {
+    b.addEventListener("click", () => {
+      alTab = b.dataset.region;
+      renderAirlineSheet();
+    });
+  });
+  // track which sheet was open before sub-sheet
+  let returnToDetail = false;
+
+  document.getElementById("detail-btn").addEventListener("click", () => openSheet(detailSheet));
+  document.getElementById("detail-from-row").addEventListener("click", () => {
+    detailSheet.classList.remove("open");
+    returnToDetail = true;
+    airportSheetTarget = "origin";
+    renderAirportSheet();
+    openSheet(airportSheet);
+  });
+  document.getElementById("detail-airline-row").addEventListener("click", () => {
+    renderAirlineSheet();
+    detailSheet.classList.remove("open");
+    returnToDetail = true;
+    openSheet(airlineSheet);
+  });
+  document.getElementById("airline-clear").addEventListener("click", () => {
+    details.airlines = [];
+    renderAirlineSheet();
+  });
+  document.getElementById("airline-apply").addEventListener("click", () => {
+    airlineSheet.classList.remove("open");
+    if (returnToDetail){
+      returnToDetail = false;
+      detailSheet.classList.add("open");
+      renderDetailSheet();
+    } else {
+      closeSheet();
+    }
+    render();
+  });
+  backdrop.addEventListener("click", (e) => {
+    // Only close when the backdrop itself is the click target (not a child)
+    if (e.target === backdrop) closeSheet();
+  });
+  // stop sheet clicks from leaking to backdrop / outside
+  [sortSheet, airportSheet, airlineSheet, detailSheet].forEach(s => {
+    if (s) s.addEventListener("click", (e) => e.stopPropagation());
+  });
+
+  // ---------- WHEEL PICKER ----------
+  const ITEM_H = 38;
+  function buildWheelCol(colEl, items, initialIdx, onCommit){
+    colEl.innerHTML = '<div class="pad"></div>'
+      + items.map((it, i) => `<div class="item" data-i="${i}">${it.label}</div>`).join("")
+      + '<div class="pad"></div>';
+    function highlight(idx){
+      colEl.querySelectorAll(".item").forEach((el, i) => el.classList.toggle("selected", i === idx));
+    }
+    function setIdx(idx, smooth){
+      idx = Math.max(0, Math.min(items.length - 1, idx));
+      colEl.scrollTo({ top: idx * ITEM_H, behavior: smooth ? "smooth" : "auto" });
+      highlight(idx);
+      colEl.__idx = idx;
+    }
+    requestAnimationFrame(() => setIdx(initialIdx, false));
+    let timer;
+    colEl.addEventListener("scroll", () => {
+      const idx = Math.round(colEl.scrollTop / ITEM_H);
+      highlight(idx);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const finalIdx = Math.max(0, Math.min(items.length - 1, Math.round(colEl.scrollTop / ITEM_H)));
+        setIdx(finalIdx, true);
+        if (finalIdx !== colEl.__lastCommitted){
+          colEl.__lastCommitted = finalIdx;
+          onCommit(items[finalIdx], finalIdx);
+        }
+      }, 140);
+    }, { passive: true });
+    // tap on item to select
+    colEl.querySelectorAll(".item").forEach((el, i) => {
+      el.addEventListener("click", () => setIdx(i, true));
+    });
+  }
+
+  function buildWheelsForTarget(target){
+    if (target === "date-from" || target === "date-to"){
+      // Compute min/max bounds for this wheel
+      const todayY = today.getFullYear();
+      const minBound = target === "date-to" && details.dateFrom
+        ? new Date(details.dateFrom + "T00:00:00")
+        : new Date(todayY, 0, 1);
+      const maxBound = target === "date-from" && details.dateTo
+        ? new Date(details.dateTo + "T00:00:00")
+        : new Date(todayY + 1, 11, 31);
+
+      const minY = minBound.getFullYear();
+      const maxY = maxBound.getFullYear();
+
+      const current = target === "date-from" ? details.dateFrom : details.dateTo;
+      const def = current ? new Date(current + "T00:00:00") : new Date(minY, minBound.getMonth(), minBound.getDate());
+      let cy = Math.max(minY, Math.min(maxY, def.getFullYear()));
+      let cm = def.getMonth() + 1;
+      let cd = def.getDate();
+      // Clamp current selection to bounds
+      if (cy < minY) { cy = minY; cm = minBound.getMonth()+1; cd = minBound.getDate(); }
+      else if (cy === minY && (cm < minBound.getMonth()+1 || (cm === minBound.getMonth()+1 && cd < minBound.getDate()))) {
+        cm = minBound.getMonth()+1; cd = Math.max(cd, minBound.getDate());
+      }
+      if (cy > maxY) { cy = maxY; cm = maxBound.getMonth()+1; cd = maxBound.getDate(); }
+      else if (cy === maxY && (cm > maxBound.getMonth()+1 || (cm === maxBound.getMonth()+1 && cd > maxBound.getDate()))) {
+        cm = maxBound.getMonth()+1; cd = Math.min(cd, maxBound.getDate());
+      }
+
+      const yearCol  = document.querySelector(`[data-wheel="${target}-year"]`);
+      const monthCol = document.querySelector(`[data-wheel="${target}-month"]`);
+      const dayCol   = document.querySelector(`[data-wheel="${target}-day"]`);
+
+      const commit = () => {
+        const iso = `${cy}-${pad2(cm)}-${pad2(cd)}`;
+        if (target === "date-from"){
+          details.dateFrom = iso;
+          if (details.dateTo && details.dateFrom > details.dateTo) details.dateTo = iso;
+        } else {
+          details.dateTo = iso;
+          if (details.dateFrom && details.dateTo < details.dateFrom) details.dateFrom = iso;
+        }
+        const valEl = document.getElementById(`wheel-${target}-val`);
+        if (valEl){ valEl.textContent = `${cy}.${pad2(cm)}.${pad2(cd)}`; valEl.classList.remove("empty"); }
+        const otherTarget = target === "date-from" ? "date-to" : "date-from";
+        const otherIso = otherTarget === "date-from" ? details.dateFrom : details.dateTo;
+        const otherVal = document.getElementById(`wheel-${otherTarget}-val`);
+        if (otherVal && otherIso){
+          const o = new Date(otherIso + "T00:00:00");
+          otherVal.textContent = `${o.getFullYear()}.${pad2(o.getMonth()+1)}.${pad2(o.getDate())}`;
+          otherVal.classList.remove("empty");
+        }
+        render();
+      };
+
+      const buildYears = () => {
+        const years = [];
+        for (let y = minY; y <= maxY; y++) years.push({ label: `${y}년`, value: y });
+        return years;
+      };
+      const buildMonths = () => {
+        const months = [];
+        const monthMin = (cy === minY) ? minBound.getMonth()+1 : 1;
+        const monthMax = (cy === maxY) ? maxBound.getMonth()+1 : 12;
+        for (let m = monthMin; m <= monthMax; m++) months.push({ label: `${m}월`, value: m });
+        return months;
+      };
+      const buildDays = () => {
+        const lastDay = new Date(cy, cm, 0).getDate();
+        const dayMin = (cy === minY && cm === minBound.getMonth()+1) ? minBound.getDate() : 1;
+        const dayMax = (cy === maxY && cm === maxBound.getMonth()+1) ? maxBound.getDate() : lastDay;
+        const days = [];
+        for (let d = dayMin; d <= dayMax; d++) days.push({ label: `${d}일`, value: d });
+        return days;
+      };
+
+      const refreshDayWheel = () => {
+        const days = buildDays();
+        const minD = days[0].value;
+        const maxD = days[days.length-1].value;
+        if (cd < minD) cd = minD;
+        if (cd > maxD) cd = maxD;
+        buildWheelCol(dayCol, days, days.findIndex(x => x.value === cd), (it) => { cd = it.value; commit(); });
+      };
+      const refreshMonthWheel = () => {
+        const months = buildMonths();
+        const minM = months[0].value;
+        const maxM = months[months.length-1].value;
+        if (cm < minM) cm = minM;
+        if (cm > maxM) cm = maxM;
+        buildWheelCol(monthCol, months, months.findIndex(x => x.value === cm), (it) => {
+          cm = it.value;
+          refreshDayWheel();
+          commit();
+        });
+      };
+
+      buildWheelCol(yearCol, buildYears(), cy - minY, (it) => {
+        cy = it.value;
+        refreshMonthWheel();
+        refreshDayWheel();
+        commit();
+      });
+      refreshMonthWheel();
+      refreshDayWheel();
+    } else if (target === "time-from" || target === "time-to"){
+      const hours = [];
+      for (let h = 0; h <= 23; h++) hours.push({ label: pad2(h), value: h });
+      hours.push({ label: "24", value: 24 });
+      const mins = [];
+      for (let m = 0; m < 60; m += 10) mins.push({ label: pad2(m), value: m });
+
+      const cur = target === "time-from" ? details.timeFromMin : details.timeToMin;
+      let ch = Math.floor(cur / 60);
+      let cmin = cur % 60;
+      if (cur === 1440){ ch = 24; cmin = 0; }
+
+      const hourCol = document.querySelector(`[data-wheel="${target}-hour"]`);
+      const minCol  = document.querySelector(`[data-wheel="${target}-min"]`);
+
+      const commitTime = () => {
+        if (ch === 24) cmin = 0;
+        const total = ch * 60 + cmin;
+        if (target === "time-from"){
+          details.timeFromMin = total;
+          if (details.timeFromMin > details.timeToMin) details.timeToMin = total;
+        } else {
+          details.timeToMin = total;
+          if (details.timeToMin < details.timeFromMin) details.timeFromMin = total;
+        }
+        const valEl = document.getElementById(`wheel-${target}-val`);
+        if (valEl) valEl.textContent = `${pad2(ch)}:${pad2(cmin)}`;
+        render();
+      };
+      const hourIdx = Math.max(0, Math.min(hours.length - 1, ch));
+      const minIdx  = Math.max(0, Math.min(mins.length - 1, Math.round(cmin / 10)));
+      buildWheelCol(hourCol, hours, hourIdx, (it) => { ch = it.value; commitTime(); });
+      buildWheelCol(minCol,  mins,  minIdx,  (it) => { cmin = it.value; commitTime(); });
+    }
+  }
+
+  // expand / collapse rows
+  document.querySelectorAll(".wheel-row[data-wheel-target]").forEach(row => {
+    row.addEventListener("click", () => {
+      const target = row.dataset.wheelTarget;
+      const panel = document.getElementById(`wheel-panel-${target}`);
+      const wasOpen = row.getAttribute("aria-expanded") === "true";
+      // close all rows (across all wheel-cards)
+      document.querySelectorAll(".wheel-row[data-wheel-target]").forEach(r => r.setAttribute("aria-expanded", "false"));
+      document.querySelectorAll(".wheel-panel").forEach(p => p.hidden = true);
+      if (!wasOpen){
+        row.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+        buildWheelsForTarget(target);
+        // ensure panel has its own confirm button
+        let foot = panel.querySelector(".wheel-confirm");
+        if (!foot){
+          foot = document.createElement("button");
+          foot.type = "button";
+          foot.className = "wheel-confirm";
+          foot.textContent = lang === "ko" ? "확인" : "Done";
+          panel.appendChild(foot);
+          foot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            row.setAttribute("aria-expanded", "false");
+            panel.hidden = true;
+          });
+        } else {
+          foot.textContent = lang === "ko" ? "확인" : "Done";
+        }
+        // smooth-scroll the panel into view
+        setTimeout(() => {
+          row.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }, 50);
+      }
+    });
+  });
+
+  // ---------- DETAIL-SHEET (인원/등급/시간/경유) ----------
+  function detailCount(){
+    let n = 0;
+    if (details.adults !== 1 || details.children !== 0 || details.infants !== 0) n++;
+    if (details.cabin !== "economy") n++;
+    if (details.timeFromMin !== 0 || details.timeToMin !== 1440) n++;
+    if (details.dateFrom || details.dateTo) n++;
+    if (details.airlines.length > 0) n++;
+    if (details.stops.length > 0) n++;
+    return n;
+  }
+  function renderDetailSheet(){
+    const t = I18N[lang];
+
+    // pax stepper
+    const paxRoot = document.getElementById("pax-list");
+    paxRoot.innerHTML = "";
+    const paxKeys = ["adults","children","infants"];
+    paxKeys.forEach(key => {
+      const row = document.createElement("div");
+      row.className = "stepper-row";
+      const minVal = key === "adults" ? 1 : 0;
+      const cur = details[key];
+      row.innerHTML = `
+        <div class="stepper-meta"><span class="t">${t.pax[key].t}</span><span class="s">${t.pax[key].s}</span></div>
+        <div class="stepper">
+          <button type="button" data-act="-" ${cur <= minVal ? "disabled" : ""}>−</button>
+          <span class="v">${cur}</span>
+          <button type="button" data-act="+">+</button>
+        </div>`;
+      row.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.act === "+") details[key] = Math.min(9, details[key] + 1);
+          else details[key] = Math.max(minVal, details[key] - 1);
+          renderDetailSheet();
+        });
+      });
+      paxRoot.appendChild(row);
+    });
+
+    // cabin pills (single-select)
+    const cabinRoot = document.getElementById("cabin-pills");
+    cabinRoot.innerHTML = "";
+    Object.keys(t.cabin).forEach(key => {
+      const b = document.createElement("button");
+      b.className = "pill" + (details.cabin === key ? " on" : "");
+      b.textContent = t.cabin[key];
+      b.addEventListener("click", () => { details.cabin = key; renderDetailSheet(); });
+      cabinRoot.appendChild(b);
+    });
+
+    // from row (origin)
+    const fromName = document.getElementById("detail-from-name");
+    const fromSub  = document.getElementById("detail-from-sub");
+    if (fromName) fromName.textContent = getOriginLabel();
+    if (fromSub)  fromSub.textContent  = getOriginSubLabel();
+
+    // date wheels — display labels
+    function fmtDate(iso){
+      if (!iso) return "—";
+      const d = new Date(iso + "T00:00:00");
+      return `${d.getFullYear()}.${pad2(d.getMonth()+1)}.${pad2(d.getDate())}`;
+    }
+    function fmtTime(mins){
+      const h = Math.floor(mins/60), m = mins%60;
+      return `${pad2(h)}:${pad2(m)}`;
+    }
+    const wdf = document.getElementById("wheel-date-from-val");
+    const wdt = document.getElementById("wheel-date-to-val");
+    const wtf = document.getElementById("wheel-time-from-val");
+    const wtt = document.getElementById("wheel-time-to-val");
+    if (wdf) wdf.textContent = fmtDate(details.dateFrom);
+    if (wdt) wdt.textContent = fmtDate(details.dateTo);
+    if (wtf) wtf.textContent = fmtTime(details.timeFromMin);
+    if (wtt) wtt.textContent = fmtTime(details.timeToMin === 0 ? 0 : details.timeToMin);
+    if (wdf) wdf.classList.toggle("empty", !details.dateFrom);
+    if (wdt) wdt.classList.toggle("empty", !details.dateTo);
+
+    // airlines
+    const airlineNameEl = document.getElementById("detail-airline-name");
+    const airlineSubEl  = document.getElementById("detail-airline-sub");
+    if (airlineNameEl){
+      const allAirlines = uniqAirlinesFromFlights();
+      if (details.airlines.length === 0){
+        airlineNameEl.textContent = t["al-all"];
+        airlineSubEl.textContent  = t["al-pick"];
+      } else {
+        const first = allAirlines.find(a => a.code === details.airlines[0]);
+        const firstName = first ? (lang === "ko" ? first.ko : first.en) : details.airlines[0];
+        airlineNameEl.textContent = details.airlines.length === 1
+          ? firstName
+          : `${firstName} ${t["ap-othern"](details.airlines.length - 1)}`;
+        airlineSubEl.textContent = summarizeIatas(details.airlines);
+      }
+    }
+
+    // stops pills (multi)
+    const stopsRoot = document.getElementById("stops-pills");
+    stopsRoot.innerHTML = "";
+    Object.keys(t.stops).forEach(key => {
+      const b = document.createElement("button");
+      b.className = "pill" + (details.stops.includes(key) ? " on" : "");
+      b.textContent = t.stops[key];
+      b.addEventListener("click", () => {
+        const i = details.stops.indexOf(key);
+        if (i >= 0) details.stops.splice(i, 1);
+        else details.stops.push(key);
+        renderDetailSheet();
+      });
+      stopsRoot.appendChild(b);
+    });
+
+    // badge
+    const cnt = detailCount();
+    const btn = document.getElementById("detail-btn");
+    btn.classList.toggle("has-changes", cnt > 0);
+    document.getElementById("detail-badge").textContent = cnt;
+  }
+  document.getElementById("detail-reset").addEventListener("click", () => {
+    details = JSON.parse(JSON.stringify(DEFAULT_DETAILS));
+    originList = ["ICN"];
+    renderDetailSheet();
+    render();
+  });
+  document.getElementById("detail-apply").addEventListener("click", () => {
+    closeSheet();
+    renderDetailSheet();
+    render();
+  });
+  renderDetailSheet();
+  document.querySelectorAll("#sort-list button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#sort-list button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      sortKey = b.dataset.sort;
+      closeSheet();
+      render();
+    });
+  });
+
+  render();
+
+  // ---------- FLIGHT DETAIL VIEW ----------
+  const detailView = document.getElementById("detail-view");
+  let currentDetailFlight = null;
+  let recentlyViewed = [];
+  try {
+    const saved = localStorage.getItem("airpick.recent");
+    if (saved) recentlyViewed = JSON.parse(saved) || [];
+  } catch(e){}
+  function saveRecent(){
+    try { localStorage.setItem("airpick.recent", JSON.stringify(recentlyViewed)); } catch(e){}
+  }
+
+  function openDetail(f){
+    currentDetailFlight = f;
+    renderDetail(f);
+    // track recently viewed (max 20)
+    try {
+      const key = `${f.iata}|${f.date}|${f.airline_code}|${f.price}`;
+      recentlyViewed = recentlyViewed.filter(r => r.key !== key);
+      recentlyViewed.unshift({ key, flight: f, viewedAt: Date.now() });
+      if (recentlyViewed.length > 20) recentlyViewed.length = 20;
+      saveRecent();
+    } catch(e){}
+    detailView.classList.add("open");
+    detailView.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function closeDetail(){
+    detailView.classList.remove("open");
+    detailView.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+  document.getElementById("detail-back").addEventListener("click", closeDetail);
+  document.getElementById("dt-cta").addEventListener("click", () => {
+    alert(lang === "ko" ? "예약 사이트 연결 예정" : "Booking link coming soon");
+  });
+
+  function renderDetail(f){
+    const t = I18N[lang];
+    const origin = getOrigin();
+    const d = daysUntil(f.date);
+    const a = new Date(f.date + "T00:00:00");
+    const b = new Date(f.returnDate + "T00:00:00");
+    const nights = Math.round((b - a) / 86400000);
+    const totalDays = nights + 1;
+
+    // header
+    document.getElementById("dt-flag").textContent = f.flag;
+    const destName = lang === "ko" ? f.ko : f.en;
+    const countryName = lang === "ko" ? f.country_ko : f.country_en;
+    document.getElementById("dt-title").textContent = `${countryName}, ${destName} / ${lang==="ko" ? totalDays+"일" : totalDays+" day"+(totalDays>1?"s":"")}`;
+    document.getElementById("dt-region").textContent = lang === "ko" ? f.region_ko : f.region_en;
+
+    // airline (use airlineMark for clean logo)
+    const aLogoEl = document.getElementById("dt-airline-logo");
+    if (aLogoEl){
+      aLogoEl.setAttribute("data-code", f.airline_code);
+      aLogoEl.classList.add("al-logo-badge");
+      aLogoEl.innerHTML = `<img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>`;
+    }
+    document.getElementById("dt-airline-name").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
+    document.getElementById("dt-airline-name2").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
+
+    // route
+    document.getElementById("dt-from-ap").textContent = lang === "ko" ? origin.ko : origin.en;
+    document.getElementById("dt-from-city").textContent = lang === "ko" ? origin.city_ko : origin.city_en;
+    document.getElementById("dt-from-iata").textContent = origin.iata;
+    document.getElementById("dt-from-date").textContent = f.date;
+
+    document.getElementById("dt-to-ap").textContent = `${destName} ${t.apIntl}`;
+    document.getElementById("dt-to-city").textContent = destName;
+    document.getElementById("dt-to-iata").textContent = f.iata;
+    document.getElementById("dt-to-date").textContent = f.returnDate;
+
+    document.getElementById("dt-duration").textContent = lang === "ko" ? `${totalDays}일` : `${totalDays} day${totalDays>1?"s":""}`;
+
+    // price
+    document.getElementById("dt-price").textContent = `₩${formatKRW(f.price)}`;
+
+    // d-day section removed
+
+    // provider
+    document.getElementById("dt-provider").textContent = f.provider;
+
+    // calendar (출발일의 월을 표시)
+    renderCalendar(a, b);
+
+    // i18n static (몇 건 업데이트)
+    detailView.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (t[k] !== undefined && typeof t[k] !== "function" && typeof t[k] !== "object") {
+        el.textContent = t[k];
+      }
+    });
+  }
+
+  function renderCalendar(startDate, endDate){
+    const calRoot = document.getElementById("dt-calendar");
+    const year  = startDate.getFullYear();
+    const monthNum = startDate.getMonth();
+    const month = new Date(year, monthNum, 1);
+    const lastDay = new Date(year, monthNum + 1, 0).getDate();
+    const firstWeekday = month.getDay();
+    const todayY = today.getFullYear(), todayM = today.getMonth(), todayD = today.getDate();
+
+    const wdLabels = lang === "ko"
+      ? ["일","월","화","수","목","금","토"]
+      : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+    const headerLabel = lang === "ko"
+      ? `${year}년 ${monthNum + 1}월`
+      : new Date(year, monthNum, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+    let html = `<div class="cal-header">${headerLabel}</div><div class="cal-grid">`;
+    wdLabels.forEach((w, i) => {
+      const cls = i === 0 ? "wd sun" : (i === 6 ? "wd sat" : "wd");
+      html += `<div class="${cls}">${w}</div>`;
+    });
+    for (let i = 0; i < firstWeekday; i++){
+      html += `<div class="d muted">0</div>`;
+    }
+    const startD = startDate.getDate();
+    const sameMonthEnd = endDate.getMonth() === startDate.getMonth() && endDate.getFullYear() === startDate.getFullYear();
+    const endD = sameMonthEnd ? endDate.getDate() : lastDay;
+
+    for (let day = 1; day <= lastDay; day++){
+      const wd = (firstWeekday + day - 1) % 7;
+      let cls = "d";
+      if (wd === 0) cls += " sun";
+      if (wd === 6) cls += " sat";
+      const isToday = (todayY === year && todayM === monthNum && todayD === day);
+      if (isToday) cls += " today";
+      if (day >= startD && day <= endD){
+        cls += " in-range";
+        if (day === startD) cls += " range-start";
+        if (day === endD)   cls += " range-end";
+      }
+      html += `<div class="${cls}">${day}</div>`;
+    }
+    html += `</div>`;
+    calRoot.innerHTML = html;
+  }
+
+  // ---------- TABS ----------
+  const appEl = document.getElementById("app");
+  document.querySelectorAll("#tabbar button").forEach(b => {
+    b.addEventListener("click", () => {
+      const tab = b.dataset.tab;
+      appEl.dataset.tab = tab;
+      document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x.dataset.tab === tab));
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // ---------- ALARMS ----------
+  let alarm = {
+    master: false,
+    windows: { 7: false, 30: false }
+  };
+  function renderAlarm(){
+    const t = I18N[lang];
+    const origin = getOrigin();
+    document.getElementById("alarm-origin-name").textContent = getOriginLabel();
+    document.getElementById("alarm-origin-sub").textContent = getOriginSubLabel();
+
+    // destination label
+    const destNameEl = document.getElementById("alarm-dest-name");
+    const destSubEl  = document.getElementById("alarm-dest-sub");
+    if (destNameEl) {
+      if (alarmDestList.length === 0) {
+        destNameEl.textContent = t["alarm-dest-add"];
+        destSubEl.textContent  = lang === "ko" ? "미선택 · 모든 노선" : "Unselected · all routes";
+        destSubEl.style.display = "";
+      } else {
+        destSubEl.style.display = "";
+        const first = AIRPORTS.find(a => a.iata === alarmDestList[0]);
+        const firstName = first ? (lang === "ko" ? first.ko : first.en) : alarmDestList[0];
+        destNameEl.textContent = alarmDestList.length === 1
+          ? firstName
+          : `${firstName} ${t["ap-othern"](alarmDestList.length - 1)}`;
+        destSubEl.textContent = summarizeIatas(alarmDestList);
+      }
+    }
+
+    const m = document.getElementById("alarm-master-switch");
+    m.classList.toggle("on", alarm.master);
+    m.setAttribute("aria-checked", alarm.master ? "true" : "false");
+
+    document.querySelectorAll("#alarm-sub-wrap .tswitch").forEach(sw => {
+      const w = sw.dataset.window;
+      const on = !!alarm.windows[w];
+      sw.classList.toggle("on", on);
+      sw.setAttribute("aria-checked", on ? "true" : "false");
+      sw.disabled = !alarm.master;
+    });
+    document.getElementById("alarm-sub-wrap").classList.toggle("is-off", !alarm.master);
+    document.getElementById("alarm-empty-note").style.display = alarm.master ? "none" : "block";
+
+    // tabbar dot — removed
+  }
+  document.getElementById("alarm-master-switch").addEventListener("click", () => {
+    alarm.master = !alarm.master;
+    renderAlarm();
+  });
+  document.querySelectorAll("#alarm-sub-wrap .tswitch").forEach(sw => {
+    sw.addEventListener("click", () => {
+      if (!alarm.master) return;
+      const w = sw.dataset.window;
+      const wasOn = !!alarm.windows[w];
+      // 한 번에 하나의 범위만 활성 — 30일을 켜면 7일을 끄고, 7일을 켜면 30일을 끈다
+      Object.keys(alarm.windows).forEach(k => alarm.windows[k] = false);
+      alarm.windows[w] = !wasOn;
+      renderAlarm();
+    });
+  });
+  document.getElementById("alarm-origin-btn").addEventListener("click", () => {
+    airportSheetTarget = "origin";
+    renderAirportSheet();
+    openSheet(airportSheet);
+  });
+  document.getElementById("alarm-dest-btn").addEventListener("click", () => {
+    airportSheetTarget = "dest";
+    renderAirportSheet();
+    openSheet(airportSheet);
+  });
+  document.getElementById("airport-apply").addEventListener("click", () => {
+    airportSheet.classList.remove("open");
+    if (returnToDetail){
+      returnToDetail = false;
+      detailSheet.classList.add("open");
+      renderDetailSheet();
+    } else {
+      closeSheet();
+    }
+    render();
+    airportSheetTarget = "origin"; // reset
+  });
+  document.getElementById("airport-clear").addEventListener("click", () => {
+    if (airportSheetTarget === "dest") {
+      alarmDestList = [];
+    } else {
+      originList = ["ICN"];
+    }
+    renderAirportSheet();
+  });
+  // override: when airport changes, also refresh alarm origin
+  const originalRender = render;
+  render = function(){
+    originalRender();
+    renderAlarm();
+  };
+  renderAlarm();
+
+  // ---------- FAQ ----------
+  const FAQS = [
+    { q_ko:"에어픽은 어떤 서비스인가요?",
+      a_ko:"에어픽은 국내외 항공권 및 여행상품 정보를 한눈에 비교할 수 있는 중개 플랫폼입니다. 항공사·여행사가 제공하는 가격과 상품을 모아서 보여드려요.",
+      q_en:"What is AirPick?",
+      a_en:"AirPick is a mediation platform that aggregates flight and travel-product prices from domestic and international airlines and travel sellers in one place." },
+    { q_ko:"가격은 실시간으로 업데이트되나요?",
+      a_ko:"네, 제휴 항공사·여행사 시스템에서 가격을 주기적으로 가져옵니다. 단, 시스템 동기화 지연이나 좌석 변동으로 실제 결제 금액과 차이가 있을 수 있어요. 결제 직전에 항공사 페이지에서 최종 가격을 꼭 확인해주세요.",
+      q_en:"Are prices updated in real time?",
+      a_en:"Prices are pulled periodically from partner airline and travel-seller systems. Sync delays or seat availability changes may cause minor differences—please confirm the final price on the airline's page before payment." },
+    { q_ko:"예약·결제는 어디서 진행되나요?",
+      a_ko:"에어픽은 정보 중개자이므로 결제는 항공사 또는 제휴 여행사 사이트에서 직접 진행됩니다. 카드 클릭 시 해당 사이트로 이동해요.",
+      q_en:"Where do I book and pay?",
+      a_en:"AirPick is an information intermediary; payment is processed on the airline or partner site. Tapping a card takes you there." },
+    { q_ko:"환불·일정 변경은 어떻게 하나요?",
+      a_ko:"항공권의 취소·환불·변경은 구매하신 항공사 또는 판매처의 약관에 따라 진행됩니다. 에어픽은 환불·변경에 대한 책임을 지지 않으며, 해당 판매처 고객센터로 문의해주세요.",
+      q_en:"How do I get a refund or change my booking?",
+      a_en:"Cancellations, refunds, and changes follow the policy of the airline or seller where you purchased. AirPick is not responsible—please contact that seller's customer service." },
+    { q_ko:"알람은 어떻게 받나요?",
+      a_ko:"설정 탭에서 출발지(필수)와 도착지(선택)를 지정하고 알람을 켜면, 해당 노선의 저렴한 항공권이 뜰 때 푸시 알림으로 알려드려요. 7일 이내·30일 이내 중 받고 싶은 기간을 고를 수 있어요.",
+      q_en:"How do alerts work?",
+      a_en:"In the Settings tab, pick an origin (required) and optional destinations, then turn the alarm on. We'll send a push when cheap fares appear for that route. You can choose 7- or 30-day windows." },
+    { q_ko:"특가는 어떻게 선정되나요?",
+      a_ko:"각 노선의 평소 가격과 비교하여 일정 수준 이상 저렴한 항공권을 자동으로 \"특가\"로 표시합니다. 역대 최저가 데이터도 함께 노출돼요.",
+      q_en:"How are 'deals' chosen?",
+      a_en:"We compare current fares against each route's typical price and mark significantly cheaper ones as 'deals'. We also show the all-time low for context." },
+    { q_ko:"개인정보는 어떻게 관리되나요?",
+      a_ko:"에어픽은 개인정보 보호법에 따라 사용자 정보를 안전하게 보관하고, 항공권 검색·알람 제공 외 목적으로 사용하지 않습니다. 자세한 내용은 개인정보 처리방침을 확인해주세요.",
+      q_en:"How is my data handled?",
+      a_en:"Your information is stored securely per applicable privacy laws and is used only for flight search and alerts. See our Privacy Policy for details." },
+    { q_ko:"문의는 어디로 하나요?",
+      a_ko:"앱 사용에 대한 문의는 설정 > 고객센터로 보내주세요. 예약 관련 문의는 해당 항공사·판매처로 직접 연락해주세요.",
+      q_en:"How do I contact you?",
+      a_en:"For app-related questions, use Settings → Support. For booking issues, contact the airline or seller directly." },
+  ];
+  function renderNotices(){
+    const root = document.getElementById("notice-list");
+    if (!root) return;
+    root.innerHTML = `
+      <article class="notice-item" id="row-faq">
+        <div class="top"><span class="badge info">${lang === "ko" ? "안내" : "INFO"}</span></div>
+        <div class="title">${lang === "ko" ? "자주 묻는 질문" : "FAQ"}</div>
+        <div class="desc">${lang === "ko" ? "탭하여 자주 묻는 질문 채팅 열기" : "Tap to open FAQ chat"}</div>
+      </article>
+      <article class="notice-item" id="row-terms">
+        <div class="top"><span class="badge info">${lang === "ko" ? "약관" : "TERMS"}</span></div>
+        <div class="title">${lang === "ko" ? "이용약관" : "Terms of Service"}</div>
+        <div class="desc">${lang === "ko" ? "탭하여 이용약관 보기" : "Tap to view terms"}</div>
+      </article>
+      <article class="notice-item" id="row-contact">
+        <div class="top"><span class="badge info">${lang === "ko" ? "문의" : "CONTACT"}</span></div>
+        <div class="title">${lang === "ko" ? "문의사항" : "Contact"}</div>
+        <div class="desc">${lang === "ko" ? "고객 문의 방법 안내" : "How to reach us"}</div>
+      </article>
+    `;
+    const rowFaq = document.getElementById("row-faq");
+    if (rowFaq) rowFaq.addEventListener("click", () => {
+      appEl.dataset.tab = "faq";
+      window.scrollTo(0, 0);
+    });
+    const rowTerms = document.getElementById("row-terms");
+    if (rowTerms) rowTerms.addEventListener("click", () => {
+      appEl.dataset.tab = "terms";
+      window.scrollTo(0, 0);
+    });
+    const rowContact = document.getElementById("row-contact");
+    if (rowContact) rowContact.addEventListener("click", () => {
+      appEl.dataset.tab = "contact";
+      window.scrollTo(0, 0);
+    });
+  }
+  renderNotices();
+
+  // ---------- RECENT SUB-PAGE ----------
+  function renderRecent(){
+    const root = document.getElementById("recent-list");
+    if (!root) return;
+    const t = I18N[lang];
+    if (recentlyViewed.length === 0){
+      root.innerHTML = `<div class="recent-empty"><img src="assets/empty-plane.png" alt=""/><div class="msg">${t["recent-empty"] || (lang === "ko" ? "아직 본 상품이 없어요" : "Nothing here yet")}</div></div>`;
+      return;
+    }
+    const origin = getOrigin();
+    root.innerHTML = recentlyViewed.map((rv, i) => {
+      const f = rv.flight;
+      const d = daysUntil(f.date);
+      const tier = ddayTier(d);
+      const ddayCls = ddayBadgeTier(d);
+      const stopsHTML = f.stops === 0
+        ? `<span class="tag direct">${t.direct}</span>`
+        : `<span class="tag">${t.via(f.stops)}</span>`;
+      const isNewLow = f.price <= f.historicalLow;
+      const lowestText = isNewLow
+        ? `<span class="spark">🔥</span>${t.newLow}`
+        : `${t.lowestLabel} · ₩${formatKRW(f.historicalLow)}`;
+      return `
+        <article class="card ${tier}" data-idx="${i}">
+          <div class="row-top">
+            <div class="dest">
+              <div class="flag al-badge" data-code="${f.airline_code}">
+                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>
+              </div>
+              <div class="dest-text">
+                <div class="dest-name">
+                  <span class="city-ko">${lang === "ko" ? f.ko : f.en}</span>
+                  <span class="loc-pill">
+                    <span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span>
+                    <span class="iata">${f.iata}</span>
+                  </span>
+                </div>
+                <div class="route">
+                  <span>${lang === "ko" ? (f.from_city_ko || origin.city_ko) : (f.from_city_en || origin.city_en)}</span>
+                  <span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>
+                  ${f.via ? `<span class="via">${lang === "ko" ? f.via_ko : f.via_en}</span><span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>` : ""}
+                  <span>${lang === "ko" ? f.ko : f.en}</span>
+                </div>
+              </div>
+            </div>
+            <div class="badges-right">
+              <span class="dday ${ddayCls}">
+                <span class="dday-lbl">${t.dday(d)}</span>
+                <span class="dday-track">
+                  <svg class="plane" viewBox="0 0 24 24" fill="currentColor" style="left:${Math.max(0, Math.min(80, (1 - Math.min(d, 60) / 60) * 80))}%"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="row-bottom">
+            <div class="trip">
+              <span class="when">${formatDateRange(f.date, f.returnDate, lang)}</span>
+              <div class="tags">${stopsHTML}</div>
+            </div>
+            <div class="price">
+              <div class="amount">${formatKRW(f.price)}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+              <div class="lowest ${isNewLow?"is-new":""}">${lowestText}</div>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+    root.querySelectorAll(".card").forEach(card => {
+      card.addEventListener("click", () => {
+        const idx = +card.dataset.idx;
+        const f = recentlyViewed[idx].flight;
+        if (f) openDetail(f);
+      });
+    });
+  }
+  const openRecentBtn = document.getElementById("open-recent-btn");
+  if (openRecentBtn) openRecentBtn.addEventListener("click", () => {
+    renderRecent();
+    appEl.dataset.tab = "recent";
+    window.scrollTo(0, 0);
+  });
+  const recentBack = document.getElementById("recent-back");
+  if (recentBack) recentBack.addEventListener("click", () => {
+    appEl.dataset.tab = "alarm";
+    window.scrollTo(0, 0);
+  });
+
+  // ---------- FAQ CHAT ----------
+  const FAQ_CHAT = [
+    { section_ko:"예약·결제", section_en:"Booking & Payment" },
+    { q_ko:"에어픽에서 직접 항공권을 판매하나요?",
+      a_ko:"아니에요. 에어픽은 항공권 정보를 모아서 보여드리는 중개 플랫폼이에요. 실제 계약 당사자는 항공사 또는 제휴 여행사이며, 결제도 해당 판매처에서 직접 진행됩니다.",
+      q_en:"Do you sell tickets directly?",
+      a_en:"No. AirPick is a mediation platform that aggregates flight info. The actual contract is with the airline or partner seller, and payment is processed on their site." },
+    { q_ko:"예약 후 항공권은 어디서 확인하나요?",
+      a_ko:"결제가 완료되면 항공사에서 이메일로 e-티켓을 발송해 드려요. 예약번호(PNR)와 일정은 해당 항공사 홈페이지·앱에서 \"예약 조회\"로 확인하실 수 있어요.",
+      q_en:"Where can I see my ticket?",
+      a_en:"After payment, the airline emails an e-ticket. You can also look up your booking with the PNR on the airline's site or app." },
+    { q_ko:"결제했는데 예약 확정이 안 돼요",
+      a_ko:"카드 승인이 곧 발권 완료를 뜻하지는 않아요. 항공사 좌석 반영까지 보통 몇 분에서 최대 24시간이 걸릴 수 있어요. 일정 시간이 지나도 e-티켓이 안 오면 해당 판매처 고객센터로 문의해주세요.",
+      q_en:"Paid but no confirmation yet?",
+      a_en:"Card approval ≠ ticket issued. Confirmation can take a few minutes up to 24 hours. If it's still pending, contact the seller's support." },
+    { q_ko:"예약 정보(이름/생년월일)를 잘못 입력했어요",
+      a_ko:"수정은 항공사 정책에 따라 가능 여부와 수수료가 달라요. 일부 특가/저가 항공권은 수정 자체가 불가할 수 있으니, 발권 직후 발견 즉시 해당 판매처에 연락해주세요.",
+      q_en:"Wrong name or birthdate—can I fix it?",
+      a_en:"It depends on the airline's policy; fees may apply, and some discounted fares can't be modified. Contact the seller right after issuance." },
+
+    { section_ko:"취소·환불", section_en:"Cancellation & Refund" },
+    { q_ko:"환불은 얼마나 걸리나요?",
+      a_ko:"카드사 기준 보통 영업일 3~7일이 소요돼요. 상품에 따라 부분 환불만 가능하거나, 프로모션·특가 항공권은 환불 자체가 제한될 수 있어요.",
+      q_en:"How long do refunds take?",
+      a_en:"Usually 3–7 business days via the card issuer. Partial refunds or no-refund policies may apply for promo/deal fares." },
+    { q_ko:"출발 임박 항공권도 환불 가능한가요?",
+      a_ko:"조건부로 가능합니다. 출발 시점에 가까울수록 수수료가 커지고, 출발 후에는 보통 환불이 안 돼요. 탑승하지 않으면(NO-SHOW) 일부 항공사는 잔여 금액도 소멸시키니 사전에 꼭 확인해주세요.",
+      q_en:"Can I refund near-departure tickets?",
+      a_en:"Conditionally—fees grow as departure approaches and refunds are usually denied after departure. NO-SHOW can forfeit remaining value with some airlines." },
+    { q_ko:"천재지변·항공사 사정으로 결항되면 어떻게 되나요?",
+      a_ko:"항공사 정책이 최우선 적용돼요. 보통 대체편 안내 또는 전액 환불이 이뤄지지만, 절차와 보상 범위는 항공사마다 다르니 해당 항공사 안내를 확인해주세요.",
+      q_en:"What if a flight is cancelled?",
+      a_en:"The airline's policy applies—typically you'll get a re-booking option or full refund. Procedures vary by carrier." },
+
+    { section_ko:"가격", section_en:"Pricing" },
+    { q_ko:"상품은 언제 갱신되나요?",
+      a_ko:"1시간마다 갱신됩니다. 항공사·여행사의 최신 가격을 정기적으로 가져와 보여드려요.",
+      q_en:"How often are prices refreshed?",
+      a_en:"Every hour. We pull the latest fares from airlines and travel sellers on an hourly schedule." },
+    { q_ko:"왜 가격이 갑자기 바뀌나요?",
+      a_ko:"항공권 요금은 실시간으로 변동돼요. 좌석 잔여, 환율, 항공사 운임 정책에 따라 분 단위로도 바뀔 수 있고, 최종 가격은 결제 시점 기준으로 확정돼요.",
+      q_en:"Why do prices change?",
+      a_en:"Airfares are live—seat availability, FX, and pricing policy shift them constantly. The final price is locked at checkout." },
+    { q_ko:"표시 가격 외 추가 비용이 있나요?",
+      a_ko:"기본 운임에는 세금과 유류할증료가 포함돼요. 다만 위탁수하물, 좌석 지정, 기내식 등은 옵션에 따라 추가 요금이 발생할 수 있어요. 항공사 페이지에서 최종 금액을 꼭 확인해주세요.",
+      q_en:"Any extra fees beyond the listed price?",
+      a_en:"Taxes and fuel surcharge are included, but baggage, seat selection, or meals may cost extra. Confirm the total on the airline's page." },
+
+    { section_ko:"수하물·탑승", section_en:"Baggage & Boarding" },
+    { q_ko:"수하물 포함인가요?",
+      a_ko:"항공권마다 달라요. 저가항공(LCC)은 보통 위탁수하물이 별도 구매고, 기내수하물도 무게·크기 제한이 더 엄격해요. 항공사 안내를 미리 확인해주세요.",
+      q_en:"Is baggage included?",
+      a_en:"It depends. LCCs usually charge separately for checked bags and have stricter carry-on limits. Check the airline's policy in advance." },
+    { q_ko:"온라인 체크인은 어디서 하나요?",
+      a_ko:"항공사 홈페이지 또는 앱에서 진행하시면 돼요. 보통 출발 24~48시간 전에 열리고, 국제선은 공항에 출발 2시간 30분 전까지 도착하시는 게 안전해요.",
+      q_en:"Where do I check in online?",
+      a_en:"On the airline's site or app, usually 24–48 hours before departure. For international flights, arrive at the airport 2.5 hours early to be safe." },
+    { q_ko:"여권 정보는 언제 필요하나요?",
+      a_ko:"국제선 예약 시 필수예요. 항공권 영문 이름이 여권과 정확히 일치해야 탑승할 수 있어요. 철자가 다르면 발권 직후 즉시 수정 요청을 해주세요.",
+      q_en:"When do I need passport info?",
+      a_en:"For international flights, it's required. The ticket name must exactly match your passport—request a correction immediately if it doesn't." },
+  ];
+  function renderFAQ(){
+    const root = document.getElementById("faq-thread");
+    if (!root) return;
+    const hi = lang === "ko"
+      ? `안녕하세요! 에어픽 도우미예요. 자주 묻는 질문을 정리해드렸어요 <img class="chat-icon" src="assets/logo.png" alt=""/>`
+      : `Hi! I'm AirPick's helper. Here are the most-asked questions <img class="chat-icon" src="assets/logo.png" alt=""/>`;
+    let html = `<div class="chat-msg a">${hi}</div>`;
+    FAQ_CHAT.forEach(item => {
+      if (item.section_ko){
+        html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
+      } else {
+        html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
+        html += `<div class="chat-msg a">${lang === "ko" ? item.a_ko : item.a_en}</div>`;
+      }
+    });
+    root.innerHTML = html;
+  }
+  renderFAQ();
+  const faqBack = document.getElementById("faq-back");
+  if (faqBack) faqBack.addEventListener("click", () => {
+    appEl.dataset.tab = "notice";
+    window.scrollTo(0, 0);
+  });
+
+  // ---------- TERMS CHAT ----------
+  const TERMS_CHAT = [
+    { section_ko:"제1조 · 목적과 적용", section_en:"§1 · Purpose & Scope" },
+    { q_ko:"이 약관은 어떤 내용을 다루나요?",
+      a_ko:"본 약관은 에어픽이 제공하는 항공권·여행상품 정보 중개 서비스의 이용 조건, 절차, 회사와 이용자 간의 권리·의무·책임 사항을 규정해요.",
+      q_en:"What does this cover?",
+      a_en:"It defines the conditions, procedures, rights, duties, and responsibilities for using AirPick's flight/travel information mediation service." },
+    { q_ko:"약관은 언제 적용되나요?",
+      a_ko:"이용자가 에어픽 서비스를 이용하는 시점부터 자동으로 적용되며, 별도 동의 없이도 서비스 이용 자체가 약관 동의로 간주됩니다.",
+      q_en:"When does it apply?",
+      a_en:"From the moment you use AirPick. Use of the service constitutes agreement to these terms." },
+
+    { section_ko:"제2조 · 서비스의 성격", section_en:"§2 · Nature of Service" },
+    { q_ko:"에어픽은 항공권을 직접 판매하나요?",
+      a_ko:"아니에요. 에어픽은 항공사·여행사가 제공하는 항공권 및 여행상품 정보를 비교·표시하는 **중개 플랫폼**이며, 실제 판매·결제·발권의 당사자가 아닙니다.",
+      q_en:"Do you sell tickets directly?",
+      a_en:"No. AirPick is a mediation platform that aggregates flight/travel info. We are not the seller, payment processor, or ticket issuer." },
+    { q_ko:"표시된 가격은 보장되나요?",
+      a_ko:"표시 가격은 제휴 항공사·여행사로부터 제공받은 실시간 정보를 기반으로 하나, 시스템 동기화 지연이나 좌석 변동으로 실제 결제 가격과 다를 수 있어요. 최종 가격은 판매처에서 확인·확정됩니다.",
+      q_en:"Are prices guaranteed?",
+      a_en:"Prices reflect real-time data from partners, but sync delays or seat changes may cause differences. The final price is confirmed at the seller." },
+
+    { section_ko:"제3조 · 이용자의 의무", section_en:"§3 · User Obligations" },
+    { q_ko:"이용자가 지켜야 할 것은?",
+      a_ko:"① 정확한 정보(이름·여권·결제정보 등) 입력 ② 타인의 정보 도용 금지 ③ 서비스의 정상 운영을 방해하는 행위 금지 ④ 관련 법령 준수.",
+      q_en:"What are user responsibilities?",
+      a_en:"① Provide accurate info (name, passport, payment) ② No identity theft ③ No interference with service ④ Comply with applicable laws." },
+    { q_ko:"위반 시 어떻게 되나요?",
+      a_ko:"이용 제한, 계정 정지, 서비스 이용 거부 등의 조치가 취해질 수 있으며, 위반으로 발생한 손해는 이용자 본인에게 책임이 있습니다.",
+      q_en:"What if I violate?",
+      a_en:"We may restrict usage, suspend the account, or refuse service. You're liable for any resulting damages." },
+
+    { section_ko:"제4조 · 책임의 제한", section_en:"§4 · Limitation of Liability" },
+    { q_ko:"에어픽의 책임 범위는?",
+      a_ko:"에어픽은 정보 중개자로서, **항공권 예약·결제·환불·변경·운항·수하물 등 거래 관련 사항에 대해 직접적인 책임을 지지 않습니다.** 모든 실제 거래는 해당 항공사 또는 판매처의 약관과 정책을 따릅니다.",
+      q_en:"Scope of AirPick's liability?",
+      a_en:"As an intermediary, AirPick is **not liable** for booking, payment, refund, change, operation, or baggage. Actual transactions follow each seller's terms." },
+    { q_ko:"천재지변·시스템 오류는요?",
+      a_ko:"천재지변, 정전, 통신장애, 항공사 시스템 오류 등 불가항력 사유로 인한 서비스 중단·정보 오류에 대해서는 책임이 면제됩니다.",
+      q_en:"What about force majeure?",
+      a_en:"We're not liable for outages or errors caused by force majeure (natural disasters, outages, airline system errors, etc.)." },
+
+    { section_ko:"제5조 · 환불·취소", section_en:"§5 · Refunds & Cancellations" },
+    { q_ko:"환불·취소는 누가 처리하나요?",
+      a_ko:"항공권 환불·취소·변경은 **구매하신 항공사 또는 판매처의 약관에 따라** 진행됩니다. 에어픽은 환불 처리의 주체가 아니며, 해당 판매처 고객센터로 직접 문의해야 합니다.",
+      q_en:"Who handles refunds?",
+      a_en:"Refunds, cancellations, and changes follow the seller's policy. AirPick does not process refunds—contact the seller directly." },
+
+    { section_ko:"제6조 · 개인정보 보호", section_en:"§6 · Privacy" },
+    { q_ko:"개인정보는 어떻게 처리되나요?",
+      a_ko:"에어픽은 「개인정보 보호법」 및 관련 법령에 따라 이용자의 개인정보를 안전하게 보관·처리해요. 자세한 사항은 별도의 **개인정보 처리방침**을 참고해주세요.",
+      q_en:"How is personal data handled?",
+      a_en:"In accordance with applicable privacy laws. See our separate Privacy Policy for details." },
+
+    { section_ko:"제7조 · 약관의 변경", section_en:"§7 · Changes to Terms" },
+    { q_ko:"약관은 변경될 수 있나요?",
+      a_ko:"네. 회사는 관련 법령에 위배되지 않는 범위에서 약관을 개정할 수 있으며, 변경 시 공지사항을 통해 사전 안내해 드립니다. 변경 후에도 서비스를 계속 이용하시면 변경된 약관에 동의한 것으로 간주됩니다.",
+      q_en:"Can the terms change?",
+      a_en:"Yes. We may update them within legal limits and will announce changes in advance via Notices. Continued use means acceptance." },
+
+    { section_ko:"제8조 · 준거법·관할", section_en:"§8 · Governing Law" },
+    { q_ko:"분쟁이 생기면 어떻게 되나요?",
+      a_ko:"본 약관은 대한민국 법령에 따라 해석되며, 분쟁이 발생할 경우 회사의 본점 소재지를 관할하는 법원을 1심 관할 법원으로 합니다.",
+      q_en:"Disputes?",
+      a_en:"Governed by the laws of the Republic of Korea. The court at AirPick's principal place of business has jurisdiction." },
+
+    { section_ko:"문의", section_en:"Contact" },
+    { q_ko:"문의는 어디로 하나요?",
+      a_ko:"앱 사용 문의: 설정 > 고객센터 또는 support@airpick.app 으로 연락주세요. 예약 관련 문의는 해당 항공사·판매처로 직접 문의해주세요.",
+      q_en:"How do I contact you?",
+      a_en:"App questions: Settings → Support or support@airpick.app. For booking issues, contact the seller directly." },
+  ];
+  function renderTerms(){
+    const root = document.getElementById("terms-thread");
+    if (!root) return;
+    const hi = lang === "ko"
+      ? `에어픽 이용약관입니다. 이용 전 꼭 확인해주세요 <img class="chat-icon" src="assets/logo.png" alt=""/>`
+      : `These are AirPick's Terms of Service. Please review before using <img class="chat-icon" src="assets/logo.png" alt=""/>`;
+    let html = `<div class="chat-msg a">${hi}</div>`;
+    TERMS_CHAT.forEach(item => {
+      if (item.section_ko){
+        html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
+      } else {
+        html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
+        html += `<div class="chat-msg a">${lang === "ko" ? item.a_ko : item.a_en}</div>`;
+      }
+    });
+    root.innerHTML = html;
+  }
+  renderTerms();
+  const termsBack = document.getElementById("terms-back");
+  if (termsBack) termsBack.addEventListener("click", () => {
+    appEl.dataset.tab = "notice";
+    window.scrollTo(0, 0);
+  });
+
+  // ---------- CONTACT CHAT ----------
+  function renderContact(){
+    const root = document.getElementById("contact-thread");
+    if (!root) return;
+    const hi = lang === "ko"
+      ? `에어픽 도움이 필요하신가요? 아래 안내를 확인해주세요 <img class="chat-icon" src="assets/logo.png" alt=""/>`
+      : `Need help with AirPick? Please check below <img class="chat-icon" src="assets/logo.png" alt=""/>`;
+    const q = lang === "ko" ? "문의는 어디로 하나요?" : "How do I reach you?";
+    const a = lang === "ko"
+      ? "서비스 관련 문의 : <a href=\"mailto:support@airpick.app\" style=\"color:var(--accent);font-weight:700;text-decoration:underline;\">support@airpick.app</a> 으로 연락주세요."
+      : "Service inquiries: please email <a href=\"mailto:support@airpick.app\" style=\"color:var(--accent);font-weight:700;text-decoration:underline;\">support@airpick.app</a>.";
+    root.innerHTML = `
+      <div class="chat-msg a">${hi}</div>
+      <div class="chat-msg q">${q}</div>
+      <div class="chat-msg a">${a}</div>
+    `;
+  }
+  renderContact();
+  const contactBack = document.getElementById("contact-back");
+  if (contactBack) contactBack.addEventListener("click", () => {
+    appEl.dataset.tab = "notice";
+    window.scrollTo(0, 0);
+  });
+
+  // ---------- NOTICE SUB-PAGE ----------
+  const openNoticeBtn = document.getElementById("open-notice-btn");
+  if (openNoticeBtn) {
+    openNoticeBtn.addEventListener("click", () => {
+      appEl.dataset.tab = "notice";
+      window.scrollTo(0, 0);
+    });
+  }
+  const noticeBack = document.getElementById("notice-back");
+  if (noticeBack) {
+    noticeBack.addEventListener("click", () => {
+      appEl.dataset.tab = "alarm";
+      // re-activate alarm tab button
+      document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.dataset.tab === "alarm"));
+      window.scrollTo(0, 0);
+    });
+  }
+</script>
 </body>
 </html>
