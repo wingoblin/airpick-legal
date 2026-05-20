@@ -2520,6 +2520,15 @@
   // ---------- DATA (실데이터: deals.json) ----------
   // 카드 데이터는 flight-deal-app 레포의 deals.json에서 fetch하여 채운다.
   const DEALS_URL = "https://raw.githubusercontent.com/wingoblin/airpick-legal/main/deals.json";
+  const AFFILIATE_MARKER = "531034";
+
+  // deal.link -> 예약 딥링크. 풀 URL이면 그대로, path만이면 aviasales 도메인 prefix.
+  function buildDeeplink(link){
+    if (!link) return "";
+    const base = /^https?:\/\//.test(link) ? link : "https://www.aviasales.com" + link;
+    const sep = base.indexOf("?") >= 0 ? "&" : "?";
+    return base + sep + "marker=" + encodeURIComponent(AFFILIATE_MARKER);
+  }
 
   let FLIGHTS = [];
   let dataState = "loading"; // "loading" | "ok" | "error"
@@ -2560,6 +2569,44 @@
     YVR: { ko:"밴쿠버", en:"Vancouver",  flag:"🇨🇦", country_ko:"캐나다", country_en:"Canada",      region_ko:"미주", region_en:"Americas" },
     // 오세아니아
     SYD: { ko:"시드니", en:"Sydney",     flag:"🇦🇺", country_ko:"호주",   country_en:"Australia",   region_ko:"오세아니아", region_en:"Oceania" },
+
+    // ===== config.py 신규 추가 노선 =====
+    // 동북아시아 (일본 지방)
+    KMQ: { ko:"코마츠",   en:"Komatsu",    flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    TAK: { ko:"다카마츠", en:"Takamatsu",  flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    KOJ: { ko:"가고시마", en:"Kagoshima",  flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    KMJ: { ko:"구마모토", en:"Kumamoto",   flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    MYJ: { ko:"마쓰야마", en:"Matsuyama",  flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    HIJ: { ko:"히로시마", en:"Hiroshima",  flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    FSZ: { ko:"시즈오카", en:"Shizuoka",   flag:"🇯🇵", country_ko:"일본", country_en:"Japan", region_ko:"동북아시아", region_en:"Northeast Asia" },
+    // 동남아시아
+    KLO: { ko:"칼리보(보라카이)", en:"Kalibo (Boracay)", flag:"🇵🇭", country_ko:"필리핀",   country_en:"Philippines", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    USM: { ko:"코사무이",   en:"Koh Samui",  flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    HKT: { ko:"푸켓",       en:"Phuket",     flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    KBV: { ko:"크라비",     en:"Krabi",      flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    SAI: { ko:"씨엠립",     en:"Siem Reap",  flag:"🇰🇭", country_ko:"캄보디아", country_en:"Cambodia",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    CNX: { ko:"치앙마이",   en:"Chiang Mai", flag:"🇹🇭", country_ko:"태국",     country_en:"Thailand",    region_ko:"동남아시아", region_en:"Southeast Asia" },
+    CXR: { ko:"나트랑",     en:"Nha Trang",  flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia" },
+    PQC: { ko:"푸꾸옥",     en:"Phu Quoc",   flag:"🇻🇳", country_ko:"베트남",   country_en:"Vietnam",     region_ko:"동남아시아", region_en:"Southeast Asia" },
+    VTE: { ko:"비엔티안",   en:"Vientiane",  flag:"🇱🇦", country_ko:"라오스",   country_en:"Laos",        region_ko:"동남아시아", region_en:"Southeast Asia" },
+    BKI: { ko:"코타키나발루", en:"Kota Kinabalu", flag:"🇲🇾", country_ko:"말레이시아", country_en:"Malaysia", region_ko:"동남아시아", region_en:"Southeast Asia" },
+    // 유럽
+    ZRH: { ko:"취리히",   en:"Zurich",    flag:"🇨🇭", country_ko:"스위스",     country_en:"Switzerland", region_ko:"유럽", region_en:"Europe" },
+    VIE: { ko:"빈",       en:"Vienna",    flag:"🇦🇹", country_ko:"오스트리아", country_en:"Austria",     region_ko:"유럽", region_en:"Europe" },
+    MUC: { ko:"뮌헨",     en:"Munich",    flag:"🇩🇪", country_ko:"독일",       country_en:"Germany",     region_ko:"유럽", region_en:"Europe" },
+    PRG: { ko:"프라하",   en:"Prague",    flag:"🇨🇿", country_ko:"체코",       country_en:"Czechia",     region_ko:"유럽", region_en:"Europe" },
+    MAD: { ko:"마드리드", en:"Madrid",    flag:"🇪🇸", country_ko:"스페인",     country_en:"Spain",       region_ko:"유럽", region_en:"Europe" },
+    HEL: { ko:"헬싱키",   en:"Helsinki",  flag:"🇫🇮", country_ko:"핀란드",     country_en:"Finland",     region_ko:"유럽", region_en:"Europe" },
+    // 미주
+    SEA: { ko:"시애틀",   en:"Seattle",    flag:"🇺🇸", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    ATL: { ko:"애틀랜타", en:"Atlanta",    flag:"🇺🇸", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    DFW: { ko:"댈러스",   en:"Dallas",     flag:"🇺🇸", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    IAD: { ko:"워싱턴",   en:"Washington", flag:"🇺🇸", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    LAS: { ko:"라스베가스", en:"Las Vegas", flag:"🇺🇸", country_ko:"미국",  country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    YYZ: { ko:"토론토",   en:"Toronto",    flag:"🇨🇦", country_ko:"캐나다", country_en:"Canada", region_ko:"미주", region_en:"Americas" },
+    // 태평양 (미국령)
+    GUM: { ko:"괌",       en:"Guam",       flag:"🇬🇺", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
+    SPN: { ko:"사이판",   en:"Saipan",     flag:"🇲🇵", country_ko:"미국",   country_en:"USA",    region_ko:"미주", region_en:"Americas" },
   };
 
   // deals.json 한 건 -> 카드 렌더가 쓰는 FLIGHT 객체로 변환
@@ -2589,6 +2636,7 @@
       trip: deal.trip === "roundtrip" ? "round" : "oneway",
       fareType: "deal",
       provider: deal.gate || "",
+      link: deal.link || "",
     };
   }
 
@@ -2730,6 +2778,42 @@
     { iata:"JFK", region:"intl",     ko:"존 펀 케네디",     city_ko:"뉴욕",     en:"John F. Kennedy",  city_en:"New York",   country_ko:"미국",     country_en:"USA" },
     { iata:"LHR", region:"intl",     ko:"히드로공항",         city_ko:"런던",     en:"Heathrow",         city_en:"London",     country_ko:"영국",     country_en:"UK" },
     { iata:"CDG", region:"intl",     ko:"샤를 드골공항",     city_ko:"파리",     en:"Charles de Gaulle",city_en:"Paris",      country_ko:"프랑스",   country_en:"France" },
+    // ===== config.py 신규 추가 노선 =====
+    // 일본 지방
+    { iata:"KMQ", region:"intl",     ko:"코마츠공항",         city_ko:"코마츠",   en:"Komatsu",          city_en:"Komatsu",    country_ko:"일본",     country_en:"Japan" },
+    { iata:"TAK", region:"intl",     ko:"다카마쓰공항",       city_ko:"다카마츠", en:"Takamatsu",        city_en:"Takamatsu",  country_ko:"일본",     country_en:"Japan" },
+    { iata:"KOJ", region:"intl",     ko:"가고시마공항",       city_ko:"가고시마", en:"Kagoshima",        city_en:"Kagoshima",  country_ko:"일본",     country_en:"Japan" },
+    { iata:"KMJ", region:"intl",     ko:"구마모토공항",       city_ko:"구마모토", en:"Kumamoto",         city_en:"Kumamoto",   country_ko:"일본",     country_en:"Japan" },
+    { iata:"MYJ", region:"intl",     ko:"마쓰야마공항",       city_ko:"마쓰야마", en:"Matsuyama",        city_en:"Matsuyama",  country_ko:"일본",     country_en:"Japan" },
+    { iata:"HIJ", region:"intl",     ko:"히로시마공항",       city_ko:"히로시마", en:"Hiroshima",        city_en:"Hiroshima",  country_ko:"일본",     country_en:"Japan" },
+    { iata:"FSZ", region:"intl",     ko:"시즈오카공항",       city_ko:"시즈오카", en:"Shizuoka",         city_en:"Shizuoka",   country_ko:"일본",     country_en:"Japan" },
+    // 동남아시아
+    { iata:"KLO", region:"intl",     ko:"칼리보국제공항",     city_ko:"칼리보(보라카이)", en:"Kalibo Intl",  city_en:"Kalibo (Boracay)", country_ko:"필리핀", country_en:"Philippines" },
+    { iata:"USM", region:"intl",     ko:"사무이공항",         city_ko:"코사무이", en:"Samui",            city_en:"Koh Samui",  country_ko:"태국",     country_en:"Thailand" },
+    { iata:"HKT", region:"intl",     ko:"푸켓국제공항",       city_ko:"푸켓",     en:"Phuket Intl",      city_en:"Phuket",     country_ko:"태국",     country_en:"Thailand" },
+    { iata:"KBV", region:"intl",     ko:"크라비국제공항",     city_ko:"크라비",   en:"Krabi Intl",       city_en:"Krabi",      country_ko:"태국",     country_en:"Thailand" },
+    { iata:"SAI", region:"intl",     ko:"씨엠립앙코르국제공항", city_ko:"씨엠립",   en:"Siem Reap-Angkor Intl", city_en:"Siem Reap", country_ko:"캄보디아", country_en:"Cambodia" },
+    { iata:"CNX", region:"intl",     ko:"치앙마이국제공항",   city_ko:"치앙마이", en:"Chiang Mai Intl",  city_en:"Chiang Mai", country_ko:"태국",     country_en:"Thailand" },
+    { iata:"CXR", region:"intl",     ko:"깜라인국제공항",     city_ko:"나트랑",   en:"Cam Ranh Intl",    city_en:"Nha Trang",  country_ko:"베트남",   country_en:"Vietnam" },
+    { iata:"PQC", region:"intl",     ko:"푸꾸옥국제공항",     city_ko:"푸꾸옥",   en:"Phu Quoc Intl",    city_en:"Phu Quoc",   country_ko:"베트남",   country_en:"Vietnam" },
+    { iata:"VTE", region:"intl",     ko:"와따이국제공항",     city_ko:"비엔티안", en:"Wattay Intl",      city_en:"Vientiane",  country_ko:"라오스",   country_en:"Laos" },
+    { iata:"BKI", region:"intl",     ko:"코타키나발루국제공항", city_ko:"코타키나발루", en:"Kota Kinabalu Intl", city_en:"Kota Kinabalu", country_ko:"말레이시아", country_en:"Malaysia" },
+    // 유럽
+    { iata:"ZRH", region:"intl",     ko:"취리히공항",         city_ko:"취리히",   en:"Zurich",           city_en:"Zurich",     country_ko:"스위스",   country_en:"Switzerland" },
+    { iata:"VIE", region:"intl",     ko:"빈국제공항",         city_ko:"빈",       en:"Vienna Intl",      city_en:"Vienna",     country_ko:"오스트리아", country_en:"Austria" },
+    { iata:"MUC", region:"intl",     ko:"뮌헨공항",           city_ko:"뮌헨",     en:"Munich",           city_en:"Munich",     country_ko:"독일",     country_en:"Germany" },
+    { iata:"PRG", region:"intl",     ko:"프라하국제공항",     city_ko:"프라하",   en:"Prague",           city_en:"Prague",     country_ko:"체코",     country_en:"Czechia" },
+    { iata:"MAD", region:"intl",     ko:"마드리드바라하스공항", city_ko:"마드리드", en:"Madrid-Barajas",   city_en:"Madrid",     country_ko:"스페인",   country_en:"Spain" },
+    { iata:"HEL", region:"intl",     ko:"헬싱키반타공항",     city_ko:"헬싱키",   en:"Helsinki-Vantaa",  city_en:"Helsinki",   country_ko:"핀란드",   country_en:"Finland" },
+    // 미주·태평양
+    { iata:"SEA", region:"intl",     ko:"시애틀타코마국제공항", city_ko:"시애틀",   en:"Seattle-Tacoma Intl", city_en:"Seattle", country_ko:"미국",     country_en:"USA" },
+    { iata:"ATL", region:"intl",     ko:"애틀랜타국제공항",   city_ko:"애틀랜타", en:"Atlanta Intl",     city_en:"Atlanta",    country_ko:"미국",     country_en:"USA" },
+    { iata:"DFW", region:"intl",     ko:"댈러스포트워스국제공항", city_ko:"댈러스",   en:"Dallas/Fort Worth Intl", city_en:"Dallas", country_ko:"미국",     country_en:"USA" },
+    { iata:"IAD", region:"intl",     ko:"워싱턴덜레스국제공항", city_ko:"워싱턴",   en:"Washington Dulles", city_en:"Washington", country_ko:"미국",     country_en:"USA" },
+    { iata:"LAS", region:"intl",     ko:"라스베가스국제공항", city_ko:"라스베가스", en:"Las Vegas (Harry Reid)", city_en:"Las Vegas", country_ko:"미국", country_en:"USA" },
+    { iata:"YYZ", region:"intl",     ko:"토론토피어슨국제공항", city_ko:"토론토",   en:"Toronto Pearson",  city_en:"Toronto",    country_ko:"캐나다",   country_en:"Canada" },
+    { iata:"GUM", region:"intl",     ko:"괌국제공항",         city_ko:"괌",       en:"Guam Intl",        city_en:"Guam",       country_ko:"미국",     country_en:"USA" },
+    { iata:"SPN", region:"intl",     ko:"사이판국제공항",     city_ko:"사이판",   en:"Saipan Intl",      city_en:"Saipan",     country_ko:"미국",     country_en:"USA" },
   ];
 
   // ---------- I18N ----------
@@ -3262,9 +3346,16 @@
     list.innerHTML = "";
 
     if (items.length === 0){
+      if (dataState === "error"){
+        const errMsg = lang === "ko" ? "일시적으로 데이터를 불러올 수 없습니다" : "Couldn't load data right now. Please try again later.";
+        const retryLabel = lang === "ko" ? "다시 시도" : "Retry";
+        list.innerHTML = `<div class="empty"><img class="empty-icon" src="assets/empty-plane.png" alt=""/><div class="msg">${errMsg}</div><button type="button" id="retry-btn" style="margin-top:14px;padding:10px 22px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;cursor:pointer;">${retryLabel}</button></div>`;
+        const rb = document.getElementById("retry-btn");
+        if (rb) rb.addEventListener("click", loadDeals);
+        return;
+      }
       let emptyMsg = t.empty;
       if (dataState === "loading") emptyMsg = lang === "ko" ? "불러오는 중…" : "Loading…";
-      else if (dataState === "error") emptyMsg = lang === "ko" ? "일시적으로 데이터를 불러올 수 없습니다" : "Couldn't load data right now. Please try again later.";
       list.innerHTML = `<div class="empty"><img class="empty-icon" src="assets/empty-plane.png" alt=""/><div class="msg">${emptyMsg}</div></div>`;
       return;
     }
@@ -3809,7 +3900,12 @@
   }
   document.getElementById("detail-back").addEventListener("click", closeDetail);
   document.getElementById("dt-cta").addEventListener("click", () => {
-    alert(lang === "ko" ? "예약 사이트 연결 예정" : "Booking link coming soon");
+    const url = currentDetailFlight ? buildDeeplink(currentDetailFlight.link) : "";
+    if (url){
+      window.open(url, "_blank", "noopener");
+    } else {
+      alert(lang === "ko" ? "예약 링크를 불러올 수 없습니다" : "Booking link unavailable");
+    }
   });
 
   function renderDetail(f){
