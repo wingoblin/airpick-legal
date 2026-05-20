@@ -1509,6 +1509,9 @@
   .flag.al-badge[data-code="KE"] .al-fallback{ background: #00b0e6; }
   .flag.al-badge[data-code="BR"] .al-fallback{ background: #1b6738; }
   .flag.al-badge[data-code="CX"] .al-fallback{ background: #006464; }
+  /* fallback: 미등록 항공사 코드 — 회색 원형 배경에 코드 알파벳 표시 */
+  .flag.al-badge .al-fallback{ background: #9aa4b2; }
+  .airline-mark .a-logo .al-fallback{ background: #9aa4b2; }
   .dest-text{ min-width:0 }
   .dest-name{
     display:flex; align-items:center; gap:6px;
@@ -2637,6 +2640,7 @@
       fareType: "deal",
       provider: deal.gate || "",
       link: deal.link || "",
+      metaMissing: !DEST_META[deal.destination],
     };
   }
 
@@ -3061,8 +3065,18 @@
       case "CX":
         return `<span class="mark-code">CX</span>`;
       default:
-        return `<span class="mark-code">${code}</span>`;
+        return `<span class="mark-code">${(code || "").slice(0, 2).toUpperCase()}</span>`;
     }
+  }
+
+  // 로고/등록 정보가 없는 항공사: 코드로 일정한 색을 생성해 이니셜 배경에 적용.
+  // 등록된 항공사(아래 코드들)는 CSS data-code 브랜드색을 그대로 쓰도록 빈 문자열 반환.
+  const BRANDED_AIRLINES = { "7C":1, "BX":1, "TW":1, "LJ":1, "OZ":1, "KE":1, "BR":1, "CX":1 };
+  function alFallbackStyle(code){
+    if (!code || BRANDED_AIRLINES[code]) return "";
+    let h = 0;
+    for (let i = 0; i < code.length; i++) h = (h * 31 + code.charCodeAt(i)) % 360;
+    return `background:hsl(${h}, 55%, 42%)`;
   }
   const PROVIDERS = {
     INTERPARK: { ko:"인터파크", en:"Interpark" },
@@ -3369,21 +3383,22 @@
         : `<span class="tag">${t.via(f.stops)}</span>`;
       const avgLabel = lang === "ko" ? "평균가" : "Avg";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
+      const cityName = lang === "ko" ? f.ko : f.en;
+      const locPillHTML = f.metaMissing
+        ? `<span class="loc-pill"><span class="country">${lang === "ko" ? "공항 코드" : "Airport code"}</span></span>`
+        : `<span class="loc-pill"><span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span><span class="iata">${f.iata}</span></span>`;
       const card = document.createElement("article");
       card.className = "card " + tier;
       card.innerHTML = `
         <div class="row-top">
           <div class="dest">
               <div class="flag al-badge" data-code="${f.airline_code}">
-                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>
+                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback" style="${alFallbackStyle(f.airline_code)}">${airlineMark(f.airline_code)}</span>
               </div>
             <div class="dest-text">
               <div class="dest-name">
-                <span class="city-ko">${lang === "ko" ? f.ko : f.en}</span>
-                <span class="loc-pill">
-                  <span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span>
-                  <span class="iata">${f.iata}</span>
-                </span>
+                <span class="city-ko">${cityName}</span>
+                ${locPillHTML}
               </div>
               <div class="route">
                 <span>${lang === "ko" ? origin.city_ko : origin.city_en}</span>
@@ -3918,18 +3933,19 @@
     const totalDays = nights + 1;
 
     // header
-    document.getElementById("dt-flag").textContent = f.flag;
+    document.getElementById("dt-flag").textContent = f.flag || "✈️";
     const destName = lang === "ko" ? f.ko : f.en;
     const countryName = lang === "ko" ? f.country_ko : f.country_en;
-    document.getElementById("dt-title").textContent = `${countryName}, ${destName} / ${lang==="ko" ? totalDays+"일" : totalDays+" day"+(totalDays>1?"s":"")}`;
-    document.getElementById("dt-region").textContent = lang === "ko" ? f.region_ko : f.region_en;
+    const daysLabel = lang === "ko" ? totalDays+"일" : totalDays+" day"+(totalDays>1?"s":"");
+    document.getElementById("dt-title").textContent = (countryName ? `${countryName}, ${destName}` : destName) + ` / ${daysLabel}`;
+    document.getElementById("dt-region").textContent = (lang === "ko" ? f.region_ko : f.region_en) || (lang === "ko" ? "공항 코드" : "Airport code");
 
     // airline (use airlineMark for clean logo)
     const aLogoEl = document.getElementById("dt-airline-logo");
     if (aLogoEl){
       aLogoEl.setAttribute("data-code", f.airline_code);
       aLogoEl.classList.add("al-logo-badge");
-      aLogoEl.innerHTML = `<img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>`;
+      aLogoEl.innerHTML = `<img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback" style="${alFallbackStyle(f.airline_code)}">${airlineMark(f.airline_code)}</span>`;
     }
     document.getElementById("dt-airline-name").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
     document.getElementById("dt-airline-name2").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
@@ -4217,20 +4233,21 @@
         : `<span class="tag">${t.via(f.stops)}</span>`;
       const avgLabel = lang === "ko" ? "평균가" : "Avg";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
+      const cityName = lang === "ko" ? f.ko : f.en;
+      const locPillHTML = f.metaMissing
+        ? `<span class="loc-pill"><span class="country">${lang === "ko" ? "공항 코드" : "Airport code"}</span></span>`
+        : `<span class="loc-pill"><span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span><span class="iata">${f.iata}</span></span>`;
       return `
         <article class="card ${tier}" data-idx="${i}">
           <div class="row-top">
             <div class="dest">
               <div class="flag al-badge" data-code="${f.airline_code}">
-                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback">${airlineMark(f.airline_code)}</span>
+                <img class="al-logo-img" src="${airlineLogoSrc(f.airline_code)}" alt="${f.airline_code}" onerror="this.classList.add('hidden')" loading="lazy" /><span class="al-fallback" style="${alFallbackStyle(f.airline_code)}">${airlineMark(f.airline_code)}</span>
               </div>
               <div class="dest-text">
                 <div class="dest-name">
-                  <span class="city-ko">${lang === "ko" ? f.ko : f.en}</span>
-                  <span class="loc-pill">
-                    <span class="country">${lang === "ko" ? f.country_ko : f.country_en}</span>
-                    <span class="iata">${f.iata}</span>
-                  </span>
+                  <span class="city-ko">${cityName}</span>
+                  ${locPillHTML}
                 </div>
                 <div class="route">
                   <span>${lang === "ko" ? (f.from_city_ko || origin.city_ko) : (f.from_city_en || origin.city_en)}</span>
