@@ -2070,6 +2070,44 @@
     background: var(--accent);
     color: #fff;
   }
+
+  /* 예매 이동 확인 모달 (중앙) */
+  .confirm-modal-backdrop{
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background: rgba(17,19,24,.45);
+    opacity: 0; pointer-events: none;
+    transition: opacity .18s ease;
+  }
+  .confirm-modal-backdrop.open{ opacity: 1; pointer-events: auto; }
+  .confirm-modal{
+    width: 100%; max-width: 340px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px 20px 16px;
+    box-shadow: 0 14px 44px rgba(0,0,0,.20);
+    transform: translateY(8px) scale(.98);
+    transition: transform .18s ease;
+  }
+  .confirm-modal-backdrop.open .confirm-modal{ transform: none; }
+  .confirm-modal-text{
+    margin: 0 0 18px;
+    font-size: 13.5px; line-height: 1.6;
+    color: var(--muted);
+    letter-spacing: -.01em;
+  }
+  .confirm-modal-actions{ display: flex; gap: 8px; }
+  .confirm-modal-actions .cm-btn{
+    flex: 1 1 auto;
+    border: 0; border-radius: 12px;
+    padding: 13px 14px;
+    font: inherit; font-size: 14px; font-weight: 700;
+    letter-spacing: -.01em; cursor: pointer;
+  }
+  .confirm-modal-actions .cm-cancel{ background: #f3f5f8; color: var(--ink-2); }
+  .confirm-modal-actions .cm-go{ background: var(--accent-soft); color: var(--accent); }
+  .confirm-modal-actions .cm-go:active{ background: var(--accent); color: #fff; }
 </style>
 </head>
 <body>
@@ -2503,9 +2541,19 @@
       </div>
     </div>
     <footer class="detail-cta">
-      <button type="button" id="dt-cta" data-i18n="dt-cta">예약 사이트로 이동</button>
+      <button type="button" id="dt-cta" data-i18n="dt-cta">예매하러가기</button>
     </footer>
   </div>
+
+    <div class="confirm-modal-backdrop" id="book-modal" aria-hidden="true">
+      <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="book-modal-text">
+        <p class="confirm-modal-text" id="book-modal-text">항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 15분마다 갱신됩니다.</p>
+        <div class="confirm-modal-actions">
+          <button type="button" class="cm-btn cm-cancel" id="book-cancel">취소</button>
+          <button type="button" class="cm-btn cm-go" id="book-go">예매하기</button>
+        </div>
+      </div>
+    </div>
   </main>
 
 <script>
@@ -2866,7 +2914,7 @@
       stops: { round:"왕복", oneway:"편도", direct:"직항", one:"경유 1회", "two-plus":"경유 2회 이상" },
       "dt-duration": "여행기간",
       "dt-lowest": "이 구간 역대 최저가",
-      "dt-cta": "예약 사이트로 이동",
+      "dt-cta": "예매하러가기",
       disc1: "에어픽은 항공권 및 여행상품 정보를 제공하는 중개 플랫폼이며, 실제 항공권 판매 및 계약의 당사자가 아닙니다. 항공권 예약, 결제, 환불, 변경, 운항 및 기타 거래와 관련한 책임은 해당 항공사 또는 판매처에 있으며, 에어픽은 이에 대한 책임을 지지 않습니다.",
       disc2: "",
       "disc-prov": "항공권 프로바이더 식별코드",
@@ -3895,14 +3943,37 @@
     document.body.style.overflow = "";
   }
   document.getElementById("detail-back").addEventListener("click", closeDetail);
+  const bookModal = document.getElementById("book-modal");
+  let bookUrl = "";
+  function openBookModal(url){
+    bookUrl = url;
+    const ko = lang === "ko";
+    document.getElementById("book-modal-text").textContent = ko
+      ? "항공권 특가 좌석은 전 세계 이용자를 대상으로 실시간 선착순 소진됩니다. 에어픽이 가격 정보를 수집한 시점과 실제 예매 시점 사이에 좌석이 예매된경우 잔여좌석에 따라 표시가격과 차이가 발생할 수 있습니다. 항공권은 15분마다 갱신됩니다."
+      : "Discounted seats sell out in real time on a first-come basis to users worldwide. If seats are booked between when AirPick collected the price and your actual booking, the displayed price may differ depending on remaining seats. Fares update every 15 minutes.";
+    document.getElementById("book-cancel").textContent = ko ? "취소" : "Cancel";
+    document.getElementById("book-go").textContent = ko ? "예매하기" : "Book";
+    bookModal.classList.add("open");
+    bookModal.setAttribute("aria-hidden", "false");
+  }
+  function closeBookModal(){
+    bookModal.classList.remove("open");
+    bookModal.setAttribute("aria-hidden", "true");
+  }
   document.getElementById("dt-cta").addEventListener("click", () => {
     const url = currentDetailFlight ? buildDeeplink(currentDetailFlight.link) : "";
-    if (url){
-      window.open(url, "_blank", "noopener");
-    } else {
+    if (!url){
       alert(lang === "ko" ? "예약 링크를 불러올 수 없습니다" : "Booking link unavailable");
+      return;
     }
+    openBookModal(url);
   });
+  document.getElementById("book-cancel").addEventListener("click", closeBookModal);
+  document.getElementById("book-go").addEventListener("click", () => {
+    if (bookUrl) window.open(bookUrl, "_blank", "noopener");
+    closeBookModal();
+  });
+  bookModal.addEventListener("click", (e) => { if (e.target === bookModal) closeBookModal(); });
 
   function renderDetail(f){
     const t = I18N[lang];
