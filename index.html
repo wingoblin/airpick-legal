@@ -1707,13 +1707,13 @@
     line-height: 1;
   }
   .price .amount .krw{
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--muted);
+    font-size: inherit;
+    font-weight: inherit;
+    color: var(--ink);
     margin-left: 2px;
   }
-  /* "약" 접두사: 가격보다 작게, 색은 동일(inherit) */
-  .approx{ font-size: .65em; color: inherit; }
+  /* "~" (부터): 숫자와 같은 글씨체, 회색 */
+  .tilde{ color: var(--muted); margin-left: 3px; }
   .price .lowest{
     font-size: 10px;
     color: var(--muted);
@@ -3431,7 +3431,7 @@
             </div>
           </div>
           <div class="price">
-            <div class="amount"><span class="approx">${lang==="ko"?"약":"approx."}</span> ${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+            <div class="amount">${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span><span class="tilde">~</span></div>
             <div class="lowest">${lowestText}</div>
           </div>
         </div>
@@ -3970,7 +3970,7 @@
     document.getElementById("dt-duration").textContent = lang === "ko" ? `${totalDays}일` : `${totalDays} day${totalDays>1?"s":""}`;
 
     // price
-    document.getElementById("dt-price").innerHTML = `<span class="approx">${lang==="ko"?"약":"approx."}</span> ₩${formatKRW(roundApprox(f.price))}`;
+    document.getElementById("dt-price").innerHTML = `₩${formatKRW(roundApprox(f.price))}<span class="tilde">~</span>`;
 
     // d-day section removed
 
@@ -4278,7 +4278,7 @@
               <div class="tags">${stopsHTML}</div>
             </div>
             <div class="price">
-              <div class="amount"><span class="approx">${lang==="ko"?"약":"approx."}</span> ${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span></div>
+              <div class="amount">${formatKRW(roundApprox(f.price))}<span class="krw">${lang==="ko"?"원":"KRW"}</span><span class="tilde">~</span></div>
               <div class="lowest">${lowestText}</div>
             </div>
           </div>
