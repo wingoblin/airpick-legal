@@ -2144,8 +2144,8 @@
 
     <div class="filterbar">
       <nav class="chips" aria-label="filters" id="chips">
-        <button class="chip on" data-filter="all" data-i18n="chip-all">전체</button>
-        <button class="chip" data-filter="round" data-i18n="chip-round">왕복</button>
+        <button class="chip" data-filter="all" data-i18n="chip-all">전체</button>
+        <button class="chip on" data-filter="round" data-i18n="chip-round">왕복</button>
         <button class="chip" data-filter="oneway" data-i18n="chip-oneway">편도</button>
         <button class="chip" data-filter="transit" data-i18n="chip-transit">경유</button>
       </nav>
@@ -2699,7 +2699,7 @@
   }
 
   // ---------- STATE ----------
-  let filter = "all";  // 기본: 전체 (편도+왕복 모두 노출)
+  let filter = "round";  // 기본: 왕복
   let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
   // 출발지 선택 옵션 (백엔드 ORIGINS와 일치)
   const ORIGIN_AIRPORTS = ["ICN", "GMP", "PUS", "TAE", "CJU"];
