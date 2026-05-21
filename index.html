@@ -2703,7 +2703,7 @@
   let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
   // 출발지 선택 옵션 (백엔드 ORIGINS와 일치)
   const ORIGIN_AIRPORTS = ["ICN", "GMP", "PUS", "TAE", "CJU"];
-  let originList = ["ICN"];
+  let originList = [...ORIGIN_AIRPORTS];
   let alarmDestList = []; // empty = all destinations for alarm
   let airportSheetTarget = "origin"; // "origin" | "dest" — which list the sheet edits
   let apTab = "domestic";
@@ -3183,10 +3183,12 @@
   // ---------- RENDER ----------
   function getOrigin(){ return AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0]; }
   function getOriginLabel(){
+    const t = I18N[lang];
     if (originList.length === 0) return lang === "ko" ? "출발지 선택" : "Pick origin";
     const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
-    if (originList.length === 1) return lang === "ko" ? first.ko : first.en;
-    return lang === "ko" ? `${originList.length}개 공항 선택` : `${originList.length} airports`;
+    const name = lang === "ko" ? first.ko : first.en;
+    if (originList.length === 1) return name;
+    return `${name} ${t["ap-othern"](originList.length - 1)}`;
   }
   function getOriginSubLabel(){
     const first = AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0];
@@ -3897,7 +3899,7 @@
   }
   document.getElementById("detail-reset").addEventListener("click", () => {
     details = JSON.parse(JSON.stringify(DEFAULT_DETAILS));
-    originList = ["ICN"];
+    originList = [...ORIGIN_AIRPORTS];
     renderDetailSheet();
     render();
   });
@@ -4189,7 +4191,7 @@
     if (airportSheetTarget === "dest") {
       alarmDestList = [];
     } else {
-      originList = ["ICN"];
+      originList = [...ORIGIN_AIRPORTS];
     }
     renderAirportSheet();
   });
