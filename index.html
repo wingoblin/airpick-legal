@@ -3182,6 +3182,9 @@
 
   // ---------- RENDER ----------
   function getOrigin(){ return AIRPORTS.find(a => a.iata === originList[0]) || AIRPORTS[0]; }
+  // 카드/상세는 전역 출발지가 아니라 각 딜의 실제 출발지(f.from)를 표시해야 함
+  function originAirport(code){ return AIRPORTS.find(a => a.iata === code) || getOrigin(); }
+  function originCity(code){ const a = originAirport(code); return lang === "ko" ? a.city_ko : a.city_en; }
   function getOriginLabel(){
     const t = I18N[lang];
     if (originList.length === 0) return lang === "ko" ? "출발지 선택" : "Pick origin";
@@ -3441,7 +3444,7 @@
                 ${locPillHTML}
               </div>
               <div class="route">
-                <span>${lang === "ko" ? origin.city_ko : origin.city_en}</span>
+                <span>${originCity(f.from)}</span>
                 <span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>
                 ${f.via ? `<span class="via">${lang === "ko" ? f.via_ko : f.via_en}</span><span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>` : ""}
                 <span>${lang === "ko" ? f.ko : f.en}</span>
@@ -4013,10 +4016,11 @@
     document.getElementById("dt-airline-name").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
     document.getElementById("dt-airline-name2").textContent = lang === "ko" ? f.airline_ko : f.airline_en;
 
-    // route
-    document.getElementById("dt-from-ap").textContent = lang === "ko" ? origin.ko : origin.en;
-    document.getElementById("dt-from-city").textContent = lang === "ko" ? origin.city_ko : origin.city_en;
-    document.getElementById("dt-from-iata").textContent = origin.iata;
+    // route (use the deal's own origin, not the globally selected one)
+    const fromAp = originAirport(f.from);
+    document.getElementById("dt-from-ap").textContent = lang === "ko" ? fromAp.ko : fromAp.en;
+    document.getElementById("dt-from-city").textContent = lang === "ko" ? fromAp.city_ko : fromAp.city_en;
+    document.getElementById("dt-from-iata").textContent = fromAp.iata;
     document.getElementById("dt-from-date").textContent = f.date;
 
     document.getElementById("dt-to-ap").textContent = `${destName} ${t.apIntl}`;
@@ -4313,7 +4317,7 @@
                   ${locPillHTML}
                 </div>
                 <div class="route">
-                  <span>${lang === "ko" ? (f.from_city_ko || origin.city_ko) : (f.from_city_en || origin.city_en)}</span>
+                  <span>${originCity(f.from)}</span>
                   <span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>
                   ${f.via ? `<span class="via">${lang === "ko" ? f.via_ko : f.via_en}</span><span class="arrow">${f.trip === "round" ? "⇄" : "→"}</span>` : ""}
                   <span>${lang === "ko" ? f.ko : f.en}</span>
