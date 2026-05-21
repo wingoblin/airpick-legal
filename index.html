@@ -2701,6 +2701,10 @@
   // ---------- STATE ----------
   let filter = "round";  // 기본: 왕복
   let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
+  try {
+    const _savedSort = localStorage.getItem("airpick.sortKey");
+    if (["price-asc","price-desc","date-asc","date-desc"].includes(_savedSort)) sortKey = _savedSort;
+  } catch (e) {}
   // 출발지 선택 옵션 (백엔드 ORIGINS와 일치)
   const ORIGIN_AIRPORTS = ["ICN", "GMP", "PUS", "TAE", "CJU"];
   let originList = [...ORIGIN_AIRPORTS];
@@ -3917,10 +3921,13 @@
       document.querySelectorAll("#sort-list button").forEach(x => x.classList.remove("on"));
       b.classList.add("on");
       sortKey = b.dataset.sort;
+      try { localStorage.setItem("airpick.sortKey", sortKey); } catch (e) {}
       closeSheet();
       render();
     });
   });
+  // 저장된 정렬값을 시트 활성 표시에 반영
+  document.querySelectorAll("#sort-list button").forEach(x => x.classList.toggle("on", x.dataset.sort === sortKey));
 
   render();
 
