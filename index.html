@@ -2708,6 +2708,14 @@
   // 출발지 선택 옵션 (백엔드 ORIGINS와 일치)
   const ORIGIN_AIRPORTS = ["ICN", "GMP", "PUS", "TAE", "CJU"];
   let originList = [...ORIGIN_AIRPORTS];
+  try {
+    const _savedOrigins = JSON.parse(localStorage.getItem("airpick.origins") || "null");
+    if (Array.isArray(_savedOrigins)) {
+      const _valid = _savedOrigins.filter(c => ORIGIN_AIRPORTS.includes(c));
+      if (_valid.length) originList = _valid;
+    }
+  } catch (e) {}
+  function saveOrigins(){ try { localStorage.setItem("airpick.origins", JSON.stringify(originList)); } catch (e) {} }
   let alarmDestList = []; // empty = all destinations for alarm
   let airportSheetTarget = "origin"; // "origin" | "dest" — which list the sheet edits
   let apTab = "domestic";
@@ -3301,6 +3309,7 @@
         } else {
           list.push(iata);
         }
+        if (airportSheetTarget !== "dest") saveOrigins();
         renderAirportSheet();
       });
     });
@@ -3907,6 +3916,7 @@
   document.getElementById("detail-reset").addEventListener("click", () => {
     details = JSON.parse(JSON.stringify(DEFAULT_DETAILS));
     originList = [...ORIGIN_AIRPORTS];
+    saveOrigins();
     renderDetailSheet();
     render();
   });
@@ -4202,7 +4212,8 @@
     if (airportSheetTarget === "dest") {
       alarmDestList = [];
     } else {
-      originList = [...ORIGIN_AIRPORTS];
+      originList = [];          // 초기화 = 출발지 전체 선택 해제
+      saveOrigins();
     }
     renderAirportSheet();
   });
