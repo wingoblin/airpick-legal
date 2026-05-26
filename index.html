@@ -2448,7 +2448,10 @@
       </div>
 
       <div class="detail-section">
-        <div class="detail-label"><span data-i18n="d-cabin">좌석 등급</span></div>
+        <div class="detail-label">
+          <span data-i18n="d-cabin">좌석 등급</span>
+          <span class="hint" data-i18n="d-multi">중복 선택</span>
+        </div>
         <div class="pill-row" id="cabin-pills"></div>
       </div>
 
@@ -2768,7 +2771,7 @@
     adults: 1,
     children: 0,
     infants: 0,
-    cabin: "economy",        // economy | business | first
+    cabin: ["economy"],      // multi-select; default = ["economy"]
     timeFromMin: 0,
     timeToMin:   1440,
     dateFrom: "",
@@ -3866,7 +3869,7 @@
   function detailCount(){
     let n = 0;
     if (details.adults !== 1 || details.children !== 0 || details.infants !== 0) n++;
-    if (details.cabin !== "economy") n++;
+    if (details.cabin.length !== 1 || details.cabin[0] !== "economy") n++;
     if (details.timeFromMin !== 0 || details.timeToMin !== 1440) n++;
     if (details.dateFrom || details.dateTo) n++;
     if (details.airlines.length > 0) n++;
@@ -3902,14 +3905,19 @@
       paxRoot.appendChild(row);
     });
 
-    // cabin pills (single-select)
+    // cabin pills (multi-select)
     const cabinRoot = document.getElementById("cabin-pills");
     cabinRoot.innerHTML = "";
     Object.keys(t.cabin).forEach(key => {
       const b = document.createElement("button");
-      b.className = "pill" + (details.cabin === key ? " on" : "");
+      b.className = "pill" + (details.cabin.includes(key) ? " on" : "");
       b.textContent = t.cabin[key];
-      b.addEventListener("click", () => { details.cabin = key; renderDetailSheet(); });
+      b.addEventListener("click", () => {
+        details.cabin = details.cabin.includes(key)
+          ? details.cabin.filter(c => c !== key)
+          : [...details.cabin, key];
+        renderDetailSheet();
+      });
       cabinRoot.appendChild(b);
     });
 
