@@ -9,57 +9,137 @@ body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 0 auto;
 h1 { color: #222; }
 h2 { color: #444; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-top: 32px; }
 a { color: #0066cc; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; font-size: 0.95em; }
+th { background: #f7f7f7; }
+.lang-switch { text-align: right; font-size: 0.9em; margin-bottom: 8px; }
 </style>
 </head>
 <body>
-<h1>에어픽 개인정보처리방침</h1>
-<p><strong>시행일: 2026년 5월 20일</strong></p>
+<div class="lang-switch"><a href="/privacy_en.html">English</a></div>
 
-<h2>1. 개인정보 수집 여부</h2>
-<p>에어픽은 회원가입, 로그인 등의 절차 없이 이용 가능한 서비스로, 이용자의 이름·이메일·전화번호 등 개인 식별 정보를 수집하지 않습니다.</p>
+<h1>에어픽 개인정보처리방침</h1>
+<p><strong>시행일: 2026년 [출시일]</strong></p>
+
+<p>에어픽(이하 "서비스")은 이용자의 개인정보를 중요시하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 서비스가 어떤 정보를 어떻게 수집·이용·보관·파기하는지 설명합니다.</p>
+
+<h2>1. 수집하지 않는 정보</h2>
+<p>서비스는 회원가입·로그인 절차가 없으며, 다음 정보를 수집하지 않습니다.</p>
+<ul>
+<li>이름, 생년월일, 성별</li>
+<li>이메일, 전화번호 (이용자가 자발적으로 문의한 경우는 제외)</li>
+<li>주소, 위치정보</li>
+<li>결제 정보</li>
+<li>광고 식별자 (Google AAID, Apple IDFA)</li>
+<li>외부 분석 도구를 통한 행동 데이터</li>
+</ul>
 
 <h2>2. 자동 수집 정보</h2>
-<p>서비스 이용 과정에서 아래 정보가 자동으로 수집될 수 있습니다.</p>
+<p>서비스 이용을 위해 다음 정보가 자동으로 수집됩니다.</p>
+<table>
+<tr><th>항목</th><th>이용 목적</th></tr>
+<tr><td>푸시 알림 토큰 (Expo Push Token)</td><td>알림 발송</td></tr>
+<tr><td>운영체제 종류 (iOS / Android)</td><td>알림 형식 최적화</td></tr>
+<tr><td>앱 언어 설정 (ko / en)</td><td>알림 언어 결정</td></tr>
+</table>
+
+<h2>3. 이용자 입력 정보</h2>
+<p>이용자가 앱 내에서 직접 설정한 다음 정보가 푸시 토큰과 함께 저장됩니다.</p>
+<table>
+<tr><th>항목</th><th>예시</th></tr>
+<tr><td>출발지 공항 코드</td><td>ICN, GMP 등</td></tr>
+<tr><td>도착지 공항 코드</td><td>NRT, LAX 등</td></tr>
+<tr><td>알람 활성화 여부</td><td>ON / OFF</td></tr>
+<tr><td>알람 출발일 필터</td><td>7일 이내 / 30일 이내</td></tr>
+<tr><td>할인율 임계값</td><td>단거리 25%, 장거리 15% 등</td></tr>
+</table>
+<p>위 정보는 모두 <strong>개인을 식별할 수 없는 설정값</strong>이며, 푸시 토큰과 함께 저장되어 맞춤 알림 발송에만 사용됩니다.</p>
+
+<h2>4. 수집 목적</h2>
+<p>수집된 정보는 다음 목적으로만 이용됩니다.</p>
 <ul>
-<li><strong>푸시 알림 토큰</strong>: 알림 발송을 위해 기기에서 발급되는 식별자. 이용자 개인을 특정하지 않습니다.</li>
-<li><strong>기기 정보</strong>: OS 종류, 앱 버전 등 서비스 운영·개선 목적으로 수집.</li>
-<li><strong>앱 사용 로그</strong>: 오류 분석 및 서비스 개선 목적.</li>
+<li>항공권 특가 푸시 알림 발송</li>
+<li>서비스 운영 및 오류 대응</li>
+<li>이용자 문의 응대</li>
+</ul>
+<p>서비스는 위 목적 외 용도로 정보를 이용하지 않으며, <strong>마케팅·광고 목적의 이용 및 외부 판매를 일절 하지 않습니다.</strong></p>
+
+<h2>5. 처리위탁</h2>
+<p>서비스는 안정적 운영을 위해 다음 업체에 개인정보 처리 업무를 위탁합니다.</p>
+<table>
+<tr><th>수탁업체</th><th>위탁 업무</th><th>보관 위치</th></tr>
+<tr><td>Supabase Inc. (미국)</td><td>푸시 토큰 및 설정 저장</td><td>일본 (도쿄 리전)</td></tr>
+<tr><td>Expo Application Services (미국)</td><td>푸시 알림 발송</td><td>미국</td></tr>
+<tr><td>Google LLC (미국)</td><td>Android 푸시 전송 (FCM)</td><td>미국</td></tr>
+<tr><td>Apple Inc. (미국)</td><td>iOS 푸시 전송 (APNs)</td><td>미국</td></tr>
+</table>
+
+<h2>6. 개인정보의 국외 이전</h2>
+<p>위 처리위탁에 따라 일부 정보가 국외로 이전됩니다.</p>
+<table>
+<tr><th>이전 국가</th><th>이전 항목</th><th>이전 시기</th><th>이전 방법</th></tr>
+<tr><td>일본 (Supabase 도쿄)</td><td>푸시 토큰, 설정값</td><td>앱 사용 시</td><td>HTTPS 암호화</td></tr>
+<tr><td>미국 (Expo, Google, Apple)</td><td>푸시 토큰, 알림 내용</td><td>알림 발송 시</td><td>HTTPS 암호화</td></tr>
+</table>
+<p>이전 정보는 <strong>푸시 토큰 및 비식별 설정값에 한정</strong>되며, 개인 식별 정보는 포함되지 않습니다. 이용자는 푸시 알림 토글을 해제함으로써 국외 이전을 거부할 수 있습니다.</p>
+
+<h2>7. 보관 기간 및 파기</h2>
+<table>
+<tr><th>항목</th><th>보관 기간</th></tr>
+<tr><td>푸시 토큰 및 설정</td><td>알람 해제 또는 앱 삭제 시까지</td></tr>
+<tr><td>발송 이력</td><td>발송일로부터 30일</td></tr>
+<tr><td>문의 이메일</td><td>응대 완료 후 3년 (전자상거래법)</td></tr>
+</table>
+<p>보관 기간 경과 시 즉시 파기하며, 전자적 파일은 복구 불가능한 방법으로 삭제됩니다.</p>
+
+<h2>8. 이용자 권리</h2>
+<p>이용자는 언제든지 다음 권리를 행사할 수 있습니다.</p>
+<ul>
+<li><strong>알림 수신 거부</strong>: 앱 내 알람 토글 OFF 또는 기기 설정에서 알림 차단</li>
+<li><strong>데이터 삭제 요청</strong>: 앱 삭제 시 푸시 토큰이 자동 비활성화됩니다. 즉시 완전 삭제를 원하시는 경우 아래 이메일로 요청해주시면 영업일 기준 7일 이내 처리합니다.</li>
+<li><strong>열람·정정 요청</strong>: 서비스는 개인 식별 정보를 수집하지 않으나, 본인의 푸시 토큰 관련 데이터 확인은 이메일로 요청 가능합니다.</li>
 </ul>
 
-<h2>3. 수집 목적</h2>
+<h2>9. 광고 및 수익 모델</h2>
 <ul>
-<li>푸시 알림 발송</li>
-<li>서비스 오류 분석 및 개선</li>
-<li>서비스 품질 향상</li>
+<li>앱 내 광고 표시 <strong>없음</strong></li>
+<li>광고 식별자 수집 <strong>없음</strong></li>
+<li>항공권 예약 시 제휴 마케팅(affiliate) 수수료로 운영됩니다.</li>
+<li>제휴 링크 클릭 시 외부 사이트(항공사·OTA)로 이동되며, 해당 사이트의 개인정보처리방침이 적용됩니다.</li>
 </ul>
 
-<h2>4. 보관 기간</h2>
+<h2>10. 만 14세 미만 아동</h2>
+<p>본 서비스는 만 14세 미만 아동의 이용을 권장하지 않으며, 만 14세 미만 이용자로부터 의도적으로 개인정보를 수집하지 않습니다.</p>
+
+<h2>11. 개인정보의 안전성 확보 조치</h2>
 <ul>
-<li>푸시 토큰: 알림 해제 또는 앱 삭제 시까지</li>
-<li>앱 사용 로그: 수집일로부터 1년</li>
+<li>모든 통신은 HTTPS(TLS)로 암호화</li>
+<li>데이터베이스 접근은 Row Level Security(RLS) 정책으로 통제</li>
+<li>관리자 키는 안전한 비밀 저장소에 보관</li>
+<li>접근 로그 보관 및 정기 점검</li>
 </ul>
 
-<h2>5. 제3자 제공</h2>
-<p>수집된 정보는 원칙적으로 제3자에게 제공하지 않습니다. 단, 법령에 의한 요구가 있는 경우 또는 이용자가 사전에 동의한 경우는 예외로 합니다.</p>
-
-<h2>6. 제3자 서비스</h2>
-<p>이용자가 서비스 내 링크를 통해 항공사·OTA 사이트로 이동하는 경우, 해당 사이트의 개인정보처리방침이 적용됩니다. 회사는 제3자 사이트의 개인정보 처리에 대해 책임을 지지 않습니다.</p>
-
-<h2>7. 이용자 권리</h2>
+<h2>12. 개인정보 보호책임자</h2>
 <ul>
-<li>푸시 알림 수신 거부: 기기 설정 또는 앱 내 설정에서 해제</li>
-<li>정보 삭제 요청: <a href="mailto:support@airpick.app">support@airpick.app</a>으로 문의</li>
+<li><strong>성명</strong>: 양성민</li>
+<li><strong>이메일</strong>: <a href="mailto:support@airpick.app">support@airpick.app</a></li>
 </ul>
 
-<h2>8. 개인정보 보호책임자</h2>
+<h2>13. 권익 침해 구제</h2>
+<p>개인정보 침해에 대한 신고·상담은 아래 기관에 문의하실 수 있습니다.</p>
+<ul>
+<li>개인정보침해신고센터: privacy.kisa.or.kr / 국번없이 118</li>
+<li>개인정보분쟁조정위원회: kopico.go.kr / 1833-6972</li>
+<li>대검찰청 사이버수사과: spo.go.kr / 1301</li>
+<li>경찰청 사이버수사국: ecrm.cyber.go.kr / 국번없이 182</li>
+</ul>
+
+<h2>14. 처리방침 변경</h2>
+<p>본 처리방침은 법령·서비스 변경에 따라 개정될 수 있으며, 중요한 변경이 있을 경우 시행 7일 전 앱 내 공지를 통해 안내합니다.</p>
+
+<h2>15. 문의</h2>
 <p>이메일: <a href="mailto:support@airpick.app">support@airpick.app</a></p>
 
-<h2>9. 변경 고지</h2>
-<p>본 방침이 변경되는 경우 앱 내 공지 또는 이메일을 통해 사전 고지합니다.</p>
-
-<h2>10. 문의</h2>
-<p><a href="mailto:support@airpick.app">support@airpick.app</a></p>
-
-<p><a href="/">← 돌아가기</a></p>
+<p style="margin-top:48px;"><a href="/terms.html">이용약관</a> · <a href="/">← 돌아가기</a></p>
 </body>
 </html>
