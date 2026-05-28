@@ -2687,6 +2687,7 @@
       date,
       returnDate,
       stops: deal.transfers || 0,
+      cabin_class: deal.cabin_class || "",
       trip: deal.trip === "roundtrip" ? "round" : "oneway",
       fareType: "deal",
       provider: deal.gate || "",
@@ -3447,10 +3448,11 @@
       const d = daysUntil(f.date);
       const tier = ddayTier(d);
       const ddayCls = ddayBadgeTier(d);
+      const cabinTxt = f.cabin_class && t.cabin[f.cabin_class] ? ` · ${t.cabin[f.cabin_class]}` : "";
       const stopsHTML = f.stops === 0
-        ? `<span class="tag direct">${t.direct}</span>`
-        : `<span class="tag">${t.via(f.stops)}</span>`;
-      const avgLabel = lang === "ko" ? "평균가" : "Avg";
+        ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
+        : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
+      const avgLabel = lang === "ko" ? "최저가" : "Lowest";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
@@ -4331,10 +4333,11 @@
       const d = daysUntil(f.date);
       const tier = ddayTier(d);
       const ddayCls = ddayBadgeTier(d);
+      const cabinTxt = f.cabin_class && t.cabin[f.cabin_class] ? ` · ${t.cabin[f.cabin_class]}` : "";
       const stopsHTML = f.stops === 0
-        ? `<span class="tag direct">${t.direct}</span>`
-        : `<span class="tag">${t.via(f.stops)}</span>`;
-      const avgLabel = lang === "ko" ? "평균가" : "Avg";
+        ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
+        : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
+      const avgLabel = lang === "ko" ? "최저가" : "Lowest";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
