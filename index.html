@@ -2172,7 +2172,7 @@
     <p class="foot">
       <span data-i18n="foot2">실제 결제 금액은 항공사 페이지에서 확인하세요.</span>
       <br>
-      <span id="fare-note">유류할증료·세금 포함. 좌석 선택료·수하물 등 부가 비용은 예약 페이지에서 확인</span>
+      <span id="fare-note">유류할증료 세금 등 부가 비용은 항공사 예매처를 확인해주세요.</span>
     </p>
 
     <!-- =============== RECENT SCREEN =============== -->
@@ -2977,7 +2977,7 @@
       "alarm-60-s": "두 달 안으로 출발하는 일정",
       "alarm-empty": "알람을 켜면 조건을 설정할 수 있어요",
       foot1: "표시 가격은 세금·유류할증료 포함 1인 기준입니다.",
-      foot2: "실제 결제 금액은 항공사 페이지에서 확인하세요.",
+      foot2: "실제 결제 금액은 에어픽 표시금액과 상이할 수 있습니다.",
       oneway: "편도",
       direct: "직항",
       via: (n) => `${n}회 경유`,
@@ -3079,7 +3079,7 @@
       "alarm-60-s": "Trips in the next two months",
       "alarm-empty": "Turn on alerts to set conditions",
       foot1: "Prices include taxes and fuel surcharge, per person.",
-      foot2: "Final price confirmed on the airline's page.",
+      foot2: "The actual payment amount may differ from the price shown on AirPick.",
       oneway: "One-way",
       direct: "Direct",
       via: (n) => `${n} stop${n>1?"s":""}`,
@@ -3370,8 +3370,8 @@
     // 푸터 안내 문구 (회색, 다국어)
     const fareNote = document.getElementById("fare-note");
     if (fareNote) fareNote.textContent = lang === "ko"
-      ? "유류할증료·세금 포함. 좌석 선택료·수하물 등 부가 비용은 예약 페이지에서 확인"
-      : "Includes fuel surcharge & taxes. Seat, baggage and other fees are shown at booking.";
+      ? "유류할증료 세금 등 부가 비용은 항공사 예매처를 확인해주세요."
+      : "Check the airline or booking site for fuel surcharges, taxes and other fees.";
 
     // origin label
     const origin = getOrigin();
