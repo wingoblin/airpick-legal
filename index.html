@@ -191,6 +191,18 @@
     color: var(--ink);
     border-bottom-left-radius: 5px;
   }
+  /* FAQ·약관 전용: Q는 왼쪽, A는 오른쪽으로 스왑 (색은 유지) */
+  .chat-msg.q.q-left{
+    align-self: flex-start;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 5px;
+  }
+  .chat-msg.a.a-right{
+    align-self: flex-end;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 5px;
+    margin-top: 8px;
+  }
   .chat-icon{
     display: inline-block;
     width: 28px; height: 18px;
@@ -1409,15 +1421,11 @@
   .card:active{
     transform: scale(.985);
   }
-  .card.tier-2::before,
-  .card.tier-3::before,
-  .card.tier-4::before{
+  .card.tier-2::before{
     content: "";
     position:absolute; left:0; top:0; bottom:0; width:3px;
   }
-  .card.tier-2::before{ background: #10b981; } /* 15일 이내 — 에메랄드 */
-  .card.tier-3::before{ background: #ff8a00; } /* 30일 이내 — 주황 */
-  .card.tier-4::before{ background: #ff3b30; } /* 30일 이상 — 빨강 */
+  .card.tier-2::before{ background: #0a8f5f; } /* 역대 최저가 이하 — 짙은 초록 */
   .row-top{
     display:flex; align-items:flex-start; justify-content: space-between;
     gap: 12px;
@@ -3200,6 +3208,11 @@
     if (d <= 30) return "tier-3";
     return "tier-4";
   }
+  // 역대 최저가(avgPrice) 이하면 초록 띠지, 그 외에는 띠지 없음
+  function priceTier(f){
+    if (f && f.avgPrice != null && f.price <= f.avgPrice) return "tier-2";
+    return "";
+  }
   function ddayBadgeTier(d){
     if (d <= 15) return "t2";
     if (d <= 30) return "t3";
@@ -3446,7 +3459,7 @@
 
     items.forEach((f, i) => {
       const d = daysUntil(f.date);
-      const tier = ddayTier(d);
+      const tier = priceTier(f);
       const ddayCls = ddayBadgeTier(d);
       const cabinTxt = f.cabin_class && t.cabin[f.cabin_class] ? ` · ${t.cabin[f.cabin_class]}` : "";
       const stopsHTML = f.stops === 0
@@ -4331,7 +4344,7 @@
     root.innerHTML = recentlyViewed.map((rv, i) => {
       const f = rv.flight;
       const d = daysUntil(f.date);
-      const tier = ddayTier(d);
+      const tier = priceTier(f);
       const ddayCls = ddayBadgeTier(d);
       const cabinTxt = f.cabin_class && t.cabin[f.cabin_class] ? ` · ${t.cabin[f.cabin_class]}` : "";
       const stopsHTML = f.stops === 0
@@ -4415,7 +4428,7 @@
       a_ko:"결제가 완료되면 항공사에서 이메일로 e-티켓을 발송해 드려요. 예약번호(PNR)와 일정은 해당 항공사 홈페이지·앱에서 \"예약 조회\"로 확인하실 수 있어요.",
       q_en:"Where can I see my ticket?",
       a_en:"After payment, the airline emails an e-ticket. You can also look up your booking with the PNR on the airline's site or app." },
-    { q_ko:"결제했는데 예약 확정이 안 돼요",
+    { q_ko:"결제했는데 예약 확정이 안돼요",
       a_ko:"카드 승인이 곧 발권 완료를 뜻하지는 않아요. 항공사 좌석 반영까지 보통 몇 분에서 최대 24시간이 걸릴 수 있어요. 일정 시간이 지나도 e-티켓이 안 오면 해당 판매처 고객센터로 문의해주세요.",
       q_en:"Paid but no confirmation yet?",
       a_en:"Card approval ≠ ticket issued. Confirmation can take a few minutes up to 24 hours. If it's still pending, contact the seller's support." },
@@ -4423,16 +4436,20 @@
       a_ko:"수정은 항공사 정책에 따라 가능 여부와 수수료가 달라요. 일부 특가/저가 항공권은 수정 자체가 불가할 수 있으니, 발권 직후 발견 즉시 해당 판매처에 연락해주세요.",
       q_en:"Wrong name or birthdate—can I fix it?",
       a_en:"It depends on the airline's policy; fees may apply, and some discounted fares can't be modified. Contact the seller right after issuance." },
+    { q_ko:"역대 최저가의 기준은 무엇인가요?",
+      a_ko:"최근 30일간 전 세계 노선의 최저가를 뜻합니다.",
+      q_en:"What defines the all-time low?",
+      a_en:"It refers to the lowest fare across global routes over the past 30 days." },
+    { q_ko:"항공권 정보의 띠지 색상은 무엇을 의미하나요?",
+      a_ko:"초록색은 역대 최저가보다 낮은 가격대의 항공권을 의미합니다.\n표시가 되지 않은 항공권은 역대 최저가에서 +20% 이내의 항공권을 의미합니다.",
+      q_en:"What does the colored band mean?",
+      a_en:"Green means the fare is below the all-time low.\nFlights without a band are within +20% of the all-time low." },
 
     { section_ko:"취소·환불", section_en:"Cancellation & Refund" },
     { q_ko:"환불은 얼마나 걸리나요?",
       a_ko:"카드사 기준 보통 영업일 3~7일이 소요돼요. 상품에 따라 부분 환불만 가능하거나, 프로모션·특가 항공권은 환불 자체가 제한될 수 있어요.",
       q_en:"How long do refunds take?",
       a_en:"Usually 3–7 business days via the card issuer. Partial refunds or no-refund policies may apply for promo/deal fares." },
-    { q_ko:"출발 임박 항공권도 환불 가능한가요?",
-      a_ko:"조건부로 가능합니다. 출발 시점에 가까울수록 수수료가 커지고, 출발 후에는 보통 환불이 안 돼요. 탑승하지 않으면(NO-SHOW) 일부 항공사는 잔여 금액도 소멸시키니 사전에 꼭 확인해주세요.",
-      q_en:"Can I refund near-departure tickets?",
-      a_en:"Conditionally—fees grow as departure approaches and refunds are usually denied after departure. NO-SHOW can forfeit remaining value with some airlines." },
     { q_ko:"천재지변·항공사 사정으로 결항되면 어떻게 되나요?",
       a_ko:"항공사 정책이 최우선 적용돼요. 보통 대체편 안내 또는 전액 환불이 이뤄지지만, 절차와 보상 범위는 항공사마다 다르니 해당 항공사 안내를 확인해주세요.",
       q_en:"What if a flight is cancelled?",
@@ -4440,17 +4457,17 @@
 
     { section_ko:"가격", section_en:"Pricing" },
     { q_ko:"상품은 언제 갱신되나요?",
-      a_ko:"1시간마다 갱신됩니다. 항공사·여행사의 최신 가격을 정기적으로 가져와 보여드려요.",
+      a_ko:"30분마다 갱신됩니다. 항공사·여행사의 최신 가격을 정기적으로 가져와 보여드려요.",
       q_en:"How often are prices refreshed?",
-      a_en:"Every hour. We pull the latest fares from airlines and travel sellers on an hourly schedule." },
+      a_en:"Every 30 minutes. We pull the latest fares from airlines and travel sellers on a 30-minute schedule." },
     { q_ko:"왜 가격이 갑자기 바뀌나요?",
       a_ko:"항공권 요금은 실시간으로 변동돼요. 좌석 잔여, 환율, 항공사 운임 정책에 따라 분 단위로도 바뀔 수 있고, 최종 가격은 결제 시점 기준으로 확정돼요.",
       q_en:"Why do prices change?",
       a_en:"Airfares are live—seat availability, FX, and pricing policy shift them constantly. The final price is locked at checkout." },
     { q_ko:"표시 가격 외 추가 비용이 있나요?",
-      a_ko:"기본 운임에는 세금과 유류할증료가 포함돼요. 다만 위탁수하물, 좌석 지정, 기내식 등은 옵션에 따라 추가 요금이 발생할 수 있어요. 항공사 페이지에서 최종 금액을 꼭 확인해주세요.",
+      a_ko:"세금, 유류할증료, 위탁수하물, 좌석 지정, 기내식 등은 항공사 페이지에서 최종 금액을 꼭 확인해주세요",
       q_en:"Any extra fees beyond the listed price?",
-      a_en:"Taxes and fuel surcharge are included, but baggage, seat selection, or meals may cost extra. Confirm the total on the airline's page." },
+      a_en:"Taxes, fuel surcharge, baggage, seat selection, and meals—please confirm the final total on the airline's page." },
 
     { section_ko:"수하물·탑승", section_en:"Baggage & Boarding" },
     { q_ko:"수하물 포함인가요?",
@@ -4465,14 +4482,6 @@
       a_ko:"국제선 예약 시 필수예요. 항공권 영문 이름이 여권과 정확히 일치해야 탑승할 수 있어요. 철자가 다르면 발권 직후 즉시 수정 요청을 해주세요.",
       q_en:"When do I need passport info?",
       a_en:"For international flights, it's required. The ticket name must exactly match your passport—request a correction immediately if it doesn't." },
-    { q_ko:"역대 최저가의 기준은 무엇인가요?",
-      a_ko:"최근 30일간 전 세계 노선의 최저가를 뜻합니다.",
-      q_en:"What defines the all-time low?",
-      a_en:"It refers to the lowest fare across global routes over the past 30 days." },
-    { q_ko:"항공권 정보의 초록색·빨강색·주황색 띠지는 무슨 의미인가요?",
-      a_ko:"초록색은 역대 최저가보다 낮은 가격대의 항공권을 의미합니다.\n주황색은 역대 최저가에서 +5% 이내의 항공권을 의미합니다.\n빨강색은 역대 최저가에서 +15% 이내의 항공권을 의미합니다.",
-      q_en:"What do the green, orange, and red bands mean?",
-      a_en:"Green means the fare is below the all-time low.\nOrange means within +5% of the all-time low.\nRed means within +15% of the all-time low." },
   ];
   function renderFAQ(){
     const root = document.getElementById("faq-thread");
@@ -4485,8 +4494,8 @@
       if (item.section_ko){
         html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
       } else {
-        html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
-        html += `<div class="chat-msg a">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
+        html += `<div class="chat-msg q q-left">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
+        html += `<div class="chat-msg a a-right">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
       }
     });
     root.innerHTML = html;
@@ -4581,8 +4590,8 @@
       if (item.section_ko){
         html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
       } else {
-        html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
-        html += `<div class="chat-msg a">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
+        html += `<div class="chat-msg q q-left">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
+        html += `<div class="chat-msg a a-right">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
       }
     });
     root.innerHTML = html;
