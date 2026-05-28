@@ -385,32 +385,6 @@
   }
   .tabbar button.has-dot .dot{ display: block; }
 
-  /* ---------- TOSS-STYLE SWITCH ---------- */
-  .tswitch{
-    width: 50px; height: 30px;
-    background: #d8dde4;
-    border-radius: 999px;
-    position: relative;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-    transition: background .18s ease;
-    flex: 0 0 auto;
-  }
-  .tswitch::after{
-    content: "";
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 24px; height: 24px;
-    background: #fff;
-    border-radius: 999px;
-    box-shadow: 0 2px 4px rgba(15,23,42,.18);
-    transition: transform .2s cubic-bezier(.3, 1.2, .4, 1);
-  }
-  .tswitch.on{ background: var(--accent); }
-  .tswitch.on::after{ transform: translateX(20px); }
-  .tswitch:disabled{ opacity: .45; cursor: not-allowed; }
-
   /* ---------- ALARM SCREEN ---------- */
   .alarm-header{
     padding: 10px 18px 6px;
@@ -582,52 +556,6 @@
   }
   .recent-empty img{ width: 110px; height: auto; margin: 0 auto 12px; display: block; opacity: .85; }
   .recent-empty .msg{ font-size: 13px; font-weight: 500; }
-
-  .toggle-row{
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 4px;
-    gap: 12px;
-  }
-  .toggle-row + .toggle-row{ border-top: 1px solid var(--line); }
-  .toggle-row.master{
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    padding: 12px 16px;
-  }
-  .toggle-row.master + .toggle-row.master{ margin-top: 8px; }
-  .toggle-row .label-wrap{
-    flex: 1 1 auto; min-width: 0;
-    display: flex; flex-direction: column; gap: 3px;
-  }
-  .toggle-row .label-wrap .t{
-    font-size: 15px; font-weight: 700;
-    color: var(--ink);
-    letter-spacing: -.015em;
-  }
-  .toggle-row .label-wrap .s{
-    font-size: 12px; color: var(--muted);
-    font-weight: 500;
-  }
-  .alarm-sub{
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 4px 18px;
-    margin-top: 10px;
-    overflow: hidden;
-    transition: opacity .18s ease;
-  }
-  .alarm-sub.is-off{
-    opacity: .4;
-    pointer-events: none;
-  }
-  .alarm-empty-note{
-    margin-top: 14px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-  }
 
   /* ---------- TOP BAR ---------- */
   .topbar{
@@ -2286,35 +2214,6 @@
         </div>
       </section>
 
-      <section class="alarm-section">
-        <p class="section-title" data-i18n="alarm-master-title">알람 설정</p>
-        <div class="toggle-row master">
-          <div class="label-wrap">
-            <span class="t" data-i18n="alarm-master">출발지 알람 받기</span>
-            <span class="s" data-i18n="alarm-master-sub">내 출발지에서 출발하는 저렴한 항공권 알림</span>
-          </div>
-          <button class="tswitch" id="alarm-master-switch" role="switch" aria-checked="false" aria-label="알람 받기"></button>
-        </div>
-
-        <div class="alarm-sub" id="alarm-sub-wrap">
-          <div class="toggle-row">
-            <div class="label-wrap">
-              <span class="t" data-i18n="alarm-7-t">7일 이내 출발</span>
-              <span class="s" data-i18n="alarm-7-s">임박한 일정이 있을 때 알려드려요</span>
-            </div>
-            <button class="tswitch" data-window="7" role="switch" aria-checked="false" aria-label="7일 이내 알람"></button>
-          </div>
-          <div class="toggle-row">
-            <div class="label-wrap">
-              <span class="t" data-i18n="alarm-30-t">30일 이내 출발</span>
-              <span class="s" data-i18n="alarm-30-s">한 달 안으로 출발하는 일정</span>
-            </div>
-            <button class="tswitch" data-window="30" role="switch" aria-checked="false" aria-label="30일 이내 알람"></button>
-          </div>
-        </div>
-
-        <p class="alarm-empty-note" id="alarm-empty-note" data-i18n="alarm-empty">알람을 켜면 조건을 설정할 수 있어요</p>
-      </section>
     </div>
 
     <div class="sheet-backdrop" id="sheet-backdrop"></div>
@@ -2974,16 +2873,6 @@
       "alarm-dest": "도착지 (선택사항)",
       "alarm-dest-empty": "도착지 선택안함 · 모든 노선",
       "alarm-dest-add": "모든 노선",
-      "alarm-master-title": "알람 설정",
-      "alarm-master": "출발지 알람 받기",
-      "alarm-master-sub": "내 출발지에서 출발하는 저렴한 항공권 알람(전체)",
-      "alarm-7-t": "7일 이내 출발",
-      "alarm-7-s": "임박한 일정이 있을 때 알려드려요",
-      "alarm-30-t": "30일 이내 출발",
-      "alarm-30-s": "한 달 안으로 출발하는 일정",
-      "alarm-60-t": "60일 이내 출발",
-      "alarm-60-s": "두 달 안으로 출발하는 일정",
-      "alarm-empty": "알람을 켜면 조건을 설정할 수 있어요",
       foot1: "표시 가격은 세금·유류할증료 포함 1인 기준입니다.",
       foot2: "실제 결제 금액은 에어픽 표시금액과 상이할 수 있습니다.",
       oneway: "편도",
@@ -3076,16 +2965,6 @@
       "alarm-dest": "Destination (optional)",
       "alarm-dest-empty": "Any destination · all routes",
       "alarm-dest-add": "All routes",
-      "alarm-master-title": "Alert settings",
-      "alarm-master": "Get alerts for my origin",
-      "alarm-master-sub": "Cheap flight alerts from your home airports (all)",
-      "alarm-7-t": "Within 7 days",
-      "alarm-7-s": "Last-minute deals",
-      "alarm-30-t": "Within 30 days",
-      "alarm-30-s": "Trips in the next month",
-      "alarm-60-t": "Within 60 days",
-      "alarm-60-s": "Trips in the next two months",
-      "alarm-empty": "Turn on alerts to set conditions",
       foot1: "Prices include taxes and fuel surcharge, per person.",
       foot2: "The actual payment amount may differ from the price shown on AirPick.",
       oneway: "One-way",
@@ -4159,10 +4038,6 @@
   });
 
   // ---------- ALARMS ----------
-  let alarm = {
-    master: false,
-    windows: { 7: false, 30: false }
-  };
   function renderAlarm(){
     const t = I18N[lang];
     const origin = getOrigin();
@@ -4188,37 +4063,8 @@
       }
     }
 
-    const m = document.getElementById("alarm-master-switch");
-    m.classList.toggle("on", alarm.master);
-    m.setAttribute("aria-checked", alarm.master ? "true" : "false");
-
-    document.querySelectorAll("#alarm-sub-wrap .tswitch").forEach(sw => {
-      const w = sw.dataset.window;
-      const on = !!alarm.windows[w];
-      sw.classList.toggle("on", on);
-      sw.setAttribute("aria-checked", on ? "true" : "false");
-      sw.disabled = !alarm.master;
-    });
-    document.getElementById("alarm-sub-wrap").classList.toggle("is-off", !alarm.master);
-    document.getElementById("alarm-empty-note").style.display = alarm.master ? "none" : "block";
-
-    // tabbar dot — removed
+    // 알람 설정(master/7일/30일) UI 제거됨 — 노선 표시만 유지
   }
-  document.getElementById("alarm-master-switch").addEventListener("click", () => {
-    alarm.master = !alarm.master;
-    renderAlarm();
-  });
-  document.querySelectorAll("#alarm-sub-wrap .tswitch").forEach(sw => {
-    sw.addEventListener("click", () => {
-      if (!alarm.master) return;
-      const w = sw.dataset.window;
-      const wasOn = !!alarm.windows[w];
-      // 한 번에 하나의 범위만 활성 — 30일을 켜면 7일을 끄고, 7일을 켜면 30일을 끈다
-      Object.keys(alarm.windows).forEach(k => alarm.windows[k] = false);
-      alarm.windows[w] = !wasOn;
-      renderAlarm();
-    });
-  });
   document.getElementById("alarm-origin-btn").addEventListener("click", () => {
     airportSheetTarget = "origin";
     renderAirportSheet();
