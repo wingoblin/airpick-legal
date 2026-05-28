@@ -1671,10 +1671,10 @@
   }
   .trip .when .wd-line{
     display: flex; align-items: center; gap: 0;
-    font-size: 10.5px;
-    color: var(--muted);
+    font-size: 11.5px;
+    color: var(--ink);
     font-weight: 400;
-    letter-spacing: 0;
+    letter-spacing: -.01em;
   }
   .trip .tags{
     display:flex; gap: 6px; flex-wrap: wrap;
@@ -3172,7 +3172,7 @@
     // oneway flights (single date)
     if (isoStart === isoEnd){
       if (lang === "ko") {
-        return `<span class="date-line">${a.getFullYear()}년 ${pad2(a.getMonth()+1)}.${pad2(a.getDate())}</span>`
+        return `<span class="date-line">${a.getFullYear()}.${pad2(a.getMonth()+1)}.${pad2(a.getDate())}</span>`
              + `<span class="wd-line">편도</span>`;
       } else {
         return `<span class="date-line">${a.toLocaleDateString("en-US", { month:"short", day:"numeric" })}, ${a.getFullYear()}</span>`
@@ -3185,7 +3185,7 @@
       const end   = a.getFullYear() === b.getFullYear()
         ? `${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`
         : `${b.getFullYear()}.${pad2(b.getMonth()+1)}.${pad2(b.getDate())}`;
-      return `<span class="date-line">${y}년 ${start} ~ ${end}</span>`
+      return `<span class="date-line">${y}.${start} ⇄ ${end}</span>`
            + `<span class="wd-line">${nights}박${nights+1}일</span>`;
     } else {
       const opts = { month:"short", day:"numeric" };
@@ -3452,7 +3452,7 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
         : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
-      const avgLabel = lang === "ko" ? "최저가" : "Lowest";
+      const avgLabel = lang === "ko" ? "역대 최저가" : "All-time low";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
@@ -4337,7 +4337,7 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
         : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
-      const avgLabel = lang === "ko" ? "최저가" : "Lowest";
+      const avgLabel = lang === "ko" ? "역대 최저가" : "All-time low";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
@@ -4465,6 +4465,14 @@
       a_ko:"국제선 예약 시 필수예요. 항공권 영문 이름이 여권과 정확히 일치해야 탑승할 수 있어요. 철자가 다르면 발권 직후 즉시 수정 요청을 해주세요.",
       q_en:"When do I need passport info?",
       a_en:"For international flights, it's required. The ticket name must exactly match your passport—request a correction immediately if it doesn't." },
+    { q_ko:"역대 최저가의 기준은 무엇인가요?",
+      a_ko:"최근 30일간 전 세계 노선의 최저가를 뜻합니다.",
+      q_en:"What defines the all-time low?",
+      a_en:"It refers to the lowest fare across global routes over the past 30 days." },
+    { q_ko:"항공권 정보의 초록색·빨강색·주황색 띠지는 무슨 의미인가요?",
+      a_ko:"초록색은 역대 최저가보다 낮은 가격대의 항공권을 의미합니다.\n주황색은 역대 최저가에서 +5% 이내의 항공권을 의미합니다.\n빨강색은 역대 최저가에서 +15% 이내의 항공권을 의미합니다.",
+      q_en:"What do the green, orange, and red bands mean?",
+      a_en:"Green means the fare is below the all-time low.\nOrange means within +5% of the all-time low.\nRed means within +15% of the all-time low." },
   ];
   function renderFAQ(){
     const root = document.getElementById("faq-thread");
@@ -4478,7 +4486,7 @@
         html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
       } else {
         html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
-        html += `<div class="chat-msg a">${lang === "ko" ? item.a_ko : item.a_en}</div>`;
+        html += `<div class="chat-msg a">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
       }
     });
     root.innerHTML = html;
@@ -4574,7 +4582,7 @@
         html += `<div class="chat-section">${lang === "ko" ? item.section_ko : item.section_en}</div>`;
       } else {
         html += `<div class="chat-msg q">${lang === "ko" ? item.q_ko : item.q_en}</div>`;
-        html += `<div class="chat-msg a">${lang === "ko" ? item.a_ko : item.a_en}</div>`;
+        html += `<div class="chat-msg a">${(lang === "ko" ? item.a_ko : item.a_en).replace(/\n/g, "<br>")}</div>`;
       }
     });
     root.innerHTML = html;
