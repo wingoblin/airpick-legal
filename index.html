@@ -1349,11 +1349,6 @@
   .card:active{
     transform: scale(.985);
   }
-  .card.tier-2::before{
-    content: "";
-    position:absolute; left:0; top:0; bottom:0; width:3px;
-  }
-  .card.tier-2::before{ background: #0a8f5f; } /* 역대 최저가 이하 — 짙은 초록 */
   .row-top{
     display:flex; align-items:flex-start; justify-content: space-between;
     gap: 12px;
@@ -2169,7 +2164,7 @@
     <!-- =============== ALARM SCREEN =============== -->
     <section class="alarm-screen">
       <header class="alarm-header">
-        <h2 data-i18n="alarm-title">알람</h2>
+        <h2 data-i18n="alarm-title">설정</h2>
       </header>
 
       <section class="alarm-section">
@@ -2845,7 +2840,7 @@
       times: { dawn:"새벽 00~06", morning:"오전 06~12", afternoon:"오후 12~18", evening:"저녁 18~24" },
       stops: { round:"왕복", oneway:"편도", direct:"직항", one:"경유 1회", "two-plus":"경유 2회 이상" },
       "dt-duration": "여행기간",
-      "dt-lowest": "이 구간 역대 최저가",
+      "dt-lowest": "이 구간 최근 최저가",
       "dt-cta": "예매하러가기",
       disc1: "에어픽은 항공권 및 여행상품 정보를 제공하는 중개 플랫폼이며, 실제 항공권 판매 및 계약의 당사자가 아닙니다. 항공권 예약, 결제, 환불, 변경, 운항 및 기타 거래와 관련한 책임은 해당 항공사 또는 판매처에 있으며, 에어픽은 이에 대한 책임을 지지 않습니다.",
       disc2: "",
@@ -2879,8 +2874,8 @@
       direct: "직항",
       via: (n) => `${n}회 경유`,
       dday: (d) => d === 0 ? "D-DAY" : (d < 0 ? `D+${-d}` : `D-${d}`),
-      lowestLabel: "역대 최저가",
-      newLow: "역대 최저가 갱신",
+      lowestLabel: "최근 최저가",
+      newLow: "최근 최저가 갱신",
       alert: "예약 링크 연결 예정",
       best: "BEST",
     },
@@ -2937,7 +2932,7 @@
       times: { dawn:"Dawn 00–06", morning:"Morning 06–12", afternoon:"Afternoon 12–18", evening:"Evening 18–24" },
       stops: { round:"Round-trip", oneway:"One-way", direct:"Direct", one:"1 stop", "two-plus":"2+ stops" },
       "dt-duration": "Trip length",
-      "dt-lowest": "All-time low on this route",
+      "dt-lowest": "Recent low on this route",
       "dt-cta": "Go to booking site",
       disc1: "AirPick is a mediation platform providing flight and travel-product information, and is not a party to the actual sale or contract of any flight ticket. Responsibility for ticket bookings, payments, refunds, changes, operation, and other transactions lies with the respective airline or seller; AirPick assumes no liability.",
       disc2: "",
@@ -2971,8 +2966,8 @@
       direct: "Direct",
       via: (n) => `${n} stop${n>1?"s":""}`,
       dday: (d) => d === 0 ? "TODAY" : (d < 0 ? `+${-d}d` : `${d}d left`),
-      lowestLabel: "All-time low",
-      newLow: "New all-time low",
+      lowestLabel: "Recent low",
+      newLow: "New recent low",
       alert: "Booking link coming soon",
       best: "BEST",
     }
@@ -3343,7 +3338,7 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
         : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
-      const avgLabel = lang === "ko" ? "역대 최저가" : "All-time low";
+      const avgLabel = lang === "ko" ? "최근 최저가" : "Recent low";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
@@ -4121,18 +4116,14 @@
       a_ko:"항공권의 취소·환불·변경은 구매하신 항공사 또는 판매처의 약관에 따라 진행됩니다. 에어픽은 환불·변경에 대한 책임을 지지 않으며, 해당 판매처 고객센터로 문의해주세요.",
       q_en:"How do I get a refund or change my booking?",
       a_en:"Cancellations, refunds, and changes follow the policy of the airline or seller where you purchased. AirPick is not responsible—please contact that seller's customer service." },
-    { q_ko:"알람은 어떻게 받나요?",
-      a_ko:"설정 탭에서 출발지(필수)와 도착지(선택)를 지정하고 알람을 켜면, 해당 노선의 저렴한 항공권이 뜰 때 푸시 알림으로 알려드려요. 7일 이내·30일 이내 중 받고 싶은 기간을 고를 수 있어요.",
-      q_en:"How do alerts work?",
-      a_en:"In the Settings tab, pick an origin (required) and optional destinations, then turn the alarm on. We'll send a push when cheap fares appear for that route. You can choose 7- or 30-day windows." },
     { q_ko:"특가는 어떻게 선정되나요?",
-      a_ko:"각 노선의 평소 가격과 비교하여 일정 수준 이상 저렴한 항공권을 자동으로 \"특가\"로 표시합니다. 역대 최저가 데이터도 함께 노출돼요.",
+      a_ko:"각 노선의 평소 가격과 비교하여 일정 수준 이상 저렴한 항공권을 자동으로 \"특가\"로 표시합니다. 최근 최저가 데이터도 함께 노출돼요.",
       q_en:"How are 'deals' chosen?",
-      a_en:"We compare current fares against each route's typical price and mark significantly cheaper ones as 'deals'. We also show the all-time low for context." },
+      a_en:"We compare current fares against each route's typical price and mark significantly cheaper ones as 'deals'. We also show the recent low for context." },
     { q_ko:"개인정보는 어떻게 관리되나요?",
-      a_ko:"에어픽은 개인정보 보호법에 따라 사용자 정보를 안전하게 보관하고, 항공권 검색·알람 제공 외 목적으로 사용하지 않습니다. 자세한 내용은 개인정보 처리방침을 확인해주세요.",
+      a_ko:"에어픽은 개인정보 보호법에 따라 사용자 정보를 안전하게 보관하고, 항공권 검색·특가 정보 제공 외 목적으로 사용하지 않습니다. 자세한 내용은 개인정보 처리방침을 확인해주세요.",
       q_en:"How is my data handled?",
-      a_en:"Your information is stored securely per applicable privacy laws and is used only for flight search and alerts. See our Privacy Policy for details." },
+      a_en:"Your information is stored securely per applicable privacy laws and is used only for flight search and deal information. See our Privacy Policy for details." },
     { q_ko:"문의는 어디로 하나요?",
       a_ko:"앱 사용에 대한 문의는 설정 > 고객센터로 보내주세요. 예약 관련 문의는 해당 항공사·판매처로 직접 연락해주세요.",
       q_en:"How do I contact you?",
@@ -4195,7 +4186,7 @@
       const stopsHTML = f.stops === 0
         ? `<span class="tag direct">${t.direct}${cabinTxt}</span>`
         : `<span class="tag">${t.via(f.stops)}${cabinTxt}</span>`;
-      const avgLabel = lang === "ko" ? "역대 최저가" : "All-time low";
+      const avgLabel = lang === "ko" ? "최근 최저가" : "Recent low";
       const lowestText = f.avgPrice ? `${avgLabel} ₩${formatKRW(f.avgPrice)}` : "";
       const cityName = lang === "ko" ? f.ko : f.en;
       const locPillHTML = f.metaMissing
@@ -4281,10 +4272,10 @@
       a_ko:"수정은 항공사 정책에 따라 가능 여부와 수수료가 달라요. 일부 특가/저가 항공권은 수정 자체가 불가할 수 있으니, 발권 직후 발견 즉시 해당 판매처에 연락해주세요.",
       q_en:"Wrong name or birthdate—can I fix it?",
       a_en:"It depends on the airline's policy; fees may apply, and some discounted fares can't be modified. Contact the seller right after issuance." },
-    { q_ko:"역대 최저가의 기준은 무엇인가요?",
-      a_ko:"최근 30일간 전 세계 노선의 최저가를 뜻합니다.",
-      q_en:"What defines the all-time low?",
-      a_en:"It refers to the lowest fare across global routes over the past 30 days." },
+    { q_ko:"최근 최저가의 기준은 무엇인가요?",
+      a_ko:"해당 노선의 최근 30일 가격 중 가장 낮았던 5개의 평균값이에요. 최근 가격대의 바닥 수준을 보여주는 참고용 지표입니다.",
+      q_en:"What defines the recent low?",
+      a_en:"It's the average of the five lowest fares for that route over the past 30 days—a reference for the recent price floor." },
 
     { section_ko:"취소·환불", section_en:"Cancellation & Refund" },
     { q_ko:"환불은 얼마나 걸리나요?",
