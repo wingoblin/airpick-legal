@@ -2288,36 +2288,6 @@
           <button class="tswitch" id="alarm-master-switch" role="switch" aria-checked="false" aria-label="알람 받기"></button>
         </div>
 
-        <p class="ad-title" data-i18n="alarm-discount-t">할인율 설정</p>
-        <div class="wheel-card" style="margin-top:8px;">
-          <button type="button" class="wheel-row" data-wheel-target="discount-short" aria-expanded="false">
-            <span class="wr-label"><span data-i18n="alarm-d-short">단거리</span> <span class="wr-sub" data-i18n="alarm-d-short-r">일본·동남아</span></span>
-            <span class="wr-side">
-              <span class="wr-val" id="wheel-discount-short-val">25%</span>
-              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </span>
-          </button>
-          <div class="wheel-panel" id="wheel-panel-discount-short" hidden>
-            <div class="wheel">
-              <div class="wheel-col" data-wheel="discount-short"></div>
-              <div class="wheel-indicator"></div>
-            </div>
-          </div>
-          <button type="button" class="wheel-row" data-wheel-target="discount-long" aria-expanded="false">
-            <span class="wr-label"><span data-i18n="alarm-d-long">장거리</span> <span class="wr-sub" data-i18n="alarm-d-long-r">유럽·미국</span></span>
-            <span class="wr-side">
-              <span class="wr-val" id="wheel-discount-long-val">15%</span>
-              <svg class="wr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </span>
-          </button>
-          <div class="wheel-panel" id="wheel-panel-discount-long" hidden>
-            <div class="wheel">
-              <div class="wheel-col" data-wheel="discount-long"></div>
-              <div class="wheel-indicator"></div>
-            </div>
-          </div>
-        </div>
-
         <div class="alarm-sub" id="alarm-sub-wrap">
           <div class="toggle-row">
             <div class="label-wrap">
@@ -2743,8 +2713,6 @@
 
   // ---------- STATE ----------
   let filter = "round";  // 기본: 왕복
-  let alarmDiscountShort = 25; // 단거리(일본·동남아) 기본 25%
-  let alarmDiscountLong = 15;  // 장거리(유럽·미국) 기본 15%
   let sortKey = "price-asc"; // price-asc | price-desc | date-asc | date-desc
   try {
     const _savedSort = localStorage.getItem("airpick.sortKey");
@@ -3000,12 +2968,6 @@
       "alarm-master-title": "알람 설정",
       "alarm-master": "출발지 알람 받기",
       "alarm-master-sub": "내 출발지에서 출발하는 저렴한 항공권 알람(전체)",
-      "alarm-discount-t": "할인율 설정",
-      "alarm-discount-60": "60% 이상",
-      "alarm-d-short": "단거리",
-      "alarm-d-short-r": "일본·동남아",
-      "alarm-d-long": "장거리",
-      "alarm-d-long-r": "유럽·미국",
       "alarm-7-t": "7일 이내 출발",
       "alarm-7-s": "임박한 일정이 있을 때 알려드려요",
       "alarm-30-t": "30일 이내 출발",
@@ -3108,12 +3070,6 @@
       "alarm-master-title": "Alert settings",
       "alarm-master": "Get alerts for my origin",
       "alarm-master-sub": "Cheap flight alerts from your home airports (all)",
-      "alarm-discount-t": "Discount rate",
-      "alarm-discount-60": "60%+",
-      "alarm-d-short": "Short-haul",
-      "alarm-d-short-r": "Japan·SE Asia",
-      "alarm-d-long": "Long-haul",
-      "alarm-d-long-r": "Europe·US",
       "alarm-7-t": "Within 7 days",
       "alarm-7-s": "Last-minute deals",
       "alarm-30-t": "Within 30 days",
@@ -3812,19 +3768,6 @@
       const minIdx  = Math.max(0, Math.min(mins.length - 1, Math.round(cmin / 10)));
       buildWheelCol(hourCol, hours, hourIdx, (it) => { ch = it.value; commitTime(); });
       buildWheelCol(minCol,  mins,  minIdx,  (it) => { cmin = it.value; commitTime(); });
-    } else if (target === "discount-short" || target === "discount-long"){
-      const isLong = target === "discount-long";
-      const steps = isLong ? [15, 20, 25, 30, 35, 40, 45, 50, 55, 60] : [25, 30, 35, 40, 45, 50, 55, 60];
-      const items = steps.map(v => ({ label: v >= 60 ? (lang === "ko" ? "60% 이상" : "60%+") : v + "%", value: v }));
-      const cur = isLong ? alarmDiscountLong : alarmDiscountShort;
-      let idx = steps.indexOf(cur);
-      if (idx < 0) idx = 0;
-      const col = document.querySelector(`[data-wheel="${target}"]`);
-      buildWheelCol(col, items, idx, (it) => {
-        if (isLong) alarmDiscountLong = it.value; else alarmDiscountShort = it.value;
-        const valEl = document.getElementById(`wheel-${target}-val`);
-        if (valEl) valEl.textContent = it.value >= 60 ? (lang === "ko" ? "60% 이상" : "60%+") : it.value + "%";
-      });
     }
   }
 
