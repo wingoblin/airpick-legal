@@ -3087,9 +3087,8 @@
     if (d <= 30) return "tier-3";
     return "tier-4";
   }
-  // 역대 최저가(avgPrice) 이하면 초록 띠지, 그 외에는 띠지 없음
+  // 띠지 표시 제거 — 항상 빈 클래스 반환
   function priceTier(f){
-    if (f && f.avgPrice != null && f.price <= f.avgPrice) return "tier-2";
     return "";
   }
   function ddayBadgeTier(d){
@@ -4286,10 +4285,6 @@
       a_ko:"최근 30일간 전 세계 노선의 최저가를 뜻합니다.",
       q_en:"What defines the all-time low?",
       a_en:"It refers to the lowest fare across global routes over the past 30 days." },
-    { q_ko:"항공권 정보의 띠지 색상은 무엇을 의미하나요?",
-      a_ko:"초록색은 역대 최저가보다 낮은 가격대의 항공권을 의미합니다.\n표시가 되지 않은 항공권은 역대 최저가에서 +20% 이내의 항공권을 의미합니다.",
-      q_en:"What does the colored band mean?",
-      a_en:"Green means the fare is below the all-time low.\nFlights without a band are within +20% of the all-time low." },
 
     { section_ko:"취소·환불", section_en:"Cancellation & Refund" },
     { q_ko:"환불은 얼마나 걸리나요?",
