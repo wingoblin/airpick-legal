@@ -4085,7 +4085,7 @@
     if (airportSheetTarget === "dest") {
       alarmDestList = [];
     } else {
-      originList = [];          // 초기화 = 출발지 전체 선택 해제
+      originList = [...ORIGIN_AIRPORTS];   // 초기화 = 출발지 전체 선택
       saveOrigins();
     }
     renderAirportSheet();
