@@ -2483,7 +2483,9 @@
     if (!link) return "";
     const base = /^https?:\/\//.test(link) ? link : "https://www.aviasales.com" + link;
     const sep = base.indexOf("?") >= 0 ? "&" : "?";
-    return base + sep + "marker=" + encodeURIComponent(AFFILIATE_MARKER) + "&locale=" + (lang === "en" ? "en" : "ko");
+    return base + sep + "marker=" + encodeURIComponent(AFFILIATE_MARKER)
+      + "&currency=" + (lang === "en" ? "usd" : "krw")
+      + "&locale=" + (lang === "en" ? "en" : "ko");
   }
 
   let FLIGHTS = [];
