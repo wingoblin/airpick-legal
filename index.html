@@ -1372,21 +1372,6 @@
     border-radius: 999px;
     text-decoration: none;
     white-space: nowrap;
-    margin-right: 14px;
-  }
-  .tg-banner .tg-x{
-    position: absolute;
-    top: 5px;
-    right: 7px;
-    width: 20px;
-    height: 20px;
-    border: 0;
-    background: transparent;
-    color: rgba(255, 255, 255, .8);
-    font-size: 17px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0;
   }
   .list{
     padding: 10px 16px 0;
@@ -2156,20 +2141,19 @@
       </button>
     </div>
 
-    <!-- 텔레그램 구독 배너 · 채널 개설 후 아래 스크립트의 TELEGRAM_URL 값만 실제 채널 주소로 바꾸면 됩니다 -->
-    <div class="tg-banner" id="tg-banner" hidden>
-      <a class="tg-main" href="#" target="_blank" rel="noopener">
+    <!-- 텔레그램 구독 배너 · 채널 주소 변경 시 아래 href 두 곳을 수정하세요 -->
+    <div class="tg-banner" id="tg-banner">
+      <a class="tg-main" href="https://t.me/airpick" target="_blank" rel="noopener">
         <svg class="tg-ic" viewBox="0 0 240 240" aria-hidden="true">
           <circle cx="120" cy="120" r="120" fill="rgba(255,255,255,.18)"/>
           <path fill="#fff" d="M181 71l-22 104c-1.6 7.4-6 9.1-12.2 5.7l-33.6-24.8-16.2 15.6c-1.8 1.8-3.3 3.3-6.7 3.3l2.4-34.1 62-56c2.7-2.4-.6-3.8-4.2-1.4l-76.6 48.2-33-10.3c-7.2-2.2-7.3-7.2 1.5-10.6l129-49.7c6-2.2 11.2 1.4 9.2 10z"/>
         </svg>
         <span class="tg-tx">
-          <b data-i18n="tg-title">특가 실시간 알림 받기</b>
-          <span data-i18n="tg-sub">텔레그램으로 놓치기 아까운 특가만 쏙쏙</span>
+          <b data-i18n="tg-title">항공권 특가 실시간 알림</b>
+          <span data-i18n="tg-sub">텔레그램으로 항공권 특가 받아보세요</span>
         </span>
       </a>
-      <a class="tg-cta" href="#" target="_blank" rel="noopener" data-i18n="tg-cta">구독</a>
-      <button class="tg-x" id="tg-x" type="button" aria-label="닫기">×</button>
+      <a class="tg-cta" href="https://t.me/airpick" target="_blank" rel="noopener" data-i18n="tg-cta">구독</a>
     </div>
 
     <div class="filter-banner" id="filter-banner" hidden></div>
@@ -2919,8 +2903,8 @@
     ko: {
       brand: "싸게날자",
       "brand-tagline": "가장 저렴한 순간을 잡다",
-      "tg-title": "특가 실시간 알림 받기",
-      "tg-sub": "텔레그램으로 놓치기 아까운 특가만 쏙쏙",
+      "tg-title": "항공권 특가 실시간 알림",
+      "tg-sub": "텔레그램으로 항공권 특가 받아보세요",
       "tg-cta": "구독",
       live: "실시간 최저가",
       title: "인천 출발 최저가",
@@ -3014,8 +2998,8 @@
     en: {
       brand: "Ssagenalja",
       "brand-tagline": "Catch the cheapest moment",
-      "tg-title": "Get deal alerts in real time",
-      "tg-sub": "Only the deals worth catching, on Telegram",
+      "tg-title": "Real-time flight deal alerts",
+      "tg-sub": "Get flight deals on Telegram",
       "tg-cta": "Join",
       live: "Live lowest fares",
       title: "Cheapest from Incheon",
@@ -4614,30 +4598,6 @@
 
   // ---------- 실데이터 로드 (deals.json) ----------
   loadDeals();
-</script>
-<script>
-  // ---------- 텔레그램 구독 배너 ----------
-  (function () {
-    var TELEGRAM_URL = "https://t.me/airpick"; // ← 채널 주소 변경 시 여기만 수정
-    var banner = document.getElementById("tg-banner");
-    if (!banner) return;
-    // 배너 내 모든 링크를 채널로 연결
-    var links = banner.querySelectorAll("a");
-    for (var i = 0; i < links.length; i++) links[i].href = TELEGRAM_URL;
-    // 이전에 닫은 사용자는 계속 숨김
-    var closed = false;
-    try { closed = localStorage.getItem("tgBannerClosed") === "1"; } catch (e) {}
-    if (closed) return;
-    banner.hidden = false;
-    // 닫기(×) 버튼
-    var x = document.getElementById("tg-x");
-    if (x) x.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      banner.hidden = true;
-      try { localStorage.setItem("tgBannerClosed", "1"); } catch (err) {}
-    });
-  })();
 </script>
 </body>
 </html>
